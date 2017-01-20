@@ -35,8 +35,8 @@ namespace Assets.Scripts.Managers
             var placementPosition = GetPlacementPosition(0);
             if (placementPosition != new Vector3() && _placedObjectManager.CanPlaceObject(placementPosition) && _canPlace)
             {
-                _canPlace = false;
-                PlaceObject(ObjectToPlace, placementPosition);
+                _canPlace = true;
+                _placedObjectManager.AddObject(PlaceObject(ObjectToPlace, placementPosition));
             }
         }
 
@@ -52,7 +52,6 @@ namespace Assets.Scripts.Managers
 
         private static GameObject PlaceObject(GameObject model, Vector3 position)
         {
-            Debug.Log(position);
             var objectToPlace = Instantiate(model);
             objectToPlace.transform.position = position;
             return objectToPlace;
@@ -63,7 +62,7 @@ namespace Assets.Scripts.Managers
             
         }
 
-        private bool _canPlace;
+        private bool _canPlace = true;
         private GameManager _gameManager;
         private PlacedObjectManager _placedObjectManager;
     }

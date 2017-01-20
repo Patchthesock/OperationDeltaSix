@@ -7,6 +7,8 @@ namespace Assets
 {
     public class PlacedObjectManager : MonoBehaviour
     {
+        public float MinDistanceBetweenObjects;
+
         [HideInInspector]
         public static PlacedObjectManager instance = null;
 
@@ -18,7 +20,6 @@ namespace Assets
                 Destroy(gameObject);
 
             DontDestroyOnLoad(gameObject);
-
         }
 
         public void AddObject(GameObject placedObject)
@@ -29,7 +30,7 @@ namespace Assets
 
         public bool CanPlaceObject(Vector3 position)
         {
-            return _placedObjects.All(o => !(Vector3.Distance(o.transform.position, position) < 0.5));
+            return _placedObjects.All(o => !(Vector3.Distance(o.transform.position, position) < MinDistanceBetweenObjects));
         }
 
         private readonly List<GameObject> _placedObjects = new List<GameObject>();
