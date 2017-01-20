@@ -9,7 +9,7 @@ namespace Assets
 
         private bool _shift;
         private bool _ctrl;
-        private float _flySpeed = 10;
+        private float _flySpeed = 1;
         private float _accelerationAmount = 30;
         private readonly float _accelerationRatio = 3;
         private readonly float _slowDownRatio = 0.2f;
@@ -60,12 +60,10 @@ namespace Assets
                 Camera.transform.Translate(Vector3.forward * _flySpeed * Input.GetAxis("Vertical"));
             }
 
-
             if (Math.Abs(Input.GetAxis("Horizontal")) > 0.01)
             {
                 Camera.transform.Translate(Vector3.right * _flySpeed * Input.GetAxis("Horizontal"));
             }
-
 
             if (Input.GetKey(KeyCode.E))
             {

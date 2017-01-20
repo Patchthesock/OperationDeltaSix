@@ -26,27 +26,45 @@ namespace Assets.Scripts.Managers
                 return;
             }
 
-            var placementPosition = GetPlacementPosition(0);
-            if (placementPosition != new Vector3())
+            if (_placedObjectManager == null)
             {
+                _placedObjectManager = PlacedObjectManager.instance;
+                return;
+            }
+
+            var placementPosition = GetPlacementPosition(0);
+            if (placementPosition != new Vector3() && _placedObjectManager.CanPlaceObject(placementPosition) && _canPlace)
+            {
+                _canPlace = false;
                 PlaceObject(ObjectToPlace, placementPosition);
             }
         }
 
         private static Vector3 GetPlacementPosition(int mouseButtonNumber)
         {
+            if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return new Vector3();
             if (!Input.GetMouseButtonDown(mouseButtonNumber)) return new Vector3();
             RaycastHit hit;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            return !Physics.Raycast(ray, out hit, Mathf.Infinity) ? new Vector3() : hit.normal;
+            Physics.Raycast(ray, out hit, Mathf.Infinity);
+            return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point;
         }
 
-        private static void PlaceObject(GameObject model, Vector3 position)
+        private static GameObject PlaceObject(GameObject model, Vector3 position)
         {
+            Debug.Log(position);
             var objectToPlace = Instantiate(model);
             objectToPlace.transform.position = position;
+            return objectToPlace;
         }
 
+        private static void RotateObject(GameObject objectToRoate)
+        {
+            
+        }
+
+        private bool _canPlace;
         private GameManager _gameManager;
+        private PlacedObjectManager _placedObjectManager;
     }
 }
