@@ -7,6 +7,8 @@ namespace Assets
     {
         public Button PlayBtn;
 
+        public bool IsPlaying { get; private set; }
+
         [HideInInspector]
         public static GameManager instance = null;
 
@@ -18,7 +20,7 @@ namespace Assets
                 Destroy(gameObject);
 
             DontDestroyOnLoad(gameObject);
-            _isPlaying = false;
+            IsPlaying = false;
             InitGame();
         }
 
@@ -29,22 +31,20 @@ namespace Assets
             {
                 PlayBtn.onClick.AddListener(() =>
                 {
-                    PlayControl(!_isPlaying);
+                    PlayControl(!IsPlaying);
                 });
             }
         }
 
         private void Update()
         {
-            Debug.Log(_isPlaying);
+            Debug.Log(IsPlaying);
         }
 
         private void PlayControl(bool state)
         {
             Physics.gravity = state ? new Vector3(0, -50, 0) : new Vector3(0, 0, 0);
-            _isPlaying = !_isPlaying;
+            IsPlaying = !IsPlaying;
         }
-
-        private bool _isPlaying;
     }
 }

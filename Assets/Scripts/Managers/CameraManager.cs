@@ -7,13 +7,12 @@ namespace Assets
     {
         public GameObject Camera;
 
-        float flySpeed = 10;
-      
-        bool shift;
-        bool ctrl;
-        float accelerationAmount = 30;
-        float accelerationRatio = 3;
-        float slowDownRatio = 0.2f;
+        private bool _shift;
+        private bool _ctrl;
+        private float _flySpeed = 10;
+        private float _accelerationAmount = 30;
+        private readonly float _accelerationRatio = 3;
+        private readonly float _slowDownRatio = 0.2f;
 
         [HideInInspector]
         public static CameraManager instance = null;
@@ -33,48 +32,48 @@ namespace Assets
             //use shift to speed up flight
             if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
             {
-                shift = true;
-                flySpeed *= accelerationRatio;
+                _shift = true;
+                _flySpeed *= _accelerationRatio;
             }
 
             if (Input.GetKeyUp(KeyCode.LeftShift) || Input.GetKeyUp(KeyCode.RightShift))
             {
-                shift = false;
-                flySpeed /= accelerationRatio;
+                _shift = false;
+                _flySpeed /= _accelerationRatio;
             }
 
             //use ctrl to slow up flight
             if (Input.GetKeyDown(KeyCode.LeftControl) || Input.GetKeyDown(KeyCode.RightControl))
             {
-                ctrl = true;
-                flySpeed *= slowDownRatio;
+                _ctrl = true;
+                _flySpeed *= _slowDownRatio;
             }
 
             if (Input.GetKeyUp(KeyCode.LeftControl) || Input.GetKeyUp(KeyCode.RightControl))
             {
-                ctrl = false;
-                flySpeed /= slowDownRatio;
+                _ctrl = false;
+                _flySpeed /= _slowDownRatio;
             }
-            //
-            if (Input.GetAxis("Vertical") != 0)
+            
+            if (Math.Abs(Input.GetAxis("Vertical")) > 0.01)
             {
-                Camera.transform.Translate(Vector3.forward * flySpeed * Input.GetAxis("Vertical"));
+                Camera.transform.Translate(Vector3.forward * _flySpeed * Input.GetAxis("Vertical"));
             }
 
 
-            if (Input.GetAxis("Horizontal") != 0)
+            if (Math.Abs(Input.GetAxis("Horizontal")) > 0.01)
             {
-                Camera.transform.Translate(Vector3.right * flySpeed * Input.GetAxis("Horizontal"));
+                Camera.transform.Translate(Vector3.right * _flySpeed * Input.GetAxis("Horizontal"));
             }
 
 
             if (Input.GetKey(KeyCode.E))
             {
-                Camera.transform.Translate(Vector3.up * flySpeed);
+                Camera.transform.Translate(Vector3.up * _flySpeed);
             }
             else if (Input.GetKey(KeyCode.Q))
             {
-                Camera.transform.Translate(Vector3.down * flySpeed);
+                Camera.transform.Translate(Vector3.down * _flySpeed);
             }
 
 
