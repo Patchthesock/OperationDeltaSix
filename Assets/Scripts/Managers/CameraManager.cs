@@ -59,18 +59,15 @@ namespace Assets
             
             if (Math.Abs(Input.GetAxis("Vertical")) > 0.01)
             {
-                //var newForward = new Vector3(Vector3.forward.x,Vector3.forward.y, 0);
-                //var pos = Vector3.forward * _flySpeed * Input.GetAxis("Vertical");
-                Camera.transform.position = Camera.transform.position + (new Vector3(1, 0, 1) * Input.GetAxis("Vertical"));
-                //Camera.transform.Translate(new Vector3(pos.x, 0, pos.z));
-                //Camera.transform.position = Camera.transform.position + new Vector3(1, 0, 0) * Input.GetAxis("Vertical");
+
+
+                Camera.transform.Translate(new Vector3(Camera.transform.forward.x,0,Camera.transform.forward.z) * Input.GetAxis("Vertical"), Space.World);
             }
 
-            //if (Math.Abs(Input.GetAxis("Horizontal")) > 0.01)
-            //{
-            //    //Camera.transform.Translate(Vector3.right * _flySpeed * Input.GetAxis("Horizontal"));
-            //    Camera.transform.position = Camera.transform.position + new Vector3(0, 0, 1) * Input.GetAxis("Horizontal");
-            //}
+            if (Math.Abs(Input.GetAxis("Horizontal")) > 0.01)
+            {
+                Camera.transform.Translate(new Vector3(Camera.transform.right.x, 0, Camera.transform.right.z) * Input.GetAxis("Horizontal"), Space.World);
+            }
 
             if (Input.GetKey(KeyCode.E))
             {

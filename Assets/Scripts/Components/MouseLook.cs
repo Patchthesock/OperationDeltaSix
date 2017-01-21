@@ -63,7 +63,7 @@ public class MouseLook : MonoBehaviour
                 rotationY = ClampAngle(rotationY, minimumY, maximumY);
                 var xQuaternion = Quaternion.AngleAxis(rotationX, Vector3.up);
                 var yQuaternion = Quaternion.AngleAxis(rotationY, -Vector3.right);
-                Camera.transform.localRotation = originalRotation * xQuaternion * yQuaternion;
+                Camera.transform.rotation = originalRotation * xQuaternion * yQuaternion;
             }
                 break;
             case RotationAxes.MouseX:
@@ -71,7 +71,7 @@ public class MouseLook : MonoBehaviour
                 rotationX += Input.GetAxis("Mouse X") * sensitivityX;
                 rotationX = ClampAngle(rotationX, minimumX, maximumX);
                 Quaternion xQuaternion = Quaternion.AngleAxis(rotationX, Vector3.up);
-                Camera.transform.localRotation = originalRotation * xQuaternion;
+                Camera.transform.rotation = originalRotation * xQuaternion;
             }
                 break;
             case RotationAxes.MouseY:
@@ -81,7 +81,7 @@ public class MouseLook : MonoBehaviour
                 rotationY += Input.GetAxis("Mouse Y") * sensitivityY;
                 rotationY = ClampAngle(rotationY, minimumY, maximumY);
                 var yQuaternion = Quaternion.AngleAxis(-rotationY, Vector3.right);
-                Camera.transform.localRotation = originalRotation * yQuaternion;
+                Camera.transform.rotation = originalRotation * yQuaternion;
             }
                 break;
         }
