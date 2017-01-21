@@ -21,6 +21,7 @@ namespace Assets.Scripts.Managers
             else if (instance != this)
                 Destroy(gameObject);
             DontDestroyOnLoad(gameObject);
+            _removingObjects = false;
 
             DominoOneBtn.onClick.AddListener(() =>
             {
@@ -31,12 +32,15 @@ namespace Assets.Scripts.Managers
             {
                 SetObject(ObjectToPlace);
             });
+
+            RemoveBtn.onClick.AddListener(RemoveObjects);
         }
 
         public void SetActive(bool state)
         {
             _isActive = state;
             SetMenu(state);
+            _removingObjects = false;
             _selectedObject = null;
             Destroy(_ghostObject);
         }
@@ -56,6 +60,18 @@ namespace Assets.Scripts.Managers
                 return;
             }
 
+            if (_removingObjects)
+            {
+                if (!Input.GetMouseButtonDown(0)) return;
+                RaycastHit hit;
+                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                Physics.Raycast(ray, out hit, Mathf.Infinity);
+                if (hit.collider == null) return;
+                if (hit.collider.gameObject.tag != "Disposable") return;
+                PlacedObjectManager.instance.RemoveObject(hit.collider.gameObject);
+                return;
+            }
+
             if (_selectedObject == null) return;
             var ghostPos = GetPlacementPosition();
             _ghostObject.transform.position = ghostPos == new Vector3() ? new Vector3(999, 999, 999) : ghostPos;
@@ -72,6 +88,7 @@ namespace Assets.Scripts.Managers
             RaycastHit hit;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
+            if (hit.collider == null) return new Vector3();
             return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point;
         }
 
@@ -80,6 +97,7 @@ namespace Assets.Scripts.Managers
             RaycastHit hit;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
+            if (hit.collider == null) return new Vector3();
             return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point + new Vector3(0,1.1f,0);
         }
 
@@ -109,10 +127,12 @@ namespace Assets.Scripts.Managers
         {
             DominoOneBtn.gameObject.SetActive(state);
             DominoTwoBtn.gameObject.SetActive(state);
+            RemoveBtn.gameObject.SetActive(state);
         }
 
         private void SetObject(GameObject model)
         {
+            _removingObjects = false;
             _selectedObject = model;
             _ghostObject = Instantiate(_selectedObject);
             _ghostObject.GetComponent<Rigidbody>().isKinematic = true;
@@ -121,6 +141,15 @@ namespace Assets.Scripts.Managers
             _ghostObject.gameObject.layer = 2;
         }
 
+        private void RemoveObjects()
+        {
+            _removingObjects = true;
+            _selectedObject = null;
+            if (_ghostObject == null) return;
+            Destroy(_ghostObject);
+        }
+
+        private bool _removingObjects = false;
         private bool _isActive = true;
         private GameObject _selectedObject;
         private GameObject _ghostObject;

@@ -63,6 +63,13 @@ namespace Assets
             return _placedObjects.All(o => !(Vector3.Distance(o.transform.position, position) < MinDistanceBetweenObjects));
         }
 
+        public void RemoveObject(GameObject o)
+        {
+            _placedObjects.Remove(o);
+            _nonPlacedObjects.Add(o);
+            o.SetActive(false);
+        }
+
         public void RemoveObjects()
         {
             foreach (var o in _placedObjects.ToList())
