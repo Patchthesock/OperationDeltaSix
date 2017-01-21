@@ -14,23 +14,8 @@ namespace Assets
 
         public bool IsPlaying { get; private set; }
 
-        [HideInInspector]
-        public static GameManager instance = null;
-
-        private void Awake()
-        {
-            if (instance == null)
-                instance = this;
-            else if (instance != this)
-                Destroy(gameObject);
-
-            DontDestroyOnLoad(gameObject);
-            InitGame();
-        }
-
         private void InitGame()
         {
-            // Play Button Control
             if (PlayBtn != null)
             {
                 PlayBtn.onClick.AddListener(() =>
@@ -64,9 +49,22 @@ namespace Assets
         private void ToggleCredit(bool state)
         {
             Credits.SetActive(state);
-            Debug.Log(state);
         }
 
         private bool _showCredit = false;
+
+        [HideInInspector]
+        public static GameManager instance = null;
+
+        private void Awake()
+        {
+            if (instance == null)
+                instance = this;
+            else if (instance != this)
+                Destroy(gameObject);
+
+            DontDestroyOnLoad(gameObject);
+            InitGame();
+        }
     }
 }
