@@ -75,7 +75,7 @@ namespace Assets.Scripts.Managers
                 {
                     _placedDominoManager.PlaceDomino(
                         new Vector3(o.transform.position.x, o.transform.position.y - 1, o.transform.position.z),
-                        GetDefaultRotation());
+                        o.transform.rotation);
                 }
                 ForceMouseButtonRelease();
             }
