@@ -7,7 +7,10 @@ namespace Assets
     public class GameManager : MonoBehaviour
     {
         public Button PlayBtn;
+        public Button CreditBtn;
+        public float CreditFadeTime;
         public GameObject HandObject;
+        public GameObject Credits;
 
         public bool IsPlaying { get; private set; }
 
@@ -35,8 +38,13 @@ namespace Assets
                     PlayControl(!IsPlaying);
                     
                 });
+                CreditBtn.onClick.AddListener(() =>
+                {
+                    ToggleCredit(_showCredit = !_showCredit);
+                });
             }
             PlayControl(false);
+            ToggleCredit(_showCredit);
         }
 
         public void PlayControl(bool state)
@@ -52,5 +60,13 @@ namespace Assets
             if (PlacedObjectManager.instance == null) return;
             PlacedObjectManager.instance.UpdatePlacedObjectPhysics(state);
         }
+
+        private void ToggleCredit(bool state)
+        {
+            Credits.SetActive(state);
+            Debug.Log(state);
+        }
+
+        private bool _showCredit = false;
     }
 }
