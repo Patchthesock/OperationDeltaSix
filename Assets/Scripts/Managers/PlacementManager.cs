@@ -117,6 +117,7 @@ namespace Assets.Scripts.Managers
             
             if (_ghostObject.GetComponent<DominoHooks>())
             {
+                TurnOffDominoPhysics(_ghostObject);
                 foreach (var o in _ghostObject.GetComponent<DominoHooks>().Dominos)
                 {
                     TurnOffDominoPhysics(_ghostObject);
