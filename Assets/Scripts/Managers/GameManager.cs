@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Managers;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets
@@ -41,9 +42,12 @@ namespace Assets
         {
             if(state) SaveManager.instance.Save();
             Physics.gravity = state ? new Vector3(0, -50, 0) : new Vector3(0, 0, 0);
-            PlacedObjectManager.instance.UpdatePlacedObjectPhysics(state);
             HandObject.SetActive(state);
             IsPlaying = state;
+            if (PlacementManager.instance == null) return;
+            PlacementManager.instance.SetActive(!state);
+            if (PlacedObjectManager.instance == null) return;
+            PlacedObjectManager.instance.UpdatePlacedObjectPhysics(state);
         }
     }
 }

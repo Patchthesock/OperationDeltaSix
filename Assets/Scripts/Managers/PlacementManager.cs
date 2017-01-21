@@ -1,10 +1,15 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Managers
 {
     public class PlacementManager : MonoBehaviour
     {
+        public Button DominoOneBtn;
+        public Button DominoTwoBtn;
+        public Button RemoveBtn;
+
         public GameObject ObjectToPlace;
 
         [HideInInspector] public static PlacementManager instance = null;
@@ -15,12 +20,30 @@ namespace Assets.Scripts.Managers
                 instance = this;
             else if (instance != this)
                 Destroy(gameObject);
-
             DontDestroyOnLoad(gameObject);
+
+            DominoOneBtn.onClick.AddListener(() =>
+            {
+                SetObject(ObjectToPlace);
+            });
+
+            DominoTwoBtn.onClick.AddListener(() =>
+            {
+                SetObject(ObjectToPlace);
+            });
+        }
+
+        public void SetActive(bool state)
+        {
+            _isActive = state;
+            SetMenu(state);
+            _selectedObject = null;
+            Destroy(_ghostObject);
         }
 
         private void Update()
         {
+            if (!_isActive) return;
             if (_gameManager == null)
             {
                 _gameManager = GameManager.instance;
@@ -33,9 +56,12 @@ namespace Assets.Scripts.Managers
                 return;
             }
 
+            if (_selectedObject == null) return;
+            var ghostPos = GetPlacementPosition();
+            _ghostObject.transform.position = ghostPos == new Vector3() ? new Vector3(999, 999, 999) : ghostPos;
+            _ghostObject.transform.rotation = GetDefaultRotation();
             var placementPosition = GetPlacementPosition(0);
-            if (placementPosition == new Vector3() || !_placedObjectManager.CanPlaceObject(placementPosition) || !_canPlace) return;
-            _canPlace = true;
+            if (placementPosition == new Vector3() || !_placedObjectManager.CanPlaceObject(placementPosition)) return;
             PlaceObject(ObjectToPlace, placementPosition, GetDefaultRotation());
         }
 
@@ -47,6 +73,14 @@ namespace Assets.Scripts.Managers
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
             return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point;
+        }
+
+        private static Vector3 GetPlacementPosition()
+        {
+            RaycastHit hit;
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Physics.Raycast(ray, out hit, Mathf.Infinity);
+            return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point + new Vector3(0,1.1f,0);
         }
 
         public void PlaceObject(IEnumerable<SaveManager.ObjectPosition> positions)
@@ -71,12 +105,25 @@ namespace Assets.Scripts.Managers
             return Quaternion.Euler(rotation);
         }
 
-        private static void RotateObject(GameObject objectToRoate)
+        private void SetMenu(bool state)
         {
-            
+            DominoOneBtn.gameObject.SetActive(state);
+            DominoTwoBtn.gameObject.SetActive(state);
         }
 
-        private bool _canPlace = true;
+        private void SetObject(GameObject model)
+        {
+            _selectedObject = model;
+            _ghostObject = Instantiate(_selectedObject);
+            _ghostObject.GetComponent<Rigidbody>().isKinematic = true;
+            _ghostObject.GetComponent<Rigidbody>().useGravity = false;
+            _ghostObject.GetComponent<Collider>().isTrigger = true;
+            _ghostObject.gameObject.layer = 2;
+        }
+
+        private bool _isActive = true;
+        private GameObject _selectedObject;
+        private GameObject _ghostObject;
         private GameManager _gameManager;
         private PlacedObjectManager _placedObjectManager;
     }
