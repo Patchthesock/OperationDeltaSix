@@ -14,6 +14,7 @@ namespace Assets.Scripts.Managers
         public GameObject SingleDomino;
         public GameObject FiveDomino;
 
+        public float TimeToLine;
         public CursorMode normalCursor;
         public Texture2D cursorCantPlaceTexture;
 
@@ -82,7 +83,8 @@ namespace Assets.Scripts.Managers
             if (_selectedObject.tag == "Domino")
             {
                 if (!_placedDominoManager.CanPlaceDomino(placementPosition)) return;
-                _placedDominoManager.PlaceDomino(placementPosition, GetDefaultRotation());
+                _placedDominoManager.PlaceDomino(placementPosition, GetSingleRotation(placementPosition));
+                _timeLastPlaced = Time.time;
             }
             if (_selectedObject.tag == "Object") { }
         }
@@ -126,6 +128,17 @@ namespace Assets.Scripts.Managers
             var rotation = CameraManager.instance.Camera.transform.rotation.eulerAngles;
             rotation = new Vector3(0, rotation.y, rotation.z);
             return Quaternion.Euler(rotation);
+        }
+
+        private Quaternion GetSingleRotation(Vector3 pos)
+        {
+            
+            if (Time.time - _timeLastPlaced <= TimeToLine)
+            {
+                //return Quaternion.
+            }
+            _positionLastPlaced = pos;
+            return GetDefaultRotation();
         }
 
         private void SetMenu(bool state)
@@ -230,11 +243,13 @@ namespace Assets.Scripts.Managers
         private bool _mouseLock = false;
         private bool _removingObjects = false;
         private bool _isActive = true;
+        private Vector3 _positionLastPlaced;
         private GameObject _selectedObject;
         private GameObject _ghostObject;
         private GameManager _gameManager;
         private PlacedObjectManager _placedObjectManager;
         private PlacedDominoManager _placedDominoManager;
+        private float _timeLastPlaced;
 
 
         [HideInInspector]
