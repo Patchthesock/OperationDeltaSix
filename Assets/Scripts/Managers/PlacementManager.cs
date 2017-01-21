@@ -41,12 +41,15 @@ namespace Assets.Scripts.Managers
             var placementPosition = GetPlacementPosition(0);
             if (placementPosition == new Vector3()) return;
 
-
             if (_selectedObject.tag == "MultiDomino")
             {
                 if (!_placedDominoManager.CanPlaceDomino(placementPosition)) return;
-                foreach (var o in _ghostObject.GetComponent<DominoHooks>().Dominos)
+                var dom = _ghostObject.GetComponent<DominoHooks>();
+                if (dom == null) return;
+
+                foreach (var o in dom.Dominos)
                 {
+                    Debug.Log(o.name);
                     _placedDominoManager.PlaceDomino(o.transform.position, GetDefaultRotation());
                 }
             }
@@ -61,7 +64,7 @@ namespace Assets.Scripts.Managers
         private static Vector3 GetPlacementPosition(int mouseButtonNumber)
         {
             if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return new Vector3();
-            if (!Input.GetMouseButton(mouseButtonNumber)) return new Vector3();
+            if (!Input.GetMouseButtonDown(mouseButtonNumber)) return new Vector3();
             RaycastHit hit;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
@@ -129,6 +132,10 @@ namespace Assets.Scripts.Managers
         {
             _removingObjects = true;
             _selectedObject = null;
+        }
+
+        private void DestroyGhost()
+        {
             if (_ghostObject == null) return;
             Destroy(_ghostObject);
         }
@@ -146,7 +153,7 @@ namespace Assets.Scripts.Managers
             o.GetComponent<Rigidbody>().useGravity = false;
         }
 
-        private void RemoveItem()
+        private static void RemoveItem()
         {
             if (!Input.GetMouseButtonDown(0)) return;
             RaycastHit hit;
@@ -210,15 +217,21 @@ namespace Assets.Scripts.Managers
 
             DominoOneBtn.onClick.AddListener(() =>
             {
+                DestroyGhost();
                 SetObject(SingleDomino);
             });
 
             DominoTwoBtn.onClick.AddListener(() =>
             {
+                DestroyGhost();
                 SetObject(FiveDomino);
             });
 
-            RemoveBtn.onClick.AddListener(RemoveObjects);
+            RemoveBtn.onClick.AddListener(() =>
+            {
+                DestroyGhost();
+                RemoveObjects();
+            });
         }
     }
 }
