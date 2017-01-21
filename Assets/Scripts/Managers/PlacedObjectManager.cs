@@ -9,42 +9,9 @@ namespace Assets
     {
         public float MinDistanceBetweenObjects;
 
-        [HideInInspector]
-        public static PlacedObjectManager instance = null;
-
-        private void Awake()
-        {
-            if (instance == null)
-                instance = this;
-            else if (instance != this)
-                Destroy(gameObject);
-
-            DontDestroyOnLoad(gameObject);
-        }
-
-        public void UpdatePlacedObjectPhysics(bool usePhysics)
-        {
-            foreach (var o in _placedObjects)
-            {
-                o.GetComponentInChildren<Rigidbody>().useGravity = usePhysics;
-                o.GetComponentInChildren<Rigidbody>().isKinematic = !usePhysics;
-            }
-        }
-
         public void AddObject(GameObject model, Vector3 position, Quaternion rotation)
         {
-            GameObject objectToPlace;
-            if (_nonPlacedObjects.Count > 0)
-            {
-                objectToPlace = _nonPlacedObjects.First();
-                _nonPlacedObjects.Remove(objectToPlace);
-                objectToPlace.SetActive(true);
-            }
-            else
-            {
-                objectToPlace = Instantiate(model);
-            }
-            
+            var objectToPlace = Instantiate(model);
             objectToPlace.GetComponentInChildren<Rigidbody>().isKinematic = true;
             objectToPlace.GetComponentInChildren<Rigidbody>().useGravity = false;
             objectToPlace.transform.position = position + new Vector3(0, 1f, 0);
@@ -66,21 +33,30 @@ namespace Assets
         public void RemoveObject(GameObject o)
         {
             _placedObjects.Remove(o);
-            _nonPlacedObjects.Add(o);
-            o.SetActive(false);
+            Destroy(o);
         }
 
         public void RemoveObjects()
         {
             foreach (var o in _placedObjects.ToList())
             {
-                _placedObjects.Remove(o);
-                _nonPlacedObjects.Add(o);
-                o.SetActive(false);
+                RemoveObject(o);
             }
         }
 
         private readonly List<GameObject> _placedObjects = new List<GameObject>();
-        private readonly List<GameObject> _nonPlacedObjects = new List<GameObject>();
+
+        [HideInInspector]
+        public static PlacedObjectManager instance = null;
+
+        private void Awake()
+        {
+            if (instance == null)
+                instance = this;
+            else if (instance != this)
+                Destroy(gameObject);
+
+            DontDestroyOnLoad(gameObject);
+        }
     }
 }

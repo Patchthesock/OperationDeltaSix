@@ -57,8 +57,8 @@ namespace Assets
 
             if (PlacementManager.instance == null) return;
             PlacementManager.instance.SetActive(!state);
-            if (PlacedObjectManager.instance == null) return;
-            PlacedObjectManager.instance.UpdatePlacedObjectPhysics(state);
+            if (PlacedDominoManager.instance == null) return;
+            PlacedDominoManager.instance.UpdatePlacedDominoPhysics(state);
         }
 
         private void ToggleCredit(bool state)
