@@ -34,6 +34,15 @@ public class UIManager : MonoBehaviour
 		InventoryOpen = true;
 	}
 
+	public void ExitButton()
+	{
+		foreach(Transform child in MainUI.transform)
+		{
+			child.GetComponent<Button>().interactable = true;
+			InventoryOpen = false;
+			ActiveInventory.SetActive(false);
+		}
+	}
 	
 	void Update()
 	{
