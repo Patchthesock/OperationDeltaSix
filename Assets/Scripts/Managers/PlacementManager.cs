@@ -107,7 +107,6 @@ namespace Assets.Scripts.Managers
             foreach (var p in positions)
             {
                 PlaceObject(ObjectToPlace, p.Position, p.Rotation);
-                Debug.Log("fired");
             }
         }
 
