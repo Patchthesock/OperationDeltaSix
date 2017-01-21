@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace Assets.Scripts.Managers
@@ -9,6 +7,7 @@ namespace Assets.Scripts.Managers
     public class PlacedDominoManager : MonoBehaviour
     {
         public List<GameObject> Dominos;
+        public float MinDistanceBetweenObjects;
 
         public void PlaceDomino(Vector3 position, Quaternion rotation)
         {
@@ -51,6 +50,11 @@ namespace Assets.Scripts.Managers
             _placedDominos.Remove(o);
             _nonActiveDominos.Add(o);
             o.SetActive(false);
+        }
+
+        public bool CanPlaceDomino(Vector3 position)
+        {
+            return _placedDominos.All(o => !(Vector3.Distance(o.transform.position, position) < MinDistanceBetweenObjects));
         }
 
         private GameObject PickRandomDomino()

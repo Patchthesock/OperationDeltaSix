@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,33 +13,6 @@ namespace Assets.Scripts.Managers
 
         public GameObject SingleDomino;
         public GameObject FiveDomino;
-        private GameObject ObjectToPlace;
-
-        [HideInInspector] public static PlacementManager instance = null;
-
-        private void Awake()
-        {
-            if (instance == null)
-                instance = this;
-            else if (instance != this)
-                Destroy(gameObject);
-            DontDestroyOnLoad(gameObject);
-            _removingObjects = false;
-
-            DominoOneBtn.onClick.AddListener(() =>
-            {
-                ObjectToPlace = SingleDomino;
-                SetObject(ObjectToPlace);
-            });
-
-            DominoTwoBtn.onClick.AddListener(() =>
-            {
-                ObjectToPlace = FiveDomino;
-                SetObject(ObjectToPlace);
-            });
-
-            RemoveBtn.onClick.AddListener(RemoveObjects);
-        }
 
         public void SetActive(bool state)
         {
@@ -52,27 +26,11 @@ namespace Assets.Scripts.Managers
         private void Update()
         {
             if (!_isActive) return;
-            if (_gameManager == null)
-            {
-                _gameManager = GameManager.instance;
-                return;
-            }
-
-            if (_placedObjectManager == null)
-            {
-                _placedObjectManager = PlacedObjectManager.instance;
-                return;
-            }
+            Setup();
 
             if (_removingObjects)
             {
-                if (!Input.GetMouseButtonDown(0)) return;
-                RaycastHit hit;
-                var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-                Physics.Raycast(ray, out hit, Mathf.Infinity);
-                if (hit.collider == null) return;
-                if (hit.collider.gameObject.tag != "Disposable") return;
-                PlacedObjectManager.instance.RemoveObject(hit.collider.gameObject);
+                RemoveItem();
                 return;
             }
 
@@ -81,19 +39,23 @@ namespace Assets.Scripts.Managers
             _ghostObject.transform.position = ghostPos == new Vector3() ? new Vector3(999, 999, 999) : ghostPos;
             _ghostObject.transform.rotation = GetDefaultRotation();
             var placementPosition = GetPlacementPosition(0);
-            if (placementPosition == new Vector3() || !_placedObjectManager.CanPlaceObject(placementPosition)) return;
+            if (placementPosition == new Vector3()) return;
 
-            if (ObjectToPlace.GetComponent<DominoHooks>())
+
+            if (_selectedObject.tag == "MultiDomino")
             {
-                foreach (var o in ObjectToPlace.GetComponent<DominoHooks>().Dominos)
+                if (!_placedDominoManager.CanPlaceDomino(placementPosition)) return;
+                foreach (var o in _ghostObject.GetComponent<DominoHooks>().Dominos)
                 {
-                    _placedObjectManager.AddObject(o, o.transform.position, GetDefaultRotation());
+                    _placedDominoManager.PlaceDomino(o.transform.position, GetDefaultRotation());
                 }
             }
-            else
+            if (_selectedObject.tag == "Domino")
             {
-                PlaceObject(ObjectToPlace, placementPosition, GetDefaultRotation());
+                if (!_placedDominoManager.CanPlaceDomino(placementPosition)) return;
+                _placedDominoManager.PlaceDomino(placementPosition, GetDefaultRotation());
             }
+            if (_selectedObject.tag == "Object") { }
         }
 
         private static Vector3 GetPlacementPosition(int mouseButtonNumber)
@@ -121,7 +83,7 @@ namespace Assets.Scripts.Managers
             PlacedObjectManager.instance.RemoveObjects();
             foreach (var p in positions)
             {
-                PlaceObject(ObjectToPlace, p.Position, p.Rotation);
+                PlaceObject(_selectedObject, p.Position, p.Rotation);
             }
         }
 
@@ -150,37 +112,16 @@ namespace Assets.Scripts.Managers
             _selectedObject = model;
             _ghostObject = Instantiate(_selectedObject);
             
-
             if (_ghostObject.GetComponent<DominoHooks>())
             {
                 foreach (var o in _ghostObject.GetComponent<DominoHooks>().Dominos)
                 {
-                    o.gameObject.layer = 2;
-                    if (o.GetComponent<Collider>() != null)
-                    {
-                        o.GetComponent<Collider>().isTrigger = true;
-                    }
-
-                    if (o.GetComponent<Rigidbody>() != null)
-                    {
-                        o.GetComponent<Rigidbody>().isKinematic = true;
-                        o.GetComponent<Rigidbody>().useGravity = false;
-                    }
+                    TurnOffDominoPhysics(_ghostObject);
                 }
             }
             else
             {
-                _ghostObject.gameObject.layer = 2;
-                if (_ghostObject.GetComponent<Collider>() != null)
-                {
-                    _ghostObject.GetComponent<Collider>().isTrigger = true;
-                }
-
-                if (_ghostObject.GetComponent<Rigidbody>() != null)
-                {
-                    _ghostObject.GetComponent<Rigidbody>().isKinematic = true;
-                    _ghostObject.GetComponent<Rigidbody>().useGravity = false;
-                }
+                TurnOffDominoPhysics(_ghostObject);
             }
         }
 
@@ -192,11 +133,92 @@ namespace Assets.Scripts.Managers
             Destroy(_ghostObject);
         }
 
+        private static void TurnOffDominoPhysics(GameObject o)
+        {
+            o.gameObject.layer = 2;
+            if (o.GetComponent<Collider>() != null)
+            {
+                o.GetComponent<Collider>().isTrigger = true;
+            }
+
+            if (o.GetComponent<Rigidbody>() == null) return;
+            o.GetComponent<Rigidbody>().isKinematic = true;
+            o.GetComponent<Rigidbody>().useGravity = false;
+        }
+
+        private void RemoveItem()
+        {
+            if (!Input.GetMouseButtonDown(0)) return;
+            RaycastHit hit;
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Physics.Raycast(ray, out hit, Mathf.Infinity);
+            if (hit.collider == null) return;
+
+            switch (hit.collider.gameObject.tag)
+            {
+                case "Ground":
+                    return;
+                case "Domino":
+                    PlacedDominoManager.instance.RemoveDomino(hit.collider.gameObject);
+                    break;
+                case "Object":
+                    PlacedObjectManager.instance.RemoveObject(hit.collider.gameObject);
+                    break;
+            }
+        }
+
+        private void Setup()
+        {
+            if (_gameManager == null)
+            {
+                _gameManager = GameManager.instance;
+                return;
+            }
+
+            if (_placedObjectManager == null)
+            {
+                _placedObjectManager = PlacedObjectManager.instance;
+                return;
+            }
+
+            if (_placedDominoManager == null)
+            {
+                _placedDominoManager = PlacedDominoManager.instance;
+            }
+        }
+
         private bool _removingObjects = false;
         private bool _isActive = true;
         private GameObject _selectedObject;
         private GameObject _ghostObject;
         private GameManager _gameManager;
         private PlacedObjectManager _placedObjectManager;
+        private PlacedDominoManager _placedDominoManager;
+
+
+        [HideInInspector]
+        public static PlacementManager instance = null;
+
+        private void Awake()
+        {
+            if (instance == null)
+                instance = this;
+            else if (instance != this)
+                Destroy(gameObject);
+            DontDestroyOnLoad(gameObject);
+            _removingObjects = false;
+
+            DominoOneBtn.onClick.AddListener(() =>
+            {
+                SetObject(SingleDomino);
+            });
+
+            DominoTwoBtn.onClick.AddListener(() =>
+            {
+                SetObject(FiveDomino);
+            });
+
+            RemoveBtn.onClick.AddListener(RemoveObjects);
+        }
     }
 }
