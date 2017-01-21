@@ -29,6 +29,8 @@ namespace Assets
 
         void Update()
         {
+            MouseLook.instance.SetActive(Input.GetMouseButton(1));
+
             //use shift to speed up flight
             if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
             {
@@ -57,13 +59,18 @@ namespace Assets
             
             if (Math.Abs(Input.GetAxis("Vertical")) > 0.01)
             {
-                Camera.transform.Translate(Vector3.forward * _flySpeed * Input.GetAxis("Vertical"));
+                //var newForward = new Vector3(Vector3.forward.x,Vector3.forward.y, 0);
+                //var pos = Vector3.forward * _flySpeed * Input.GetAxis("Vertical");
+                Camera.transform.position = Camera.transform.position + (new Vector3(1, 0, 1) * Input.GetAxis("Vertical"));
+                //Camera.transform.Translate(new Vector3(pos.x, 0, pos.z));
+                //Camera.transform.position = Camera.transform.position + new Vector3(1, 0, 0) * Input.GetAxis("Vertical");
             }
 
-            if (Math.Abs(Input.GetAxis("Horizontal")) > 0.01)
-            {
-                Camera.transform.Translate(Vector3.right * _flySpeed * Input.GetAxis("Horizontal"));
-            }
+            //if (Math.Abs(Input.GetAxis("Horizontal")) > 0.01)
+            //{
+            //    //Camera.transform.Translate(Vector3.right * _flySpeed * Input.GetAxis("Horizontal"));
+            //    Camera.transform.position = Camera.transform.position + new Vector3(0, 0, 1) * Input.GetAxis("Horizontal");
+            //}
 
             if (Input.GetKey(KeyCode.E))
             {

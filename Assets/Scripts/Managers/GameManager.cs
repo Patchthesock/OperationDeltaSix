@@ -39,6 +39,7 @@ namespace Assets
 
         public void PlayControl(bool state)
         {
+            if(state) SaveManager.instance.Save();
             Physics.gravity = state ? new Vector3(0, -50, 0) : new Vector3(0, 0, 0);
             PlacedObjectManager.instance.UpdatePlacedObjectPhysics(state);
             HandObject.SetActive(state);

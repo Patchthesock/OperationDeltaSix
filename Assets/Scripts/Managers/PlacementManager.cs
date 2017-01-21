@@ -36,13 +36,13 @@ namespace Assets.Scripts.Managers
             var placementPosition = GetPlacementPosition(0);
             if (placementPosition == new Vector3() || !_placedObjectManager.CanPlaceObject(placementPosition) || !_canPlace) return;
             _canPlace = true;
-            PlaceObject(ObjectToPlace, placementPosition);
+            PlaceObject(ObjectToPlace, placementPosition, GetDefaultRotation());
         }
 
         private static Vector3 GetPlacementPosition(int mouseButtonNumber)
         {
             if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return new Vector3();
-            if (!Input.GetMouseButtonDown(mouseButtonNumber)) return new Vector3();
+            if (!Input.GetMouseButton(mouseButtonNumber)) return new Vector3();
             RaycastHit hit;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
@@ -54,18 +54,21 @@ namespace Assets.Scripts.Managers
             PlacedObjectManager.instance.RemoveObjects();
             foreach (var p in positions)
             {
-                PlaceObject(ObjectToPlace, p.Position);
+                PlaceObject(ObjectToPlace, p.Position, p.Rotation);
                 Debug.Log("fired");
             }
         }
 
-        private void PlaceObject(GameObject model, Vector3 position)
+        private void PlaceObject(GameObject model, Vector3 position, Quaternion rotation)
         {
-            var objectToPlace = Instantiate(model);
-            objectToPlace.GetComponentInChildren<Rigidbody>().isKinematic = true;
-            objectToPlace.GetComponentInChildren<Rigidbody>().useGravity = false;
-            objectToPlace.transform.position = position + new Vector3(0,1f,0);
-            _placedObjectManager.AddObject(objectToPlace);
+            _placedObjectManager.AddObject(model, position, rotation);
+        }
+
+        private static Quaternion GetDefaultRotation()
+        {
+            var rotation = CameraManager.instance.Camera.transform.rotation.eulerAngles;
+            rotation = new Vector3(0, rotation.y, rotation.z);
+            return Quaternion.Euler(rotation);
         }
 
         private static void RotateObject(GameObject objectToRoate)
