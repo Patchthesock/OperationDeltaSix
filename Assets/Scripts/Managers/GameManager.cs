@@ -33,6 +33,7 @@ namespace Assets
                 PlayBtn.onClick.AddListener(() =>
                 {
                     PlayControl(!IsPlaying);
+                    
                 });
             }
             PlayControl(false);
@@ -44,6 +45,8 @@ namespace Assets
             Physics.gravity = state ? new Vector3(0, -50, 0) : new Vector3(0, 0, 0);
             HandObject.SetActive(state);
             IsPlaying = state;
+            PlayBtn.GetComponentInChildren<Text>().text = IsPlaying ? "Stop" : "Start";
+
             if (PlacementManager.instance == null) return;
             PlacementManager.instance.SetActive(!state);
             if (PlacedObjectManager.instance == null) return;
