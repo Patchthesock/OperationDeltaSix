@@ -14,6 +14,9 @@ namespace Assets.Scripts.Managers
         public GameObject SingleDomino;
         public GameObject FiveDomino;
 
+        public CursorMode normalCursor;
+        public Texture2D cursorCantPlaceTexture;
+
         public void SetActive(bool state)
         {
             _isActive = state;
@@ -26,6 +29,10 @@ namespace Assets.Scripts.Managers
         private void Update()
         {
             if (!_isActive) return;
+            if (Input.GetMouseButtonUp(0))
+            {
+                _mouseLock = false;
+            }
             Setup();
 
             if (_removingObjects)
@@ -36,22 +43,37 @@ namespace Assets.Scripts.Managers
 
             if (_selectedObject == null) return;
             var ghostPos = GetPlacementPosition();
-            _ghostObject.transform.position = ghostPos == new Vector3() ? new Vector3(999, 999, 999) : ghostPos;
+
+            if (ghostPos == new Vector3())
+            {
+                _ghostObject.transform.position = new Vector3(999, 999, 999);
+                Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+            }
+            else
+            {
+                _ghostObject.transform.position = ghostPos;
+                Cursor.SetCursor(null, Vector2.zero, normalCursor);
+            }
+
             _ghostObject.transform.rotation = GetDefaultRotation();
             var placementPosition = GetPlacementPosition(0);
             if (placementPosition == new Vector3()) return;
-
+            
+            // Give to Place Manager
             if (_selectedObject.tag == "MultiDomino")
             {
+                if (_mouseLock) return;
                 if (!_placedDominoManager.CanPlaceDomino(placementPosition)) return;
                 var dom = _ghostObject.GetComponent<DominoHooks>();
                 if (dom == null) return;
 
                 foreach (var o in dom.Dominos)
                 {
-                    Debug.Log(o.name);
-                    _placedDominoManager.PlaceDomino(o.transform.position, GetDefaultRotation());
+                    _placedDominoManager.PlaceDomino(
+                        new Vector3(o.transform.position.x, o.transform.position.y - 1, o.transform.position.z),
+                        GetDefaultRotation());
                 }
+                ForceMouseButtonRelease();
             }
             if (_selectedObject.tag == "Domino")
             {
@@ -64,7 +86,7 @@ namespace Assets.Scripts.Managers
         private static Vector3 GetPlacementPosition(int mouseButtonNumber)
         {
             if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return new Vector3();
-            if (!Input.GetMouseButtonDown(mouseButtonNumber)) return new Vector3();
+            if (!Input.GetMouseButton(mouseButtonNumber)) return new Vector3();
             RaycastHit hit;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
@@ -111,16 +133,16 @@ namespace Assets.Scripts.Managers
 
         private void SetObject(GameObject model)
         {
+            // Ghost the Object
             _removingObjects = false;
             _selectedObject = model;
             _ghostObject = Instantiate(_selectedObject);
             
             if (_ghostObject.GetComponent<DominoHooks>())
             {
-                TurnOffDominoPhysics(_ghostObject);
                 foreach (var o in _ghostObject.GetComponent<DominoHooks>().Dominos)
                 {
-                    TurnOffDominoPhysics(_ghostObject);
+                    TurnOffDominoPhysics(o);
                 }
             }
             else
@@ -195,6 +217,12 @@ namespace Assets.Scripts.Managers
             }
         }
 
+        private void ForceMouseButtonRelease()
+        {
+            _mouseLock = true;
+        }
+
+        private bool _mouseLock = false;
         private bool _removingObjects = false;
         private bool _isActive = true;
         private GameObject _selectedObject;
