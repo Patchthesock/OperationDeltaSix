@@ -6,6 +6,7 @@ namespace Assets
     public class GameManager : MonoBehaviour
     {
         public Button PlayBtn;
+        public GameObject HandObject;
 
         public bool IsPlaying { get; private set; }
 
@@ -20,7 +21,6 @@ namespace Assets
                 Destroy(gameObject);
 
             DontDestroyOnLoad(gameObject);
-            IsPlaying = false;
             InitGame();
         }
 
@@ -34,17 +34,15 @@ namespace Assets
                     PlayControl(!IsPlaying);
                 });
             }
+            PlayControl(false);
         }
 
-        private void Update()
-        {
-            Debug.Log(IsPlaying);
-        }
-
-        private void PlayControl(bool state)
+        public void PlayControl(bool state)
         {
             Physics.gravity = state ? new Vector3(0, -50, 0) : new Vector3(0, 0, 0);
-            IsPlaying = !IsPlaying;
+            PlacedObjectManager.instance.UpdatePlacedObjectPhysics(state);
+            HandObject.SetActive(state);
+            IsPlaying = state;
         }
     }
 }

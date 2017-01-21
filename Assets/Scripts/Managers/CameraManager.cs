@@ -9,7 +9,7 @@ namespace Assets
 
         private bool _shift;
         private bool _ctrl;
-        private float _flySpeed = 1;
+        private float _flySpeed = 0.5f;
         private float _accelerationAmount = 30;
         private readonly float _accelerationRatio = 3;
         private readonly float _slowDownRatio = 0.2f;

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.Managers
 {
@@ -33,11 +34,9 @@ namespace Assets.Scripts.Managers
             }
 
             var placementPosition = GetPlacementPosition(0);
-            if (placementPosition != new Vector3() && _placedObjectManager.CanPlaceObject(placementPosition) && _canPlace)
-            {
-                _canPlace = true;
-                _placedObjectManager.AddObject(PlaceObject(ObjectToPlace, placementPosition));
-            }
+            if (placementPosition == new Vector3() || !_placedObjectManager.CanPlaceObject(placementPosition) || !_canPlace) return;
+            _canPlace = true;
+            PlaceObject(ObjectToPlace, placementPosition);
         }
 
         private static Vector3 GetPlacementPosition(int mouseButtonNumber)
@@ -50,11 +49,23 @@ namespace Assets.Scripts.Managers
             return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point;
         }
 
-        private static GameObject PlaceObject(GameObject model, Vector3 position)
+        public void PlaceObject(IEnumerable<SaveManager.ObjectPosition> positions)
+        {
+            PlacedObjectManager.instance.RemoveObjects();
+            foreach (var p in positions)
+            {
+                PlaceObject(ObjectToPlace, p.Position);
+                Debug.Log("fired");
+            }
+        }
+
+        private void PlaceObject(GameObject model, Vector3 position)
         {
             var objectToPlace = Instantiate(model);
-            objectToPlace.transform.position = position;
-            return objectToPlace;
+            objectToPlace.GetComponentInChildren<Rigidbody>().isKinematic = true;
+            objectToPlace.GetComponentInChildren<Rigidbody>().useGravity = false;
+            objectToPlace.transform.position = position + new Vector3(0,1f,0);
+            _placedObjectManager.AddObject(objectToPlace);
         }
 
         private static void RotateObject(GameObject objectToRoate)
