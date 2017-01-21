@@ -11,6 +11,7 @@ namespace Assets.Scripts.Managers
 
         public void PlaceDomino(Vector3 position, Quaternion rotation)
         {
+            Debug.Log(position);
             GameObject objectToPlace;
             if (_nonActiveDominos.Count > 0)
             {
