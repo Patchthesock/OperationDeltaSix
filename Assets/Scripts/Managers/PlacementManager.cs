@@ -10,7 +10,9 @@ namespace Assets.Scripts.Managers
         public Button DominoTwoBtn;
         public Button RemoveBtn;
 
-        public GameObject ObjectToPlace;
+        public GameObject SingleDomino;
+        public GameObject FiveDomino;
+        private GameObject ObjectToPlace;
 
         [HideInInspector] public static PlacementManager instance = null;
 
@@ -25,11 +27,13 @@ namespace Assets.Scripts.Managers
 
             DominoOneBtn.onClick.AddListener(() =>
             {
+                ObjectToPlace = SingleDomino;
                 SetObject(ObjectToPlace);
             });
 
             DominoTwoBtn.onClick.AddListener(() =>
             {
+                ObjectToPlace = FiveDomino;
                 SetObject(ObjectToPlace);
             });
 
@@ -78,7 +82,18 @@ namespace Assets.Scripts.Managers
             _ghostObject.transform.rotation = GetDefaultRotation();
             var placementPosition = GetPlacementPosition(0);
             if (placementPosition == new Vector3() || !_placedObjectManager.CanPlaceObject(placementPosition)) return;
-            PlaceObject(ObjectToPlace, placementPosition, GetDefaultRotation());
+
+            if (ObjectToPlace.GetComponent<DominoHooks>())
+            {
+                foreach (var o in ObjectToPlace.GetComponent<DominoHooks>().Dominos)
+                {
+                    _placedObjectManager.AddObject(o, o.transform.position, GetDefaultRotation());
+                }
+            }
+            else
+            {
+                PlaceObject(ObjectToPlace, placementPosition, GetDefaultRotation());
+            }
         }
 
         private static Vector3 GetPlacementPosition(int mouseButtonNumber)
@@ -134,10 +149,39 @@ namespace Assets.Scripts.Managers
             _removingObjects = false;
             _selectedObject = model;
             _ghostObject = Instantiate(_selectedObject);
-            _ghostObject.GetComponent<Rigidbody>().isKinematic = true;
-            _ghostObject.GetComponent<Rigidbody>().useGravity = false;
-            _ghostObject.GetComponent<Collider>().isTrigger = true;
-            _ghostObject.gameObject.layer = 2;
+            
+
+            if (_ghostObject.GetComponent<DominoHooks>())
+            {
+                foreach (var o in _ghostObject.GetComponent<DominoHooks>().Dominos)
+                {
+                    o.gameObject.layer = 2;
+                    if (o.GetComponent<Collider>() != null)
+                    {
+                        o.GetComponent<Collider>().isTrigger = true;
+                    }
+
+                    if (o.GetComponent<Rigidbody>() != null)
+                    {
+                        o.GetComponent<Rigidbody>().isKinematic = true;
+                        o.GetComponent<Rigidbody>().useGravity = false;
+                    }
+                }
+            }
+            else
+            {
+                _ghostObject.gameObject.layer = 2;
+                if (_ghostObject.GetComponent<Collider>() != null)
+                {
+                    _ghostObject.GetComponent<Collider>().isTrigger = true;
+                }
+
+                if (_ghostObject.GetComponent<Rigidbody>() != null)
+                {
+                    _ghostObject.GetComponent<Rigidbody>().isKinematic = true;
+                    _ghostObject.GetComponent<Rigidbody>().useGravity = false;
+                }
+            }
         }
 
         private void RemoveObjects()
