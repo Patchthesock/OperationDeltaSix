@@ -7,7 +7,6 @@ namespace Assets
     public class GameManager : MonoBehaviour
     {
         public Button PlayBtn;
-        public float CreditFadeTime;
         public GameObject HandObject;
 
         public bool IsPlaying { get; private set; }
