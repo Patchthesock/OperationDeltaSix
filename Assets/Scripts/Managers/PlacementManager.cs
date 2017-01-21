@@ -33,6 +33,10 @@ namespace Assets.Scripts.Managers
             {
                 _mouseLock = false;
             }
+            if (Input.GetKey(KeyCode.Escape))
+            {
+                DestroyGhost();
+            }
             Setup();
 
             if (_removingObjects)
@@ -159,6 +163,7 @@ namespace Assets.Scripts.Managers
 
         private void DestroyGhost()
         {
+            _selectedObject = null;
             if (_ghostObject == null) return;
             Destroy(_ghostObject);
         }
