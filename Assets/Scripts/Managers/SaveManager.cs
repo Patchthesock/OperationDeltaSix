@@ -38,12 +38,14 @@ namespace Assets
 
         public void Save()
         {
+            _placedObjects.Clear();
             _placedObjects.AddRange(PlacedObjectManager.instance.GetPlacedObjects().ToList().Select(t => new ObjectPosition
             {
                 GameObject = t,
                 Position = t.transform.position + new Vector3(0, -1f, 0),
                 Rotation = t.transform.rotation
             }).ToList());
+            _placedDominos.Clear();
             _placedDominos.AddRange(PlacedDominoManager.instance.GetPlacedDominos().ToList().Select(t => new ObjectPosition
             {
                 Position = t.transform.position + new Vector3(0, -1f, 0),

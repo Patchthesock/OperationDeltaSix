@@ -15,6 +15,8 @@ namespace Assets.Scripts.Managers
         public Button DominoNintyRightBtn;
         public Button DominoOneEightyTurnBtn;
         public Button RemoveBtn;
+        public Button DominoMenuBtn;
+        public Button PropMenuBtn;
 
         public GameObject SingleDomino;
         public GameObject FiveDomino;
@@ -147,10 +149,8 @@ namespace Assets.Scripts.Managers
 
         private void SetMenu(bool state)
         {
-            //DominoOneBtn.gameObject.SetActive(state);
-            //DominoFiveBtn.gameObject.SetActive(state);
-            //DominoTenBtn.gameObject.SetActive(state);
-            //RemoveBtn.gameObject.SetActive(state);
+            DominoMenuBtn.gameObject.SetActive(state);
+            PropMenuBtn.gameObject.SetActive(state);
         }
 
         private void SetObject(GameObject model)
