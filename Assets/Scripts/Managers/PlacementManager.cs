@@ -121,15 +121,6 @@ namespace Assets.Scripts.Managers
             return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point + new Vector3(0,1.1f,0);
         }
 
-        public void PlaceObject(IEnumerable<SaveManager.ObjectPosition> positions)
-        {
-            PlacedObjectManager.instance.RemoveObjects();
-            foreach (var p in positions)
-            {
-                PlaceObject(_selectedObject, p.Position, p.Rotation);
-            }
-        }
-
         private void PlaceObject(GameObject model, Vector3 position, Quaternion rotation)
         {
             _placedObjectManager.AddObject(model, position, rotation);

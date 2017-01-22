@@ -6,6 +6,10 @@ namespace Assets
     public class CameraManager : MonoBehaviour
     {
         public GameObject Camera;
+        public float MinHeight;
+        public float MaxHeight;
+        public float MaxMinX;
+        public float MaxMinZ;
         public float FlySpeed = 0.5f;
 
         private bool _shift;
@@ -78,6 +82,35 @@ namespace Assets
                 Camera.transform.Translate(Vector3.down * FlySpeed);
             }
 
+            if (Camera.transform.position.y < MinHeight)
+            {
+                Camera.transform.position = new Vector3(Camera.transform.position.x, MinHeight, Camera.transform.position.z);
+            }
+
+            if (Camera.transform.position.y > MaxHeight)
+            {
+                Camera.transform.position = new Vector3(Camera.transform.position.x, MaxHeight, Camera.transform.position.z);
+            }
+
+            if (Camera.transform.position.x > MaxMinX)
+            {
+                Camera.transform.position = new Vector3(MaxMinX, Camera.transform.position.y, Camera.transform.position.z);
+            }
+
+            if (Mathf.Abs(Camera.transform.position.x) > MaxMinX)
+            {
+                Camera.transform.position = new Vector3(-MaxMinX, Camera.transform.position.y, Camera.transform.position.z);
+            }
+
+            if (Camera.transform.position.z > MaxMinZ)
+            {
+                Camera.transform.position = new Vector3(Camera.transform.position.z, Camera.transform.position.y, MaxMinZ);
+            }
+
+            if (Mathf.Abs(Camera.transform.position.z) > MaxMinZ)
+            {
+                Camera.transform.position = new Vector3(Camera.transform.position.z, Camera.transform.position.y, -MaxMinZ);
+            }
 
             //if (Input.GetKeyDown(KeyCode.M))
             //    playerObject.transform.position = transform.position; 
