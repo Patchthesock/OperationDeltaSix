@@ -8,11 +8,21 @@ namespace Assets.Scripts.Managers
     public class PlacementManager : MonoBehaviour
     {
         public Button DominoOneBtn;
-        public Button DominoTwoBtn;
+        public Button DominoFiveBtn;
+        public Button DominoTenBtn;
+        public Button DominoTwentyBtn;
+        public Button DominoNintyLeftBtn;
+        public Button DominoNintyRightBtn;
+        public Button DominoOneEightyTurnBtn;
         public Button RemoveBtn;
 
         public GameObject SingleDomino;
         public GameObject FiveDomino;
+        public GameObject TenDomino;
+        public GameObject TwentyDomino;
+        public GameObject NintyLeft;
+        public GameObject NintyRight;
+        public GameObject OneEightyTurn; 
 
         public float TimeToLine;
         public CursorMode normalCursor;
@@ -144,9 +154,10 @@ namespace Assets.Scripts.Managers
 
         private void SetMenu(bool state)
         {
-            DominoOneBtn.gameObject.SetActive(state);
-            DominoTwoBtn.gameObject.SetActive(state);
-            RemoveBtn.gameObject.SetActive(state);
+            //DominoOneBtn.gameObject.SetActive(state);
+            //DominoFiveBtn.gameObject.SetActive(state);
+            //DominoTenBtn.gameObject.SetActive(state);
+            //RemoveBtn.gameObject.SetActive(state);
         }
 
         private void SetObject(GameObject model)
@@ -271,10 +282,40 @@ namespace Assets.Scripts.Managers
                 SetObject(SingleDomino);
             });
 
-            DominoTwoBtn.onClick.AddListener(() =>
+            DominoFiveBtn.onClick.AddListener(() =>
             {
                 DestroyGhost();
                 SetObject(FiveDomino);
+            });
+
+            DominoTenBtn.onClick.AddListener(() =>
+            {
+                DestroyGhost();
+                SetObject(TenDomino);
+            });
+
+            DominoTwentyBtn.onClick.AddListener(() =>
+            {
+                DestroyGhost();
+                SetObject(TwentyDomino);
+            });
+
+            DominoNintyLeftBtn.onClick.AddListener(() =>
+            {
+                DestroyGhost();
+                SetObject(NintyLeft);
+            });
+
+            DominoNintyRightBtn.onClick.AddListener(() =>
+            {
+                DestroyGhost();
+                SetObject(NintyRight);
+            });
+
+            DominoOneEightyTurnBtn.onClick.AddListener(() =>
+            {
+                DestroyGhost();
+                SetObject(OneEightyTurn);
             });
 
             RemoveBtn.onClick.AddListener(() =>
