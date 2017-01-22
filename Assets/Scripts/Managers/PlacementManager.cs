@@ -81,6 +81,10 @@ namespace Assets.Scripts.Managers
             if (_selectedObject.tag == "MultiDomino")
             {
                 if (_mouseLock) return;
+                if (!_placedDominoManager.CanPlaceDomino(placementPosition))
+                {
+                    Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+                }
                 if (!_placedDominoManager.CanPlaceDomino(placementPosition)) return;
                 var dom = _ghostObject.GetComponent<DominoHooks>();
                 if (dom == null) return;
@@ -88,7 +92,7 @@ namespace Assets.Scripts.Managers
                 foreach (var o in dom.Dominos)
                 {
                     _placedDominoManager.PlaceDomino(
-                        new Vector3(o.transform.position.x, o.transform.position.y - 1, o.transform.position.z),
+                        new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z),
                         o.transform.rotation);
                 }
                 ForceMouseButtonRelease();
