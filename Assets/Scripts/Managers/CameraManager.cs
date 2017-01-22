@@ -40,23 +40,23 @@ namespace Assets
 
             ////
 
-            if (Input.GetMouseButton(0))
-            {
-                if (Input.GetMouseButtonDown(0))
-                {
-                    _dragOrigin = Input.mousePosition;
-                    Debug.Log("fired");
-                }
+            //if (Input.GetMouseButton(0))
+            //{
+            //    if (Input.GetMouseButtonDown(0))
+            //    {
+            //        _dragOrigin = Input.mousePosition;
+            //        Debug.Log("fired");
+            //    }
                 
-                var pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - _dragOrigin);
-                var move = new Vector2(pos.x, pos.y) * -1; //* FlySpeed * -1;
-                //TheCamera.transform.Translate(new Vector3(TheCamera.transform.forward.x + pos.x, 0, TheCamera.transform.right.z + pos.y) , Space.World);
+            //    var pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - _dragOrigin);
+            //    var move = new Vector2(pos.x, pos.y) * -1; //* FlySpeed * -1;
+            //    //TheCamera.transform.Translate(new Vector3(TheCamera.transform.forward.x + pos.x, 0, TheCamera.transform.right.z + pos.y) , Space.World);
 
-                TheCamera.transform.position = new Vector3(
-                    TheCamera.transform.position.x + move.x,
-                    TheCamera.transform.position.y,
-                    TheCamera.transform.position.z + move.y); 
-            }
+            //    TheCamera.transform.position = new Vector3(
+            //        TheCamera.transform.position.x + move.x,
+            //        TheCamera.transform.position.y,
+            //        TheCamera.transform.position.z + move.y); 
+            //}
 
             
 

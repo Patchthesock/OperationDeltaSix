@@ -37,7 +37,7 @@ namespace Assets
                 PlacedObjectManager.instance.AddObject(_placedObjects);
                 PlacedDominoManager.instance.PlaceDomino(_placedDominos);
             });
-            LoadData();
+            //LoadData();
         }
 
         public void Save()
@@ -56,7 +56,7 @@ namespace Assets
                 Rotation = t.transform.rotation
             }));
 
-            SaveDataToFile(_placedDominos, _placedObjects);
+            //SaveDataToFile(_placedDominos, _placedObjects);
         }
 
         private void Save(IEnumerable<ObjectPosition> positions)
@@ -100,44 +100,44 @@ namespace Assets
             public ObjectPositionSave() { }
         }
 
-        [Serializable]
-        public class ListObjectPositionSave
-        {
-            public List<ObjectPositionSave> ObjectPositionSave;
-        }
+        //[Serializable]
+        //public class ListObjectPositionSave
+        //{
+        //    public List<ObjectPositionSave> ObjectPositionSave;
+        //}
 
-        private static void SaveDataToFile(IEnumerable<ObjectPosition> dominos, List<ObjectPosition> objects)
-        {
+        //private static void SaveDataToFile(IEnumerable<ObjectPosition> dominos, List<ObjectPosition> objects)
+        //{
 
-            var data = new ListObjectPositionSave
-            {
-                ObjectPositionSave = dominos.Select(d => new ObjectPositionSave(d.Position, d.Rotation)).ToList()
-            };
-            if (!Directory.Exists("Saves")) Directory.CreateDirectory("Saves");
-            var formatter = new BinaryFormatter();
-            var dominosFile = File.Create("Saves/dominos.binary");
-            //var objectsFile = File.Create("saves/objects.binary");
-            formatter.Serialize(dominosFile, data);
-            //formatter.Serialize(objectsFile, objects);
-            dominosFile.Close();
-            //objectsFile.Close();
-        }
+        //    var data = new ListObjectPositionSave
+        //    {
+        //        ObjectPositionSave = dominos.Select(d => new ObjectPositionSave(d.Position, d.Rotation)).ToList()
+        //    };
+        //    if (!Directory.Exists("Saves")) Directory.CreateDirectory("Saves");
+        //    var formatter = new BinaryFormatter();
+        //    var dominosFile = File.Create("Saves/dominos.binary");
+        //    //var objectsFile = File.Create("saves/objects.binary");
+        //    formatter.Serialize(dominosFile, data);
+        //    //formatter.Serialize(objectsFile, objects);
+        //    dominosFile.Close();
+        //    //objectsFile.Close();
+        //}
 
-        private void LoadData()
-        {
-            if (!Directory.Exists("Saves")) return;
-            var formatter = new BinaryFormatter();
-            var dominosFile = File.Open("Saves/dominos.binary", FileMode.Open);
-            //var objectsFile = File.Open("Saves/objects.binary", FileMode.Open);
-            var dom = (ListObjectPositionSave)formatter.Deserialize(dominosFile);
-            //_placedObjects = (List<ObjectPosition>)formatter.Deserialize(objectsFile);
-            dominosFile.Close();
-            //objectsFile.Close();
+        //private void LoadData()
+        //{
+        //    if (!Directory.Exists("Saves")) return;
+        //    var formatter = new BinaryFormatter();
+        //    var dominosFile = File.Open("Saves/dominos.binary", FileMode.Open);
+        //    //var objectsFile = File.Open("Saves/objects.binary", FileMode.Open);
+        //    var dom = (ListObjectPositionSave)formatter.Deserialize(dominosFile);
+        //    //_placedObjects = (List<ObjectPosition>)formatter.Deserialize(objectsFile);
+        //    dominosFile.Close();
+        //    //objectsFile.Close();
 
-            _placedDominos = dom.ObjectPositionSave.Select(d => new ObjectPosition
-            {
-                GameObject = null, Position = new Vector3(d.PosX, d.PosY, d.PosZ), Rotation = Quaternion.Euler(new Vector3(d.RotX, d.RotY, d.RotZ))
-            }).ToList();
-        }
+        //    _placedDominos = dom.ObjectPositionSave.Select(d => new ObjectPosition
+        //    {
+        //        GameObject = null, Position = new Vector3(d.PosX, d.PosY, d.PosZ), Rotation = Quaternion.Euler(new Vector3(d.RotX, d.RotY, d.RotZ))
+        //    }).ToList();
+        //}
     }
 }
