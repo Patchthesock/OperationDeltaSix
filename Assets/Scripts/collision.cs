@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 
 public class collision : MonoBehaviour
@@ -15,12 +15,14 @@ public class collision : MonoBehaviour
 
     void OnCollisionEnter (Collision col)
     {
-    	
-        if(col.gameObject.tag == "domino")
+    	Debug.Log("Fired");
+        if(col.gameObject.tag == "Domino")
         {
         	index = Random.Range (0, audioFiles.Length);
    			_audioSource.clip = audioFiles[index];
             _audioSource.Play();
+            Debug.Log("Fired");
+            
         }
     }
 }
