@@ -8,5 +8,10 @@ public class IntroMenuManager : MonoBehaviour
 	{
 		Application.LoadLevel("ZenGarden");
 	}
+	
+	public void ExitGame()
+	{
+		Application.Quit();
+	}
 
 }
