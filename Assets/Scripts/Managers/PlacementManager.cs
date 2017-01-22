@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Assets.Scripts.Components;
+﻿using Assets.Scripts.Components;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -62,7 +61,7 @@ namespace Assets.Scripts.Managers
 
             if (_selectedObject == null) return;
             var ghostPos = GetPlacementPosition();
-            if (ghostPos == new Vector3())
+            if (ghostPos == new Vector3() || !_placedDominoManager.CanPlaceDomino(ghostPos))
             {
                 _ghostObject.transform.position = new Vector3(999, 999, 999);
                 Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
@@ -99,6 +98,10 @@ namespace Assets.Scripts.Managers
             }
             if (_selectedObject.tag == "Domino")
             {
+                if (!_placedDominoManager.CanPlaceDomino(placementPosition))
+                {
+                    Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+                }
                 if (!_placedDominoManager.CanPlaceDomino(ghostPos)) return;
                 _placedDominoManager.PlaceDomino(ghostPos, GetSingleRotation(ghostPos));
                 _timeLastPlaced = Time.time;
@@ -128,7 +131,7 @@ namespace Assets.Scripts.Managers
 
         private static Quaternion GetDefaultRotation()
         {
-            var rotation = CameraManager.instance.Camera.transform.rotation.eulerAngles;
+            var rotation = CameraManager.instance.TheCamera.transform.rotation.eulerAngles;
             rotation = new Vector3(0, rotation.y, rotation.z);
             return Quaternion.Euler(rotation);
         }
