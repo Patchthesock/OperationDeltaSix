@@ -12,7 +12,6 @@ namespace Assets
         public float MaxMinZ;
         public float FlySpeed = 0.5f;
 
-        public float DragSpeed = 2;
         private float Height;
         private Vector3 _dragOrigin;
         private bool _shift;
@@ -35,11 +34,9 @@ namespace Assets
             DontDestroyOnLoad(gameObject);
         }
 
-        void Update()
+        private void Update()
         {
             MouseLook.instance.SetActive(Input.GetMouseButton(1));
-
-            ////
 
             if (Input.GetMouseButton(2))
             {
@@ -51,20 +48,11 @@ namespace Assets
                 }
 
                 var pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - _dragOrigin);
-                var move = new Vector3(pos.x, 0, pos.y) * -1; //* FlySpeed * -1;
-
-                //var vec = (new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * move.x) +
-                 //         (new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * move.y) * FlySpeed;
-
-                //TheCamera.transform.Translate(vec, Space.World);
-
+                var move = new Vector3(pos.x, 0, pos.y) * -1;
                 TheCamera.transform.Translate(move * FlySpeed, Space.Self);
                 TheCamera.transform.position = new Vector3(TheCamera.transform.position.x, Height, TheCamera.transform.position.z);
             }
 
-
-
-            ////
             //use shift to speed up flight
             if (Input.GetKeyDown(KeyCode.LeftShift) || Input.GetKeyDown(KeyCode.RightShift))
             {
@@ -112,8 +100,6 @@ namespace Assets
             }
 
             Clamp();
-            //if (Input.GetKeyDown(KeyCode.M))
-            //    playerObject.transform.position = transform.position; 
         }
 
         private void Clamp()
