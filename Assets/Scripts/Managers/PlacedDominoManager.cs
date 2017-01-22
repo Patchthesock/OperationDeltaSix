@@ -26,7 +26,7 @@ namespace Assets.Scripts.Managers
 
             objectToPlace.GetComponentInChildren<Rigidbody>().isKinematic = true;
             objectToPlace.GetComponentInChildren<Rigidbody>().useGravity = false;
-            objectToPlace.transform.position = position + new Vector3(0, 1f, 0);
+            objectToPlace.transform.position = position;
             objectToPlace.transform.rotation = rotation;
             objectToPlace.transform.SetParent(ARBoard.transform);
             if (_placedDominos.Contains(objectToPlace)) return;

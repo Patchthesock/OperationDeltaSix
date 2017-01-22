@@ -62,7 +62,6 @@ namespace Assets.Scripts.Managers
 
             if (_selectedObject == null) return;
             var ghostPos = GetPlacementPosition();
-
             if (ghostPos == new Vector3())
             {
                 _ghostObject.transform.position = new Vector3(999, 999, 999);
@@ -96,8 +95,8 @@ namespace Assets.Scripts.Managers
             }
             if (_selectedObject.tag == "Domino")
             {
-                if (!_placedDominoManager.CanPlaceDomino(placementPosition)) return;
-                _placedDominoManager.PlaceDomino(placementPosition, GetSingleRotation(placementPosition));
+                if (!_placedDominoManager.CanPlaceDomino(ghostPos)) return;
+                _placedDominoManager.PlaceDomino(ghostPos, GetSingleRotation(ghostPos));
                 _timeLastPlaced = Time.time;
             }
             if (_selectedObject.tag == "Object") { }
@@ -120,12 +119,7 @@ namespace Assets.Scripts.Managers
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
             if (hit.collider == null) return new Vector3();
-            return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point + new Vector3(0,1.1f,0);
-        }
-
-        private void PlaceObject(GameObject model, Vector3 position, Quaternion rotation)
-        {
-            _placedObjectManager.AddObject(model, position, rotation);
+            return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point + new Vector3(0,0.6f,0);
         }
 
         private static Quaternion GetDefaultRotation()
