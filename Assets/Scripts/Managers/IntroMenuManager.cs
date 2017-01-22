@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class IntroMenuManager : MonoBehaviour 
 {
+	public GameObject CreditsScreen;
+	public GameObject LogoLeft;
+	
 	public void NewGameButton()
 	{
 		Application.LoadLevel("ZenGarden");
@@ -14,4 +17,9 @@ public class IntroMenuManager : MonoBehaviour
 		Application.Quit();
 	}
 
+	public void Credits()
+	{
+		CreditsScreen.SetActive(true);
+		LogoLeft.SetActive(false);
+	}
 }
