@@ -121,6 +121,7 @@ namespace Assets
         {
             if (!Directory.Exists("Saves")) return;
             var formatter = new BinaryFormatter();
+            if (!File.Exists("Saves/dominos.binary")) return;
             var dominosFile = File.Open("Saves/dominos.binary", FileMode.Open);
             //var objectsFile = File.Open("Saves/objects.binary", FileMode.Open);
             var dom = (ListObjectPositionSave)formatter.Deserialize(dominosFile);

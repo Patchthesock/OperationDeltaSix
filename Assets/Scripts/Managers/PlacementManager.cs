@@ -19,6 +19,7 @@ namespace Assets.Scripts.Managers
         public Button PropBridgeBtn;
         public Button PropStepSlideBtn;
 
+        public Button ClearDominos;
         public Button RemoveBtn;
         public Button DominoMenuBtn;
         public Button PropMenuBtn;
@@ -378,6 +379,19 @@ namespace Assets.Scripts.Managers
 
             PropStepSlideBtn.onClick.AddListener(() =>
             {
+                DestroyGhost();
+                SetObject(StepSlideProp);
+                foreach (Transform child in MainUI.transform)
+                {
+                    child.GetComponent<Button>().interactable = true;
+                    GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
+                    GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+                }
+            });
+
+            ClearDominos.onClick.AddListener(() =>
+            {
+                PlacedDominoManager.instance.RemoveDomino();
                 DestroyGhost();
                 SetObject(StepSlideProp);
                 foreach (Transform child in MainUI.transform)
