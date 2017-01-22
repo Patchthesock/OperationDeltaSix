@@ -33,6 +33,15 @@ namespace Assets.Scripts.Managers
             _placedDominos.Add(objectToPlace);
         }
 
+        public void PlaceDomino(IEnumerable<SaveManager.ObjectPosition> dominos)
+        {
+            RemoveDomino();
+            foreach (var o in dominos)
+            {
+                PlaceDomino(o.Position, o.Rotation);
+            }
+        }
+
         public void UpdatePlacedDominoPhysics(bool usePhysics)
         {
             foreach (var o in _placedDominos)
@@ -45,6 +54,14 @@ namespace Assets.Scripts.Managers
         public IEnumerable<GameObject> GetPlacedDominos()
         {
             return _placedDominos;
+        }
+
+        public void RemoveDomino()
+        {
+            foreach (var o in _placedDominos.ToList())
+            {
+                RemoveDomino(o);
+            }
         }
 
         public void RemoveDomino(GameObject o)
