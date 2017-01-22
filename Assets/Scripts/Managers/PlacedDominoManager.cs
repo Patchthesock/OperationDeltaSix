@@ -26,11 +26,20 @@ namespace Assets.Scripts.Managers
 
             objectToPlace.GetComponentInChildren<Rigidbody>().isKinematic = true;
             objectToPlace.GetComponentInChildren<Rigidbody>().useGravity = false;
-            objectToPlace.transform.position = position + new Vector3(0, 1f, 0);
+            objectToPlace.transform.position = position;
             objectToPlace.transform.rotation = rotation;
             objectToPlace.transform.SetParent(ARBoard.transform);
             if (_placedDominos.Contains(objectToPlace)) return;
             _placedDominos.Add(objectToPlace);
+        }
+
+        public void PlaceDomino(IEnumerable<SaveManager.ObjectPosition> dominos)
+        {
+            RemoveDomino();
+            foreach (var o in dominos)
+            {
+                PlaceDomino(o.Position, o.Rotation);
+            }
         }
 
         public void UpdatePlacedDominoPhysics(bool usePhysics)
@@ -45,6 +54,14 @@ namespace Assets.Scripts.Managers
         public IEnumerable<GameObject> GetPlacedDominos()
         {
             return _placedDominos;
+        }
+
+        public void RemoveDomino()
+        {
+            foreach (var o in _placedDominos.ToList())
+            {
+                RemoveDomino(o);
+            }
         }
 
         public void RemoveDomino(GameObject o)

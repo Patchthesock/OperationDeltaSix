@@ -73,8 +73,8 @@ namespace UnityStandardAssets.ImageEffects
 
             if (filterType.enumValueIndex == 0) {
                 // portal style motion blur
-                EditorGUILayout.PropertyField (rotationScale, new GUIContent(" Camera Rotation"));
-                EditorGUILayout.PropertyField (movementScale, new GUIContent(" Camera Movement"));
+                EditorGUILayout.PropertyField (rotationScale, new GUIContent(" TheCamera Rotation"));
+                EditorGUILayout.PropertyField (movementScale, new GUIContent(" TheCamera Movement"));
             }
             else {
                 // "plausible" blur or cheap, local blur

@@ -10,7 +10,7 @@ public class UIManager : MonoBehaviour
 	public GameObject MainUI;
 	public bool InventoryOpen;
 	
-	private GameObject ActiveInventory;
+	public GameObject ActiveInventory;
 	
 	public void DominoesButton()
 	{

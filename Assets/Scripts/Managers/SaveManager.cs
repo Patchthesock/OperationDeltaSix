@@ -31,17 +31,26 @@ namespace Assets
             ResetBtn.onClick.AddListener(() =>
             {
                 GameManager.instance.PlayControl(false);
-                PlacementManager.instance.PlaceObject(_placedObjects);
+                PlacedObjectManager.instance.AddObject(_placedObjects);
+                PlacedDominoManager.instance.PlaceDomino(_placedDominos);
             });
         }
 
         public void Save()
         {
-            Save(PlacedObjectManager.instance.GetPlacedObjects().ToList().Select(t => new ObjectPosition
+            _placedObjects.Clear();
+            _placedObjects.AddRange(PlacedObjectManager.instance.GetPlacedObjects().ToList().Select(t => new ObjectPosition
             {
-                Position = t.transform.position + new Vector3(0, -1f, 0),
+                GameObject = t,
+                Position = t.transform.position,
                 Rotation = t.transform.rotation
             }).ToList());
+            _placedDominos.Clear();
+            _placedDominos.AddRange(PlacedDominoManager.instance.GetPlacedDominos().ToList().Select(t => new ObjectPosition
+            {
+                Position = t.transform.position,
+                Rotation = t.transform.rotation
+            }));
         }
 
         private void Save(IEnumerable<ObjectPosition> positions)
@@ -50,11 +59,13 @@ namespace Assets
         }
 
         private List<ObjectPosition> _placedObjects = new List<ObjectPosition>();
+        private List<ObjectPosition> _placedDominos = new List<ObjectPosition>();
 
         public class ObjectPosition
         {
             public Vector3 Position;
             public Quaternion Rotation;
+            public GameObject GameObject;
         }
     }
 }
