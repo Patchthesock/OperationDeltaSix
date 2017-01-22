@@ -8,6 +8,8 @@ namespace Assets
     {
         public Button PlayBtn;
         public GameObject HandObject;
+        public Color StartBtnColorActive;
+        public Color StartBtnColorNotActive;
 
         public bool IsPlaying { get; private set; }
 
@@ -18,10 +20,10 @@ namespace Assets
                 PlayBtn.onClick.AddListener(() =>
                 {
                     PlayControl(!IsPlaying);
-                    
                 });
             }
             PlayControl(false);
+            PlayBtn.GetComponent<Image>().color = StartBtnColorNotActive;
         }
 
         public void PlayControl(bool state)
@@ -30,7 +32,8 @@ namespace Assets
             Physics.gravity = state ? new Vector3(0, -50, 0) : new Vector3(0, 0, 0);
             HandObject.SetActive(state);
             IsPlaying = state;
-            PlayBtn.GetComponentInChildren<Text>().text = IsPlaying ? "Stop" : "Start";
+            PlayBtn.GetComponentInChildren<Text>().text = IsPlaying ? "Stop" : "Begin";
+            PlayBtn.GetComponent<Image>().color = IsPlaying ? StartBtnColorNotActive : StartBtnColorActive;
 
             if (PlacementManager.instance == null) return;
             PlacementManager.instance.SetActive(!state);

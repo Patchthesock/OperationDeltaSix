@@ -22,8 +22,9 @@ namespace Assets.Scripts.Managers
         public GameObject TwentyDomino;
         public GameObject NintyLeft;
         public GameObject NintyRight;
-        public GameObject OneEightyTurn; 
+        public GameObject OneEightyTurn;
 
+        public GameObject MainUi;
         public float TimeToLine;
         public CursorMode normalCursor;
         public Texture2D cursorCantPlaceTexture;
