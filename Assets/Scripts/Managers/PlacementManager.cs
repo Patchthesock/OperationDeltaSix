@@ -132,10 +132,11 @@ namespace Assets.Scripts.Managers
 
         private Quaternion GetSingleRotation(Vector3 pos)
         {
-            
             if (Time.time - _timeLastPlaced <= TimeToLine)
             {
-                //return Quaternion.
+                var rot = Quaternion.LookRotation(_positionLastPlaced - pos);
+                _positionLastPlaced = pos;
+                return rot;
             }
             _positionLastPlaced = pos;
             return GetDefaultRotation();
