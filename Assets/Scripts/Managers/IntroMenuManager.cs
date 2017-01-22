@@ -2,15 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class IntroMenuManager : MonoBehaviour {
+public class IntroMenuManager : MonoBehaviour 
+{
+	public void NewGameButton()
+	{
+		Application.LoadLevel("ZenGarden");
+	}
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }
