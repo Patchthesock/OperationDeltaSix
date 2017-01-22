@@ -6,6 +6,7 @@ namespace Assets.Scripts.Managers
 {
     public class PlacementManager : MonoBehaviour
     {
+        // Domino Buttons
         public Button DominoOneBtn;
         public Button DominoFiveBtn;
         public Button DominoTenBtn;
@@ -13,6 +14,11 @@ namespace Assets.Scripts.Managers
         public Button DominoNintyLeftBtn;
         public Button DominoNintyRightBtn;
         public Button DominoOneEightyTurnBtn;
+
+        // Prop Buttons
+        public Button PropBridgeBtn;
+        public Button PropStepSlideBtn;
+
         public Button RemoveBtn;
         public Button DominoMenuBtn;
         public Button PropMenuBtn;
@@ -24,6 +30,9 @@ namespace Assets.Scripts.Managers
         public GameObject NintyLeft;
         public GameObject NintyRight;
         public GameObject OneEightyTurn;
+
+        public GameObject BridgeProp;
+        public GameObject StepSlideProp;
 
         public GameObject MainUI;
 
@@ -182,6 +191,7 @@ namespace Assets.Scripts.Managers
 
         private void DestroyGhost()
         {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             _selectedObject = null;
             if (_ghostObject == null) return;
             Destroy(_ghostObject);
@@ -352,6 +362,30 @@ namespace Assets.Scripts.Managers
 					GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
 					GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
 				}				
+            });
+
+            PropBridgeBtn.onClick.AddListener(() =>
+            {
+                DestroyGhost();
+                SetObject(BridgeProp);
+                foreach (Transform child in MainUI.transform)
+                {
+                    child.GetComponent<Button>().interactable = true;
+                    GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
+                    GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+                }
+            });
+
+            PropStepSlideBtn.onClick.AddListener(() =>
+            {
+                DestroyGhost();
+                SetObject(StepSlideProp);
+                foreach (Transform child in MainUI.transform)
+                {
+                    child.GetComponent<Button>().interactable = true;
+                    GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
+                    GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+                }
             });
 
             RemoveBtn.onClick.AddListener(() =>
