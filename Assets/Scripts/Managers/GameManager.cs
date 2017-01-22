@@ -23,7 +23,7 @@ namespace Assets
                 });
             }
             PlayControl(false);
-            PlayBtn.GetComponent<Image>().color = StartBtnColorNotActive;
+            PlayBtn.GetComponent<Image>().color = StartBtnColorActive;
         }
 
         public void PlayControl(bool state)
@@ -35,6 +35,7 @@ namespace Assets
             PlayBtn.GetComponentInChildren<Text>().text = IsPlaying ? "Stop" : "Begin";
             PlayBtn.GetComponent<Image>().color = IsPlaying ? StartBtnColorNotActive : StartBtnColorActive;
 
+            if (state) Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             if (PlacementManager.instance == null) return;
             PlacementManager.instance.SetActive(!state);
             if (PlacedDominoManager.instance == null) return;
