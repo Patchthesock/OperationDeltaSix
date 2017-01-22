@@ -24,7 +24,8 @@ namespace Assets.Scripts.Managers
         public GameObject NintyRight;
         public GameObject OneEightyTurn;
 
-        public GameObject MainUi;
+        public GameObject MainUI;
+
         public float TimeToLine;
         public CursorMode normalCursor;
         public Texture2D cursorCantPlaceTexture;
@@ -281,16 +282,34 @@ namespace Assets.Scripts.Managers
             {
                 DestroyGhost();
                 SetObject(SingleDomino);
+				foreach(Transform child in MainUI.transform)
+				{
+					child.GetComponent<Button>().interactable = true;
+					 GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
+					 GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+				}
             });
 
             DominoFiveBtn.onClick.AddListener(() =>
             {
                 DestroyGhost();
                 SetObject(FiveDomino);
+				foreach(Transform child in MainUI.transform)
+				{
+					child.GetComponent<Button>().interactable = true;
+					GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
+					GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+				}
             });
 
             DominoTenBtn.onClick.AddListener(() =>
             {
+				foreach(Transform child in MainUI.transform)
+				{
+					child.GetComponent<Button>().interactable = true;
+					GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
+					GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+				}
                 DestroyGhost();
                 SetObject(TenDomino);
             });
@@ -299,24 +318,48 @@ namespace Assets.Scripts.Managers
             {
                 DestroyGhost();
                 SetObject(TwentyDomino);
+				foreach(Transform child in MainUI.transform)
+				{
+					child.GetComponent<Button>().interactable = true;
+					GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
+					GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+				}				
             });
 
             DominoNintyLeftBtn.onClick.AddListener(() =>
             {
                 DestroyGhost();
                 SetObject(NintyLeft);
+				foreach(Transform child in MainUI.transform)
+				{
+					child.GetComponent<Button>().interactable = true;
+					GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
+					GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+				}				
             });
 
             DominoNintyRightBtn.onClick.AddListener(() =>
             {
                 DestroyGhost();
                 SetObject(NintyRight);
+				foreach(Transform child in MainUI.transform)
+				{
+					child.GetComponent<Button>().interactable = true;
+					GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
+					GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+				}
             });
 
             DominoOneEightyTurnBtn.onClick.AddListener(() =>
             {
                 DestroyGhost();
                 SetObject(OneEightyTurn);
+				foreach(Transform child in MainUI.transform)
+				{
+					child.GetComponent<Button>().interactable = true;
+					GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
+					GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+				}				
             });
 
             RemoveBtn.onClick.AddListener(() =>
