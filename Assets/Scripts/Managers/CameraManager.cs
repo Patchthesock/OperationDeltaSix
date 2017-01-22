@@ -68,11 +68,12 @@ namespace Assets
                 Camera.transform.Translate(new Vector3(Camera.transform.right.x, 0, Camera.transform.right.z) * Input.GetAxis("Horizontal") * FlySpeed, Space.World);
             }
 
-            if (Input.GetKey(KeyCode.E))
+            var d = Input.GetAxis("Mouse ScrollWheel");
+            if (Input.GetKey(KeyCode.E) || d > 0f)
             {
                 Camera.transform.Translate(Vector3.up * FlySpeed);
             }
-            else if (Input.GetKey(KeyCode.Q))
+            else if (Input.GetKey(KeyCode.Q) || d < 0f)
             {
                 Camera.transform.Translate(Vector3.down * FlySpeed);
             }

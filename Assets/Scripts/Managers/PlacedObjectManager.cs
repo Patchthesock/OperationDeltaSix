@@ -20,6 +20,14 @@ namespace Assets
             _placedObjects.Add(objectToPlace);
         }
 
+        public void AddObject(IEnumerable<SaveManager.ObjectPosition> dominos)
+        {
+            foreach (var o in dominos)
+            {
+                AddObject(o.GameObject, o.Position, o.Rotation);
+            }
+        }
+
         public IEnumerable<GameObject> GetPlacedObjects()
         {
             return _placedObjects;
