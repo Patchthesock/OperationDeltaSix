@@ -6,6 +6,7 @@ namespace Assets.Scripts.Managers
 {
     public class PlacedDominoManager : MonoBehaviour
     {
+        public GameObject ARBoard;
         public List<GameObject> Dominos;
         public float MinDistanceBetweenObjects;
 
@@ -28,6 +29,7 @@ namespace Assets.Scripts.Managers
             objectToPlace.GetComponentInChildren<Rigidbody>().useGravity = false;
             objectToPlace.transform.position = position + new Vector3(0, 1f, 0);
             objectToPlace.transform.rotation = rotation;
+            objectToPlace.transform.SetParent(ARBoard.transform);
             if (_placedDominos.Contains(objectToPlace)) return;
             _placedDominos.Add(objectToPlace);
         }
