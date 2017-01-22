@@ -13,6 +13,7 @@ namespace Assets
         public float FlySpeed = 0.5f;
 
         public float DragSpeed = 2;
+        private float Height;
         private Vector3 _dragOrigin;
         private bool _shift;
         private bool _ctrl;
@@ -40,23 +41,26 @@ namespace Assets
 
             ////
 
-            //if (Input.GetMouseButton(0))
-            //{
-            //    if (Input.GetMouseButtonDown(0))
-            //    {
-            //        _dragOrigin = Input.mousePosition;
-            //        Debug.Log("fired");
-            //    }
+            if (Input.GetMouseButton(2))
+            {
+                if (Input.GetMouseButtonDown(2))
+                {
+                    Height = TheCamera.transform.position.y;
+                    _dragOrigin = Input.mousePosition;
+                    Debug.Log("fired");
+                }
 
-            //    var pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - _dragOrigin);
-            //    var move = new Vector2(pos.x, pos.y) * -1; //* FlySpeed * -1;
-            //    //TheCamera.transform.Translate(new Vector3(TheCamera.transform.forward.x + pos.x, 0, TheCamera.transform.right.z + pos.y) , Space.World);
+                var pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - _dragOrigin);
+                var move = new Vector3(pos.x, 0, pos.y) * -1; //* FlySpeed * -1;
 
-            //    TheCamera.transform.position = new Vector3(
-            //        TheCamera.transform.position.x + move.x,
-            //        TheCamera.transform.position.y,
-            //        TheCamera.transform.position.z + move.y);
-            //}
+                //var vec = (new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * move.x) +
+                 //         (new Vector3(TheCamera.transform.right.x, 0, TheCamera.transform.right.z) * move.y) * FlySpeed;
+
+                //TheCamera.transform.Translate(vec, Space.World);
+
+                TheCamera.transform.Translate(move * FlySpeed, Space.Self);
+                TheCamera.transform.position = new Vector3(TheCamera.transform.position.x, Height, TheCamera.transform.position.z);
+            }
 
 
 
