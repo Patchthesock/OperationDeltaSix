@@ -393,7 +393,6 @@ namespace Assets.Scripts.Managers
             {
                 PlacedDominoManager.instance.RemoveDomino();
                 DestroyGhost();
-                SetObject(StepSlideProp);
                 foreach (Transform child in MainUI.transform)
                 {
                     child.GetComponent<Button>().interactable = true;
