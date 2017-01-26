@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Components;
+﻿
+using Assets.Scripts.Hooks;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -98,12 +99,12 @@ namespace Assets.Scripts.Managers
                 var dom = _ghostObject.GetComponent<DominoHooks>();
                 if (dom == null) return;
 
-                foreach (var o in dom.Dominos)
-                {
-                    _placedDominoManager.PlaceDomino(
-                        new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z),
-                        o.transform.rotation);
-                }
+                //foreach (var o in dom.Dominos)
+                //{
+                //    _placedDominoManager.PlaceDomino(
+                //        new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z),
+                //        o.transform.rotation);
+                //}
                 ForceMouseButtonRelease();
             }
             if (_selectedObject.tag == "Domino")
@@ -173,10 +174,10 @@ namespace Assets.Scripts.Managers
             
             if (_ghostObject.GetComponent<DominoHooks>())
             {
-                foreach (var o in _ghostObject.GetComponent<DominoHooks>().Dominos)
-                {
-                    TurnOffDominoPhysics(o);
-                }
+                //foreach (var o in _ghostObject.GetComponent<DominoHooks>().Dominos)
+                //{
+                //    TurnOffDominoPhysics(o);
+                //}
             }
             else
             {

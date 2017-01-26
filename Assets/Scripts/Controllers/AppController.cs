@@ -11,7 +11,7 @@ namespace Assets.Scripts.Controllers
 
         public void Initialize()
         {
-            _gameController.Start();
+            _gameController.Initialize();
         }
 
 

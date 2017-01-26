@@ -4,7 +4,7 @@ using Zenject;
 
 namespace Assets.Scripts.Controllers
 {
-    public class GameController : IInitializable, ITickable
+    public class GameController : ITickable
     {
         public GameController(
             GameStateFactory stateFactory)
