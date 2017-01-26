@@ -27,6 +27,11 @@ namespace Assets.Scripts.Controllers
             MovePositionHorizontal(_userInput.GetHorizontalPositionInput(), _hooks, _settings);
         }
 
+        public Ray ScreenPointToRay(Vector3 position)
+        {
+            return _hooks.Camera.ScreenPointToRay(position);
+        }
+
         private void MouseLook(Vector2 input, Component hooks, CameraSettings settings)
         {
             switch (settings.axes)
