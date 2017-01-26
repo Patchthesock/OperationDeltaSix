@@ -1,11 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Assets.Scripts.Controllers
+﻿namespace Assets.Scripts.Controllers
 {
-    class GameController
+    public class GameController
     {
+        public void Start()
+        {
+            
+        }
     }
 }
