@@ -32,34 +32,39 @@ namespace Assets.Scripts.Controllers
             switch (settings.axes)
             {
                 case RotationAxes.MouseXAndY:
-                    {
-                        _rotationX += input.x * settings.sensitivityX;
-                        _rotationY += input.y * settings.sensitivityY;
-                        _rotationX = ClampAngle(_rotationX, settings.minimumX, settings.maximumX);
-                        _rotationY = ClampAngle(_rotationY, settings.minimumY, settings.maximumY);
-                        var xQuaternion = Quaternion.AngleAxis(_rotationX, Vector3.up);
-                        var yQuaternion = Quaternion.AngleAxis(_rotationY, -Vector3.right);
-                        hooks.transform.rotation = _originalRotation * xQuaternion * yQuaternion;
-                    }
+                {
+                    _rotationX += input.x * settings.sensitivityX;
+                    _rotationY += input.y * settings.sensitivityY;
+                    _rotationX = ClampAngle(_rotationX, settings.minimumX, settings.maximumX);
+                    _rotationY = ClampAngle(_rotationY, settings.minimumY, settings.maximumY);
+                    var xQuaternion = Quaternion.AngleAxis(_rotationX, Vector3.up);
+                    var yQuaternion = Quaternion.AngleAxis(_rotationY, -Vector3.right);
+                    hooks.transform.rotation = _originalRotation * xQuaternion * yQuaternion;
                     break;
+                }
+                    
                 case RotationAxes.MouseX:
-                    {
-                        _rotationX += input.x * settings.sensitivityX;
-                        _rotationX = ClampAngle(_rotationX, settings.minimumX, settings.maximumX);
-                        var xQuaternion = Quaternion.AngleAxis(_rotationX, Vector3.up);
-                        hooks.transform.rotation = _originalRotation * xQuaternion;
-                    }
+                {
+                    _rotationX += input.x * settings.sensitivityX;
+                    _rotationX = ClampAngle(_rotationX, settings.minimumX, settings.maximumX);
+                    var xQuaternion = Quaternion.AngleAxis(_rotationX, Vector3.up);
+                    hooks.transform.rotation = _originalRotation * xQuaternion;
                     break;
+                }
+                    
                 case RotationAxes.MouseY:
+                {
                     break;
+                }
+                    
                 default:
-                    {
-                        _rotationY += input.y * settings.sensitivityY;
-                        _rotationY = ClampAngle(_rotationY, settings.minimumY, settings.maximumY);
-                        var yQuaternion = Quaternion.AngleAxis(-_rotationY, Vector3.right);
-                        hooks.transform.rotation = _originalRotation * yQuaternion;
-                    }
+                {
+                    _rotationY += input.y * settings.sensitivityY;
+                    _rotationY = ClampAngle(_rotationY, settings.minimumY, settings.maximumY);
+                    var yQuaternion = Quaternion.AngleAxis(-_rotationY, Vector3.right);
+                    hooks.transform.rotation = _originalRotation * yQuaternion;
                     break;
+                }  
             }
         }
 
