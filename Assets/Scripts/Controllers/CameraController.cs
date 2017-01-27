@@ -10,7 +10,7 @@ namespace Assets.Scripts.Controllers
     {
         public CameraController(
             CameraHooks hooks,
-            CameraSettings settings,
+            Settings settings,
             IUserCameraInput userInput)
         {
             _hooks = hooks;
@@ -32,7 +32,7 @@ namespace Assets.Scripts.Controllers
             return _hooks.Camera.ScreenPointToRay(position);
         }
 
-        private void MouseLook(Vector2 input, Component hooks, CameraSettings settings)
+        private void MouseLook(Vector2 input, Component hooks, Settings settings)
         {
             switch (settings.axes)
             {
@@ -73,7 +73,7 @@ namespace Assets.Scripts.Controllers
             }
         }
 
-        private static void MovePositionVertical(float input, Component hooks, CameraSettings settings)
+        private static void MovePositionVertical(float input, Component hooks, Settings settings)
         {
             if (input < 0f)
             {
@@ -86,7 +86,7 @@ namespace Assets.Scripts.Controllers
             }
         }
 
-        private static void MovePositionHorizontal(Vector2 input, Component hooks, CameraSettings settings)
+        private static void MovePositionHorizontal(Vector2 input, Component hooks, Settings settings)
         {
             if (Math.Abs(input.y) > 0.01)
             {
@@ -101,7 +101,7 @@ namespace Assets.Scripts.Controllers
             }
         }
         
-        private static void Clamp(Component hooks, CameraSettings settings)
+        private static void Clamp(Component hooks, Settings settings)
         {
             if (hooks.transform.position.y < settings.MinHeight)
             {
@@ -153,21 +153,22 @@ namespace Assets.Scripts.Controllers
         private float _rotationX;
         private float _rotationY;
 
-        private readonly Quaternion _originalRotation;
         private readonly CameraHooks _hooks;
-        private readonly CameraSettings _settings;
+        private readonly Settings _settings;
         private readonly IUserCameraInput _userInput;
+        private readonly Quaternion _originalRotation;
 
-        public class CameraSettings
+        [Serializable]
+        public class Settings
         {
             // Position
-            public float MinHeight;
-            public float MaxHeight;
             public float MaxMinX;
             public float MaxMinZ;
             public float FlySpeed;
-            public float SlowDownRatio;
+            public float MinHeight;
+            public float MaxHeight;
             public float Acceleration;
+            public float SlowDownRatio;
             public float AccelerationRatio;
 
             // Rotation

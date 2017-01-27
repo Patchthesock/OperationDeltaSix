@@ -1,5 +1,4 @@
 ﻿using Assets.Scripts.Hooks;
-using UnityEngine;
 
 namespace Assets.Scripts.Actors
 {

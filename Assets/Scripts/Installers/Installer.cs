@@ -1,12 +1,16 @@
-﻿using Assets.Scripts.Controllers;
+﻿using System;
+using Assets.Scripts.Controllers;
 using Assets.Scripts.Factories;
 using Assets.Scripts.Services;
+using UnityEngine;
 using Zenject;
 
 namespace Assets.Scripts.Installers
 {
     public class Installer : MonoInstaller
     {
+        [SerializeField] private Settings _settings = null;
+
         public override void InstallBindings()
         {
             InstallServices();
@@ -78,18 +82,32 @@ namespace Assets.Scripts.Installers
 
         private void InstallCameraController()
         {
+            Container.Bind<CameraController.Settings>()
+                .FromInstance(_settings.CameraControllerSettings);
             Container.Bind<CameraController>().AsSingle();
         }
 
         private void InstallDominoController()
         {
+            Container.Bind<DominoController.Settings>()
+                .FromInstance(_settings.DominoControllerSettings).AsSingle();
             Container.Bind<DominoController>().AsSingle();
         }
 
         private void InstallPlacementController()
         {
+            Container.Bind<PlacementController.Settings>()
+                .FromInstance(_settings.PlacementControllerSettings).AsSingle();
             Container.Bind<PlacementController>().AsSingle();
         }
         #endregion
+
+        [Serializable]
+        private class Settings
+        {
+            public CameraController.Settings CameraControllerSettings;
+            public DominoController.Settings DominoControllerSettings;
+            public PlacementController.Settings PlacementControllerSettings;
+        }
     }
 }

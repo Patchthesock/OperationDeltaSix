@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Assets.Scripts.Controllers
 {
@@ -61,6 +62,7 @@ namespace Assets.Scripts.Controllers
         private readonly Settings _settings;
         private readonly CameraController _cameraController;
 
+        [Serializable]
         public class Settings
         {
             public float TimeToLine;
