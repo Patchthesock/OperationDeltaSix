@@ -60,6 +60,7 @@ namespace Assets.Scripts.Installers
             InstallAppController();
             InstallGameController();
             InstallInputController();
+            InstallLevelController();
             InstallCameraController();
             InstallDominoController();
             InstallPlacementController();
@@ -78,6 +79,13 @@ namespace Assets.Scripts.Installers
         private void InstallInputController()
         {
             Container.Bind<InputController>().AsSingle();
+        }
+
+        private void InstallLevelController()
+        {
+            Container.Bind<LevelController.Settings>()
+                .FromInstance(_settings.LevelControllerSettings).AsSingle();
+            Container.Bind<LevelController>().AsSingle();
         }
 
         private void InstallCameraController()
@@ -105,6 +113,7 @@ namespace Assets.Scripts.Installers
         [Serializable]
         private class Settings
         {
+            public LevelController.Settings LevelControllerSettings;
             public CameraController.Settings CameraControllerSettings;
             public DominoController.Settings DominoControllerSettings;
             public PlacementController.Settings PlacementControllerSettings;

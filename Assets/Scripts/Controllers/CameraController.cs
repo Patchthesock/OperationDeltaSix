@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Scripts.Actors;
+using Assets.Scripts.Factories;
 using Assets.Scripts.Interfaces;
 using UnityEngine;
 using Zenject;
@@ -9,27 +10,33 @@ namespace Assets.Scripts.Controllers
     public class CameraController : ITickable
     {
         public CameraController(
-            CameraHooks hooks,
             Settings settings,
-            IUserCameraInput userInput)
+            IUserCameraInput userInput,
+            PrefabFactory prefabFactory)
         {
-            _hooks = hooks;
             _settings = settings;
             _userInput = userInput;
-            _originalRotation = _hooks.transform.rotation;
+            _prefabFactory = prefabFactory;
+        }
+
+        public void Initialize()
+        {
+            _camera = new PlayerCamera(_prefabFactory.Create(_settings.Camera).GetComponent<CameraHooks>());
+            _originalRotation = _camera.Transform.rotation;
         }
 
         public void Tick()
         {
-            Clamp(_hooks, _settings);
-            MouseLook(_userInput.GetRotationLookInput(), _hooks, _settings);
-            MovePositionVertical(_userInput.GetVerticalPositionInput(), _hooks, _settings);
-            MovePositionHorizontal(_userInput.GetHorizontalPositionInput(), _hooks, _settings);
+            if (_camera == null) return;
+            Clamp(_camera.Transform, _settings);
+            MouseLook(_userInput.GetRotationLookInput(), _camera.Transform, _settings);
+            MovePositionVertical(_userInput.GetVerticalPositionInput(), _camera.Transform, _settings);
+            MovePositionHorizontal(_userInput.GetHorizontalPositionInput(), _camera.Transform, _settings);
         }
 
         public Ray ScreenPointToRay(Vector3 position)
         {
-            return _hooks.Camera.ScreenPointToRay(position);
+            return _camera.Camera.ScreenPointToRay(position);
         }
 
         private void MouseLook(Vector2 input, Component hooks, Settings settings)
@@ -152,11 +159,12 @@ namespace Assets.Scripts.Controllers
 
         private float _rotationX;
         private float _rotationY;
+        private PlayerCamera _camera;
+        private Quaternion _originalRotation;
 
-        private readonly CameraHooks _hooks;
         private readonly Settings _settings;
         private readonly IUserCameraInput _userInput;
-        private readonly Quaternion _originalRotation;
+        private readonly PrefabFactory _prefabFactory;
 
         [Serializable]
         public class Settings
@@ -179,6 +187,9 @@ namespace Assets.Scripts.Controllers
             public float sensitivityX = 15f;
             public float sensitivityY = 15f;
             public RotationAxes axes = RotationAxes.MouseXAndY;
+
+            // GameObject
+            public GameObject Camera;
         }
     }
 }
