@@ -7,13 +7,24 @@ namespace Assets.Scripts.Controllers
     public class GameController : ITickable
     {
         public GameController(
-            GameStateFactory stateFactory)
+            GameStateFactory stateFactory,
+            LevelController levelController,
+            CameraController cameraController,
+            DominoController dominoController,
+            PlacementController placementController)
         {
             _stateFactory = stateFactory;
+            _levelController = levelController;
+            _cameraController = cameraController;
+            _dominoController = dominoController;
+            _placementController = placementController;
         }
 
         public void Initialize()
         {
+            _levelController.Initialize();
+            _cameraController.Initialize();
+            
             ChangeState(GameStateFactory.GameStates.Build);
         }
 
@@ -31,5 +42,10 @@ namespace Assets.Scripts.Controllers
 
         private GameState _currentState;
         private readonly GameStateFactory _stateFactory;
+        private readonly LevelController _levelController;
+        private readonly CameraController _cameraController;
+        private readonly DominoController _dominoController;
+        private readonly PlacementController _placementController;
+        
     }
 }

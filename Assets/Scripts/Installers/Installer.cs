@@ -97,8 +97,8 @@ namespace Assets.Scripts.Installers
 
         private void InstallDominoController()
         {
-            Container.Bind<DominoController.Settings>()
-                .FromInstance(_settings.DominoControllerSettings).AsSingle();
+            //Container.Bind<DominoController.Settings>()
+            //    .FromInstance(_settings.DominoControllerSettings).AsSingle();
             Container.Bind<DominoController>().AsSingle();
         }
 

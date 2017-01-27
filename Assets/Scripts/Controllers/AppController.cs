@@ -14,7 +14,6 @@ namespace Assets.Scripts.Controllers
             _gameController.Initialize();
         }
 
-
         private readonly GameController _gameController;
     }
 }
