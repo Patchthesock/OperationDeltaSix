@@ -10,9 +10,7 @@ namespace Assets.Scripts.Controllers
         {
             _settings = settings;
             _cameraController = cameraController;
-        }
-
-
+        } 
 
         private Quaternion GetSingleDominoRotation(Vector3 pos)
         {
