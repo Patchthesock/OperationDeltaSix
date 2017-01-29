@@ -11,12 +11,12 @@ namespace Assets.Scripts.Controllers
     {
         public CameraController(
             Settings settings,
-            IUserCameraInput userInput,
-            PrefabFactory prefabFactory)
+            PrefabFactory prefabFactory,
+            InputController inputController)
         {
             _settings = settings;
-            _userInput = userInput;
             _prefabFactory = prefabFactory;
+            _inputController = inputController;
         }
 
         public void Initialize()
@@ -29,9 +29,9 @@ namespace Assets.Scripts.Controllers
         {
             if (_camera == null) return;
             Clamp(_camera.Transform, _settings);
-            MouseLook(_userInput.GetRotationLookInput(), _camera.Transform, _settings);
-            MovePositionVertical(_userInput.GetVerticalPositionInput(), _camera.Transform, _settings);
-            MovePositionHorizontal(_userInput.GetHorizontalPositionInput(), _camera.Transform, _settings);
+            MouseLook(_inputController.GetRotationLookInput(), _camera.Transform, _settings);
+            MovePositionVertical(_inputController.GetVerticalPositionInput(), _camera.Transform, _settings);
+            MovePositionHorizontal(_inputController.GetHorizontalPositionInput(), _camera.Transform, _settings);
         }
 
         public Ray ScreenPointToRay(Vector3 position)
@@ -173,7 +173,7 @@ namespace Assets.Scripts.Controllers
         private Quaternion _originalRotation;
 
         private readonly Settings _settings;
-        private readonly IUserCameraInput _userInput;
+        private readonly InputController _inputController;
         private readonly PrefabFactory _prefabFactory;
 
         [Serializable]

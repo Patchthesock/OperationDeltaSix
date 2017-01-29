@@ -4,8 +4,7 @@ namespace Assets.Scripts.Services
 {
     public class StandaloneInputService
     {
-        public StandaloneInputService(
-            PrefabFactory prefabFactory)
+        public StandaloneInputService()
         {
             
         }

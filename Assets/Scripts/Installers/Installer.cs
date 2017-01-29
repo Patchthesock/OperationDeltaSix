@@ -58,13 +58,12 @@ namespace Assets.Scripts.Installers
         #region Controllers
         private void InstallControllers()
         {
-            
-            InstallGameController();
             InstallInputController();
             InstallLevelController();
             InstallCameraController();
             InstallDominoController();
             InstallPlacementController();
+            InstallGameController();
         }
 
         private void InstallGameController()

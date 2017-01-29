@@ -142,6 +142,9 @@ MonoBehaviour:
     DominoControllerSettings:
       Dominos:
       - {fileID: 1512718420550064, guid: 915f046bb9f6c9441b4a35aa379efdd9, type: 2}
+      - {fileID: 1812991237968580, guid: 3375408108ddb4142957217ddabd08a4, type: 2}
+      - {fileID: 1664693608267968, guid: 078b2adf095dcab489037202e1fb7a0e, type: 2}
+      - {fileID: 1511721036105872, guid: 87386770a6d085c419ff6c611caa8881, type: 2}
     PlacementControllerSettings:
       TimeToLine: 0
 --- !u!114 &1758212519
