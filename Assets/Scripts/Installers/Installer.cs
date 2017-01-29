@@ -85,6 +85,7 @@ namespace Assets.Scripts.Installers
 
         private void InstallCameraController()
         {
+            Container.Bind<ITickable>().To<CameraController>().AsSingle();
             Container.Bind<CameraController.Settings>()
                 .FromInstance(_settings.CameraControllerSettings);
             Container.Bind<CameraController>().AsSingle();

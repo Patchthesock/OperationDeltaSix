@@ -123,14 +123,16 @@ MonoBehaviour:
     LevelControllerSettings:
       Level: {fileID: 1825695332904158, guid: 7392aeb81149a544d86d65f6ae50cd5e, type: 2}
     CameraControllerSettings:
-      MaxMinX: 0
-      MaxMinZ: 0
-      FlySpeed: 0
+      InitialPosition: {x: -30, y: 15, z: 30}
+      InitialRotaiton: {x: 0, y: 0, z: 0}
+      MaxMinX: 100
+      MaxMinZ: 100
+      FlySpeed: 1
       MinHeight: 0
-      MaxHeight: 0
-      Acceleration: 0
-      SlowDownRatio: 0
-      AccelerationRatio: 0
+      MaxHeight: 20
+      Acceleration: 10
+      SlowDownRatio: 10
+      AccelerationRatio: 10
       minimumX: -360
       maximumX: 360
       minimumY: -60

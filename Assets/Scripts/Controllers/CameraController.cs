@@ -1,7 +1,6 @@
 ﻿using System;
 using Assets.Scripts.Actors;
 using Assets.Scripts.Factories;
-using Assets.Scripts.Interfaces;
 using UnityEngine;
 using Zenject;
 
@@ -22,7 +21,9 @@ namespace Assets.Scripts.Controllers
         public void Initialize()
         {
             _camera = new PlayerCamera(_prefabFactory.Create(_settings.Camera).GetComponent<CameraHooks>());
-            _originalRotation = _camera.Transform.rotation;
+            _camera.Transform.position = _settings.InitialPosition;
+            _camera.Transform.rotation = Quaternion.Euler(_settings.InitialRotaiton);
+            _originalRotation = Quaternion.Euler(_settings.InitialRotaiton);
         }
 
         public void Tick()
@@ -51,14 +52,14 @@ namespace Assets.Scripts.Controllers
 
         private void MouseLook(Vector2 input, Component hooks, Settings settings)
         {
-            switch (settings.axes)
+            switch (settings.Axes)
             {
                 case RotationAxes.MouseXAndY:
                 {
-                    _rotationX += input.x * settings.sensitivityX;
-                    _rotationY += input.y * settings.sensitivityY;
-                    _rotationX = ClampAngle(_rotationX, settings.minimumX, settings.maximumX);
-                    _rotationY = ClampAngle(_rotationY, settings.minimumY, settings.maximumY);
+                    _rotationX += input.x * settings.SensitivityX;
+                    _rotationY += input.y * settings.SensitivityY;
+                    _rotationX = ClampAngle(_rotationX, settings.MinimumX, settings.MaximumX);
+                    _rotationY = ClampAngle(_rotationY, settings.MinimumY, settings.MaximumY);
                     var xQuaternion = Quaternion.AngleAxis(_rotationX, Vector3.up);
                     var yQuaternion = Quaternion.AngleAxis(_rotationY, -Vector3.right);
                     hooks.transform.rotation = _originalRotation * xQuaternion * yQuaternion;
@@ -67,8 +68,8 @@ namespace Assets.Scripts.Controllers
                     
                 case RotationAxes.MouseX:
                 {
-                    _rotationX += input.x * settings.sensitivityX;
-                    _rotationX = ClampAngle(_rotationX, settings.minimumX, settings.maximumX);
+                    _rotationX += input.x * settings.SensitivityX;
+                    _rotationX = ClampAngle(_rotationX, settings.MinimumX, settings.MaximumX);
                     var xQuaternion = Quaternion.AngleAxis(_rotationX, Vector3.up);
                     hooks.transform.rotation = _originalRotation * xQuaternion;
                     break;
@@ -81,8 +82,8 @@ namespace Assets.Scripts.Controllers
                     
                 default:
                 {
-                    _rotationY += input.y * settings.sensitivityY;
-                    _rotationY = ClampAngle(_rotationY, settings.minimumY, settings.maximumY);
+                    _rotationY += input.y * settings.SensitivityY;
+                    _rotationY = ClampAngle(_rotationY, settings.MinimumY, settings.MaximumY);
                     var yQuaternion = Quaternion.AngleAxis(-_rotationY, Vector3.right);
                     hooks.transform.rotation = _originalRotation * yQuaternion;
                     break;
@@ -125,30 +126,30 @@ namespace Assets.Scripts.Controllers
                 hooks.transform.position = new Vector3(hooks.transform.position.x, settings.MinHeight, hooks.transform.position.z);
             }
 
-            //if (TheCamera.transform.position.y > MaxHeight)
-            //{
-            //    TheCamera.transform.position = new Vector3(TheCamera.transform.position.x, MaxHeight, TheCamera.transform.position.z);
-            //}
+            if (hooks.transform.position.y > settings.MaxHeight)
+            {
+                hooks.transform.position = new Vector3(hooks.transform.position.x, settings.MaxHeight, hooks.transform.position.z);
+            }
 
-            //if (TheCamera.transform.position.x > MaxMinX)
-            //{
-            //    TheCamera.transform.position = new Vector3(MaxMinX, TheCamera.transform.position.y, TheCamera.transform.position.z);
-            //}
+            if (hooks.transform.position.x > settings.MaxMinX)
+            {
+                hooks.transform.position = new Vector3(settings.MaxMinX, hooks.transform.position.y, hooks.transform.position.z);
+            }
 
-            //if (TheCamera.transform.position.x < -MaxMinX)
-            //{
-            //    TheCamera.transform.position = new Vector3(-MaxMinX, TheCamera.transform.position.y, TheCamera.transform.position.z);
-            //}
+            if (hooks.transform.position.x < -settings.MaxMinX)
+            {
+                hooks.transform.position = new Vector3(-settings.MaxMinX, hooks.transform.position.y, hooks.transform.position.z);
+            }
 
-            //if (TheCamera.transform.position.z > MaxMinZ)
-            //{
-            //    TheCamera.transform.position = new Vector3(TheCamera.transform.position.x, TheCamera.transform.position.y, MaxMinZ);
-            //}
+            if (hooks.transform.position.z > settings.MaxMinZ)
+            {
+                hooks.transform.position = new Vector3(hooks.transform.position.x, hooks.transform.position.y, settings.MaxMinZ);
+            }
 
-            //if (TheCamera.transform.position.z < -MaxMinZ)
-            //{
-            //    TheCamera.transform.position = new Vector3(TheCamera.transform.position.x, TheCamera.transform.position.y, -MaxMinZ);
-            //}
+            if (hooks.transform.position.z < -settings.MaxMinZ)
+            {
+                hooks.transform.position = new Vector3(hooks.transform.position.x, hooks.transform.position.y, -settings.MaxMinZ);
+            }
         }
 
         private static float ClampAngle(float angle, float min, float max)
@@ -179,24 +180,25 @@ namespace Assets.Scripts.Controllers
         [Serializable]
         public class Settings
         {
+            // Init
+            public Vector3 InitialPosition;
+            public Vector3 InitialRotaiton;
+
             // Position
             public float MaxMinX;
             public float MaxMinZ;
             public float FlySpeed;
             public float MinHeight;
             public float MaxHeight;
-            public float Acceleration;
-            public float SlowDownRatio;
-            public float AccelerationRatio;
 
             // Rotation
-            public float minimumX = -360f;
-            public float maximumX = 360f;
-            public float minimumY = -60f;
-            public float maximumY = 60f;
-            public float sensitivityX = 15f;
-            public float sensitivityY = 15f;
-            public RotationAxes axes = RotationAxes.MouseXAndY;
+            public float MinimumX = -360f;
+            public float MaximumX = 360f;
+            public float MinimumY = -60f;
+            public float MaximumY = 60f;
+            public float SensitivityX = 15f;
+            public float SensitivityY = 15f;
+            public RotationAxes Axes = RotationAxes.MouseXAndY;
 
             // GameObject
             public GameObject Camera;

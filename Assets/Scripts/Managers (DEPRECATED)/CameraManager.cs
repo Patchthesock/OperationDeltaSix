@@ -16,7 +16,7 @@
 //        private Vector3 _dragOrigin;
 //        private bool _shift;
 //        private bool _ctrl;
-        
+
 //        private float _accelerationAmount = 1.5f;
 //        private readonly float _accelerationRatio = 3;
 //        private readonly float _slowDownRatio = 0.2f;
@@ -78,10 +78,10 @@
 //                _ctrl = false;
 //                FlySpeed /= _slowDownRatio;
 //            }
-            
+
 //            if (Math.Abs(Input.GetAxis("Vertical")) > 0.01)
 //            {
-//                TheCamera.transform.Translate(new Vector3(TheCamera.transform.forward.x,0,TheCamera.transform.forward.z) * Input.GetAxis("Vertical") * FlySpeed, Space.World);
+//                TheCamera.transform.Translate(new Vector3(TheCamera.transform.forward.x, 0, TheCamera.transform.forward.z) * Input.GetAxis("Vertical") * FlySpeed, Space.World);
 //            }
 
 //            if (Math.Abs(Input.GetAxis("Horizontal")) > 0.01)
