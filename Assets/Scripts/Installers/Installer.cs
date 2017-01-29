@@ -109,13 +109,14 @@ namespace Assets.Scripts.Installers
 
         private void InstallGhostController()
         {
+            Container.Bind<GhostController.Settings>()
+                .FromInstance(_settings.GhostControllerSettings).AsSingle();
+            Container.Bind<ITickable>().To<GhostController>().AsSingle();
             Container.Bind<GhostController>().AsSingle();
         }
 
         private void InstallPlacementController()
         {
-            Container.Bind<PlacementController.Settings>()
-                .FromInstance(_settings.PlacementControllerSettings).AsSingle();
             Container.Bind<PlacementController>().AsSingle();
         }
         #endregion
@@ -129,11 +130,11 @@ namespace Assets.Scripts.Installers
         [Serializable]
         private class Settings
         {
-            public MenuController.Settings MenuControllerSettings;
-            public LevelController.Settings LevelControllerSettings;
-            public CameraController.Settings CameraControllerSettings;
-            public DominoController.Settings DominoControllerSettings;
-            public PlacementController.Settings PlacementControllerSettings;
+            public MenuController.Settings MenuControllerSettings = null;
+            public GhostController.Settings GhostControllerSettings = null;
+            public LevelController.Settings LevelControllerSettings = null;
+            public CameraController.Settings CameraControllerSettings = null;
+            public DominoController.Settings DominoControllerSettings = null;
         }
     }
 }

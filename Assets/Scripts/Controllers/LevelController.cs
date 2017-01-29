@@ -16,7 +16,7 @@ namespace Assets.Scripts.Controllers
 
         public void Initialize()
         {
-            _prefabFactory.Create(_settings.Level);
+            //_prefabFactory.Create(_settings.Level);
         }
 
         private readonly Settings _settings;
