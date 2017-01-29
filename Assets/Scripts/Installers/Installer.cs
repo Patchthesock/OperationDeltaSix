@@ -62,6 +62,8 @@ namespace Assets.Scripts.Installers
             InstallLevelController();
             InstallCameraController();
             InstallDominoController();
+            InstallMenuController();
+            InstallGhostController();
             InstallPlacementController();
             InstallGameController();
         }
@@ -98,6 +100,18 @@ namespace Assets.Scripts.Installers
             Container.Bind<DominoController>().AsSingle();
         }
 
+        private void InstallMenuController()
+        {
+            Container.Bind<MenuController.Settings>()
+                .FromInstance(_settings.MenuControllerSettings).AsSingle();
+            Container.Bind<MenuController>().AsSingle();
+        }
+
+        private void InstallGhostController()
+        {
+            Container.Bind<GhostController>().AsSingle();
+        }
+
         private void InstallPlacementController()
         {
             Container.Bind<PlacementController.Settings>()
@@ -115,6 +129,7 @@ namespace Assets.Scripts.Installers
         [Serializable]
         private class Settings
         {
+            public MenuController.Settings MenuControllerSettings;
             public LevelController.Settings LevelControllerSettings;
             public CameraController.Settings CameraControllerSettings;
             public DominoController.Settings DominoControllerSettings;

@@ -21,6 +21,7 @@ namespace Assets.Scripts.Controllers
 
         public void Initialize()
         {
+            _menuController.Initialize();
             _menuController.SubscribeToOnItemSelected(OnMenuItemSelected);
         }
 

@@ -24,6 +24,7 @@ namespace Assets.Scripts.Controllers
         {
             _levelController.Initialize();
             _cameraController.Initialize();
+            _placementController.Initialize();
             ChangeState(GameStateFactory.GameStates.Build);
         }
 

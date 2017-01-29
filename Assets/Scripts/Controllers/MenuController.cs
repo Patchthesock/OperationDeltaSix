@@ -18,6 +18,7 @@ namespace Assets.Scripts.Controllers
             foreach (var m in _settings.MenuOptions)
             {
                 var m1 = m;
+                if (m.Button == null) continue;
                 m.Button.onClick.AddListener(() =>
                 {
                     if (m1.GameObject == null) return;

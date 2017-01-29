@@ -7,9 +7,11 @@ namespace Assets.Scripts.Controllers
     public class GhostController : ITickable
     {
         public GhostController(
-            PrefabFactory prefabFactory)
+            PrefabFactory prefabFactory,
+            InputController inputController)
         {
             _prefabFactory = prefabFactory;
+
         }
 
         public void Select(GameObject model)
@@ -27,7 +29,8 @@ namespace Assets.Scripts.Controllers
             
         }
 
-
+        private GameObject _objectToPlace;
         private readonly PrefabFactory _prefabFactory;
+        private readonly InputController _inputController;
     }
 }

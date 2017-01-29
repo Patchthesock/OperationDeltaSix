@@ -5,10 +5,9 @@ namespace Assets.Scripts.Controllers
 {
     public class InputController
     {
-        public InputController(
-            CameraController cameraController)
+        public bool HasMouseLook()
         {
-            _cameraController = cameraController;
+            return Input.GetMouseButton(1);
         }
 
         public Vector2 GetRotationLookInput()
@@ -58,11 +57,9 @@ namespace Assets.Scripts.Controllers
         private RaycastHit GetRaycastHit()
         {
             RaycastHit hit;
-            var ray = _cameraController.ScreenPointToRay(Input.mousePosition);
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
             return hit;
         }
-
-        private readonly CameraController _cameraController;
     }
 }

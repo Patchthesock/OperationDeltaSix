@@ -29,10 +29,10 @@ namespace Assets.Scripts.Controllers
         public void Tick()
         {
             if (_camera == null) return;
-            Clamp(_camera.Transform, _settings);
-            MouseLook(_inputController.GetRotationLookInput(), _camera.Transform, _settings);
             MovePositionVertical(_inputController.GetVerticalPositionInput(), _camera.Transform, _settings);
             MovePositionHorizontal(_inputController.GetHorizontalPositionInput(), _camera.Transform, _settings);
+            if (_inputController.HasMouseLook()) MouseLook(_inputController.GetRotationLookInput(), _camera.Transform, _settings);
+            Clamp(_camera.Transform, _settings);
         }
 
         public Ray ScreenPointToRay(Vector3 position)
