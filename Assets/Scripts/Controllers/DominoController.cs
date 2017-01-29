@@ -19,8 +19,6 @@ namespace Assets.Scripts.Controllers
             _prefabFactory = prefabFactory;
         }
 
-        
-
         private Domino GetDomino()
         {
             return _nonActiveDominos.Count > 0 ? _nonActiveDominos.First() : CreateDomino();

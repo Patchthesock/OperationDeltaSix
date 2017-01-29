@@ -491,7 +491,7 @@ PlayerSettings:
   XboxOnePersistentLocalStorageSize: 0
   vrEditorSettings: {}
   cloudServicesEnabled:
-    Collab: 1
+    Collab: 0
     UNet: 1
   cloudProjectId: 732c2aab-ac55-4835-b056-5d3c37d93481
   projectName: SillySnowflakes (1)

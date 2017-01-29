@@ -50,9 +50,9 @@ namespace Assets.Scripts.Controllers
             return hit;
         }
 
-        private static Quaternion GetDefaultRotation()
+        private Quaternion GetDefaultRotation()
         {
-            var rotation = CameraManager.instance.TheCamera.transform.rotation.eulerAngles;
+            var rotation = _cameraController.Rotation.eulerAngles;
             rotation = new Vector3(0, rotation.y, rotation.z);
             return Quaternion.Euler(rotation);
         }

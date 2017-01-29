@@ -57,11 +57,11 @@ namespace Assets.Scripts.Installers
         #region Controllers
         private void InstallControllers()
         {
-            InstallAppController();
-            InstallGameController();
-            InstallInputController();
-            InstallLevelController();
-            InstallCameraController();
+            //InstallAppController();
+            //InstallGameController();
+            //InstallInputController();
+            //InstallLevelController();
+            //InstallCameraController();
             InstallDominoController();
             InstallPlacementController();
         }
@@ -104,8 +104,8 @@ namespace Assets.Scripts.Installers
 
         private void InstallPlacementController()
         {
-            Container.Bind<PlacementController.Settings>()
-                .FromInstance(_settings.PlacementControllerSettings).AsSingle();
+            //Container.Bind<PlacementController.Settings>()
+            //    .FromInstance(_settings.PlacementControllerSettings).AsSingle();
             Container.Bind<PlacementController>().AsSingle();
         }
         #endregion

@@ -25,6 +25,7 @@ GameObject:
   - component: {fileID: 65215133717388024}
   - component: {fileID: 82872009251585952}
   - component: {fileID: 114218246277096032}
+  - component: {fileID: 114584883230232402}
   m_Layer: 0
   m_Name: Domino - Copy (2)
   m_TagString: Domino
@@ -39,7 +40,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1512718420550064}
   m_LocalRotation: {x: 0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -25.018538, y: 0.41180137, z: -9.461976}
+  m_LocalPosition: {x: 39.792057, y: 25.771835, z: 34.40143}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
@@ -204,3 +205,16 @@ MonoBehaviour:
   audioFiles:
   - {fileID: 8300000, guid: 607aee73734634144a3b3ba42c9f6aef, type: 3}
   - {fileID: 8300000, guid: 9274e0d9fe1415348a32cc34c8de2097, type: 3}
+--- !u!114 &114584883230232402
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1512718420550064}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 976e95a034d9586419d019ad42c1d125, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _collider: {fileID: 65215133717388024}
+  _rigidbody: {fileID: 54671466947020160}

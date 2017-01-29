@@ -5,9 +5,9 @@ namespace Assets.Scripts.Services
 {
     public class LoadSaveService
     {
-        public LoadSaveService(BinaryFormatter binaryFormatter)
+        public LoadSaveService()
         {
-            _binaryFormatter = binaryFormatter;
+            _binaryFormatter = new BinaryFormatter();
         }
 
         public void Save()

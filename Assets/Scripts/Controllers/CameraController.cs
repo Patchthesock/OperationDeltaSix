@@ -39,6 +39,16 @@ namespace Assets.Scripts.Controllers
             return _camera.Camera.ScreenPointToRay(position);
         }
 
+        public Vector3 Position
+        {
+            get { return _camera.Transform.position; }
+        }
+
+        public Quaternion Rotation
+        {
+            get { return _camera.Transform.rotation; }
+        }
+
         private void MouseLook(Vector2 input, Component hooks, Settings settings)
         {
             switch (settings.axes)
