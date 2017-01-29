@@ -19,6 +19,14 @@ namespace Assets.Scripts.Controllers
             _prefabFactory = prefabFactory;
         }
 
+        public void PlaceDomino(Vector3 position, Vector3 rotation)
+        {
+            var domino = GetDomino();
+            _activeDominos.Add(domino);
+            domino.Transform.position = position;
+            domino.Transform.rotation = Quaternion.Euler(rotation);
+        }
+
         private Domino GetDomino()
         {
             return _nonActiveDominos.Count > 0 ? _nonActiveDominos.First() : CreateDomino();

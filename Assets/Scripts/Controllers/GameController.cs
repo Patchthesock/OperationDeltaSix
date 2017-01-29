@@ -45,6 +45,5 @@ namespace Assets.Scripts.Controllers
         private readonly CameraController _cameraController;
         private readonly DominoController _dominoController;
         private readonly PlacementController _placementController;
-        
     }
 }

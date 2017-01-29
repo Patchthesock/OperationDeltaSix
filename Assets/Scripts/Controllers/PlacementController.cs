@@ -7,11 +7,28 @@ namespace Assets.Scripts.Controllers
     {
         public PlacementController(
             Settings settings,
+            MenuController menuController,
+            GhostController ghostController,
+            InputController inputController,
             CameraController cameraController)
         {
             _settings = settings;
+            _menuController = menuController;
+            _ghostController = ghostController;
+            _inputController = inputController;
             _cameraController = cameraController;
-        } 
+        }
+
+        public void Initialize()
+        {
+            _menuController.SubscribeToOnItemSelected(OnMenuItemSelected);
+        }
+
+        private void OnMenuItemSelected(GameObject model)
+        {
+            Debug.Log("Fired");
+            _ghostController.Select(model);
+        }
 
         private Quaternion GetSingleDominoRotation(Vector3 pos)
         {
@@ -23,34 +40,10 @@ namespace Assets.Scripts.Controllers
             }
             _positionLastPlaced = pos;
             _timeLastPlaced = Time.time;
-            return GetDefaultRotation();
+            return GetDefaultSingleDominoRotation();
         }
 
-        private Vector3 GetPointerPosition()
-        {
-            var hit = GetRaycastHit();
-            if (hit.collider == null) return new Vector3();
-            return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point + new Vector3(0, 0.6f, 0);
-        }
-
-        private Vector3 GetClickPosition(int mouseButtonNumber)
-        {
-            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return new Vector3();
-            if (!Input.GetMouseButton(mouseButtonNumber)) return new Vector3();
-            var hit = GetRaycastHit();
-            if (hit.collider == null) return new Vector3();
-            return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point;
-        }
-
-        private RaycastHit GetRaycastHit()
-        {
-            RaycastHit hit;
-            var ray = _cameraController.ScreenPointToRay(Input.mousePosition);
-            Physics.Raycast(ray, out hit, Mathf.Infinity);
-            return hit;
-        }
-
-        private Quaternion GetDefaultRotation()
+        private Quaternion GetDefaultSingleDominoRotation()
         {
             var rotation = _cameraController.Rotation.eulerAngles;
             rotation = new Vector3(0, rotation.y, rotation.z);
@@ -60,6 +53,9 @@ namespace Assets.Scripts.Controllers
         private float _timeLastPlaced;
         private Vector3 _positionLastPlaced;
         private readonly Settings _settings;
+        private readonly MenuController _menuController;
+        private readonly GhostController _ghostController;
+        private readonly InputController _inputController;
         private readonly CameraController _cameraController;
 
         [Serializable]

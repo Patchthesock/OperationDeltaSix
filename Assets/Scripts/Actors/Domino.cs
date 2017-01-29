@@ -1,4 +1,5 @@
 ﻿using Assets.Scripts.Hooks;
+using UnityEngine;
 
 namespace Assets.Scripts.Actors
 {
@@ -19,6 +20,11 @@ namespace Assets.Scripts.Actors
             if (_hooks.Rigidbody == null) return;
             _hooks.Rigidbody.useGravity = state;
             _hooks.Rigidbody.isKinematic = !state;
+        }
+
+        public Transform Transform
+        {
+            get { return _hooks.transform; }
         }
 
         private readonly DominoHooks _hooks;
