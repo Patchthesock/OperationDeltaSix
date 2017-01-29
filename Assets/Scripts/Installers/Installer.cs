@@ -16,6 +16,7 @@ namespace Assets.Scripts.Installers
             InstallServices();
             InstallFactories();
             InstallControllers();
+            InstallAppController();
         }
 
         #region Factories
@@ -57,18 +58,13 @@ namespace Assets.Scripts.Installers
         #region Controllers
         private void InstallControllers()
         {
-            //InstallAppController();
-            //InstallGameController();
-            //InstallInputController();
-            //InstallLevelController();
-            //InstallCameraController();
+            
+            InstallGameController();
+            InstallInputController();
+            InstallLevelController();
+            InstallCameraController();
             InstallDominoController();
             InstallPlacementController();
-        }
-
-        private void InstallAppController()
-        {
-            Container.Bind<AppController>().AsSingle();
         }
 
         private void InstallGameController()
@@ -97,18 +93,24 @@ namespace Assets.Scripts.Installers
 
         private void InstallDominoController()
         {
-            //Container.Bind<DominoController.Settings>()
-            //    .FromInstance(_settings.DominoControllerSettings).AsSingle();
+            Container.Bind<DominoController.Settings>()
+                .FromInstance(_settings.DominoControllerSettings).AsSingle();
             Container.Bind<DominoController>().AsSingle();
         }
 
         private void InstallPlacementController()
         {
-            //Container.Bind<PlacementController.Settings>()
-            //    .FromInstance(_settings.PlacementControllerSettings).AsSingle();
+            Container.Bind<PlacementController.Settings>()
+                .FromInstance(_settings.PlacementControllerSettings).AsSingle();
             Container.Bind<PlacementController>().AsSingle();
         }
         #endregion
+
+        private void InstallAppController()
+        {
+            Container.Bind<IInitializable>().To<AppController>().AsSingle();
+            Container.Bind<AppController>().AsSingle();
+        }
 
         [Serializable]
         private class Settings
