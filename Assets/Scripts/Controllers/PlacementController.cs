@@ -1,4 +1,4 @@
-﻿using System;
+﻿using Assets.Scripts.Models;
 using UnityEngine;
 
 namespace Assets.Scripts.Controllers
@@ -7,10 +7,12 @@ namespace Assets.Scripts.Controllers
     {
         public PlacementController(
             MenuController menuController,
-            GhostController ghostController)
+            GhostController ghostController,
+            DominoController dominoController)
         {
             _menuController = menuController;
             _ghostController = ghostController;
+            _dominoController = dominoController;
         }
 
         public void Initialize()
@@ -18,6 +20,7 @@ namespace Assets.Scripts.Controllers
             _menuController.Initialize();
             _menuController.SubscribeToOnItemDropped(OnMenuItemRemoved);
             _menuController.SubscribeToOnItemSelected(OnMenuItemSelected);
+            _ghostController.SubscribeToOnItemPlaced(OnItemPlaced);
         }
 
         private void OnMenuItemSelected(GameObject model)
@@ -30,7 +33,13 @@ namespace Assets.Scripts.Controllers
             _ghostController.Drop();
         }
 
+        private void OnItemPlaced(ObjectPlacementModel model)
+        {
+            _dominoController.PlaceDomino(model.Position, model.Rotation);
+        }
+
         private readonly MenuController _menuController;
         private readonly GhostController _ghostController;
+        private readonly DominoController _dominoController;
     }
 }

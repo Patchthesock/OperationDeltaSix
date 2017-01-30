@@ -42,19 +42,19 @@ namespace Assets.Scripts.Controllers
         {
             var hit = GetRaycastHit();
             if (hit.collider == null) return new Vector3();
-            return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point + new Vector3(0, 0.6f, 0);
+            return hit.collider.gameObject.tag != "Ground" ? Vector3.zero : hit.point + new Vector3(0, 0.6f, 0);
         }
 
         public Vector3 GetMouseClickPosition(int mouseButtonNumber)
         {
             if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return new Vector3();
-            if (!Input.GetMouseButton(mouseButtonNumber)) return new Vector3();
+            if (!Input.GetMouseButton(mouseButtonNumber)) return Vector3.zero;
             var hit = GetRaycastHit();
             if (hit.collider == null) return new Vector3();
-            return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point;
+            return hit.collider.gameObject.tag != "Ground" ? Vector3.zero : hit.point;
         }
 
-        private RaycastHit GetRaycastHit()
+        private static RaycastHit GetRaycastHit()
         {
             RaycastHit hit;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);

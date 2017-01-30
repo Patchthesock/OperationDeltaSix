@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Factories;
+using Assets.Scripts.Models;
 using UnityEngine;
 using Zenject;
 
@@ -39,6 +40,25 @@ namespace Assets.Scripts.Controllers
             if (_ghost == null) return;
             _ghost.transform.position = _inputController.GetMousePosition();
             _ghost.transform.rotation = GetSingleDominoRotation(_ghost.transform.position);
+            if (_inputController.GetMouseClickPosition(0) != Vector3.zero)
+                OnItemPlaced(ModelFactory.CreateObjectPlacementModel(
+                    _ghost,
+                    _ghost.transform.position,
+                    _ghost.transform.rotation.eulerAngles));
+        }
+
+        public void SubscribeToOnItemPlaced(Action<ObjectPlacementModel> onItemPlaced)
+        {
+            if (_onItemPlacedListerns.Contains(onItemPlaced)) return;
+            _onItemPlacedListerns.Add(onItemPlaced);
+        }
+
+        private void OnItemPlaced(ObjectPlacementModel model)
+        {
+            foreach (var l in _onItemPlacedListerns)
+            {
+                l(model);
+            }
         }
 
         private GameObject GetGhost(GameObject model)
@@ -78,6 +98,7 @@ namespace Assets.Scripts.Controllers
         private readonly InputController _inputController;
         private readonly CameraController _cameraController;
         private readonly Dictionary<string, GameObject> _cachedGhosts = new Dictionary<string, GameObject>();
+        private readonly List<Action<ObjectPlacementModel>> _onItemPlacedListerns = new List<Action<ObjectPlacementModel>>();
 
         [Serializable]
         public class Settings

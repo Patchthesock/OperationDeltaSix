@@ -24,7 +24,7 @@ namespace Assets.Scripts.Actors
 
         public Transform Transform
         {
-            get { return _hooks.transform; }
+            get { return _hooks.Transform; }
         }
 
         private readonly DominoHooks _hooks;

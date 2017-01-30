@@ -10,13 +10,11 @@ namespace Assets.Scripts.Controllers
             GameStateFactory stateFactory,
             LevelController levelController,
             CameraController cameraController,
-            DominoController dominoController,
             PlacementController placementController)
         {
             _stateFactory = stateFactory;
             _levelController = levelController;
             _cameraController = cameraController;
-            _dominoController = dominoController;
             _placementController = placementController;
         }
 
@@ -44,7 +42,6 @@ namespace Assets.Scripts.Controllers
         private readonly GameStateFactory _stateFactory;
         private readonly LevelController _levelController;
         private readonly CameraController _cameraController;
-        private readonly DominoController _dominoController;
         private readonly PlacementController _placementController;
     }
 }

@@ -373,7 +373,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Domino
+  m_Text: Remove
 --- !u!222 &1020999387
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -488,7 +488,7 @@ MonoBehaviour:
       MaxMinX: 100
       MaxMinZ: 100
       FlySpeed: 1
-      MinHeight: 0
+      MinHeight: 5
       MaxHeight: 20
       MinimumX: -360
       MaximumX: 360
@@ -501,9 +501,6 @@ MonoBehaviour:
     DominoControllerSettings:
       Dominos:
       - {fileID: 1512718420550064, guid: 915f046bb9f6c9441b4a35aa379efdd9, type: 2}
-      - {fileID: 1812991237968580, guid: 3375408108ddb4142957217ddabd08a4, type: 2}
-      - {fileID: 1664693608267968, guid: 078b2adf095dcab489037202e1fb7a0e, type: 2}
-      - {fileID: 1511721036105872, guid: 87386770a6d085c419ff6c611caa8881, type: 2}
 --- !u!114 &1758212519
 MonoBehaviour:
   m_ObjectHideFlags: 0
