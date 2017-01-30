@@ -21,7 +21,11 @@ namespace Assets.Scripts.Controllers
 
         public void PlaceDomino(Vector3 position, Vector3 rotation)
         {
+            if (!CanPlace(_settings.MinimumDistance, position, _activeDominos.Select(i => i.Transform.position)))
+                return;
+
             var domino = GetDomino();
+            domino.SetPhysics(false);
             _activeDominos.Add(domino);
             domino.Transform.position = position;
             domino.Transform.rotation = Quaternion.Euler(rotation);
@@ -46,6 +50,11 @@ namespace Assets.Scripts.Controllers
             
         }
 
+        private static bool CanPlace(float minimumDistance, Vector3 position, IEnumerable<Vector3> active)
+        {
+            return active.All(p => !(Vector3.Distance(p, position) <= minimumDistance));
+        }
+
         private readonly Settings _settings;
         private readonly PrefabFactory _prefabFactory;
         private readonly List<Domino> _activeDominos = new List<Domino>();
@@ -54,6 +63,7 @@ namespace Assets.Scripts.Controllers
         [Serializable]
         public class Settings
         {
+            public float MinimumDistance;
             public List<GameObject> Dominos;
         }
     }
