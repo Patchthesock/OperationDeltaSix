@@ -17,11 +17,13 @@ public class RadialManager : MonoBehaviour
 	{
 		DominoesInventory.SetActive(true);
 		ActiveInventory = DominoesInventory;
+		/* Controls the MainUI elements and turns them off on selection
 		foreach(Transform child in MainUI.transform)
 		{
 			GrandChild = child.transform.GetChild(0);
 			GrandChild.GetComponent<Button>().interactable = false;
 		}
+		*/
 		InventoryOpen = true;
 	}
 	
@@ -40,8 +42,8 @@ public class RadialManager : MonoBehaviour
 	{
 		foreach(Transform child in MainUI.transform)
 		{
-			GrandChild = child.transform.GetChild(0);
-			GrandChild.GetComponent<Button>().interactable = true;
+			//GrandChild = child.transform.GetChild(0);
+			//GrandChild.GetComponent<Button>().interactable = true;
 			InventoryOpen = false;
 			ActiveInventory.SetActive(false);
 		}
@@ -60,6 +62,12 @@ public class RadialManager : MonoBehaviour
 					ActiveInventory.SetActive(false);
 				}
 			}
+		}
+		
+		if (Input.GetKeyDown(KeyCode.Space))
+		{
+			MainUI.transform.position = Input.mousePosition;
+			MainUI.SetActive(true);
 		}
 	}	
 }
