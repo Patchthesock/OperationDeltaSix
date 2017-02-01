@@ -6,6 +6,11 @@ namespace Assets.Scripts.Controllers
 {
     public class RemovalController : ITickable
     {
+        public RemovalController(
+            InputController inputController)
+        {
+            _inputController = inputController;
+        }
 
         public void Remove(bool state)
         {
@@ -21,7 +26,9 @@ namespace Assets.Scripts.Controllers
         public void Tick()
         {
             if (!_removeing) return;
-
+            var name = _inputController.GetMouseClickItemName(0);
+            if (name == string.Empty) return;
+            OnItemRemoved(name);
         }
 
         private void OnItemRemoved(string name)
@@ -33,6 +40,7 @@ namespace Assets.Scripts.Controllers
         }
 
         private bool _removeing;
-        private List<Action<string>> _onItemRemovedListeners = new List<Action<string>>();
+        private readonly InputController _inputController;
+        private readonly List<Action<string>> _onItemRemovedListeners = new List<Action<string>>();
     }
 }

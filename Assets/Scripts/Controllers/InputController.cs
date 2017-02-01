@@ -40,7 +40,7 @@ namespace Assets.Scripts.Controllers
 
         public Vector3 GetMousePosition()
         {
-            var hit = GetRaycastHit();
+            var hit = GetRaycastHit(Input.mousePosition);
             if (hit.collider == null) return new Vector3();
             return hit.collider.gameObject.tag != "Ground" ? Vector3.zero : hit.point + new Vector3(0, 0.6f, 0);
         }
@@ -49,15 +49,25 @@ namespace Assets.Scripts.Controllers
         {
             if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return new Vector3();
             if (!Input.GetMouseButton(mouseButtonNumber)) return Vector3.zero;
-            var hit = GetRaycastHit();
+            var hit = GetRaycastHit(Input.mousePosition);
             if (hit.collider == null) return new Vector3();
             return hit.collider.gameObject.tag != "Ground" ? Vector3.zero : hit.point;
         }
 
-        private static RaycastHit GetRaycastHit()
+        public string GetMouseClickItemName(int mouseButtonNumber)
+        {
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return string.Empty;
+            if (!Input.GetMouseButton(mouseButtonNumber)) return string.Empty;
+            var hit = GetRaycastHit(Input.mousePosition);
+            if (hit.collider == null) return string.Empty;
+            if (hit.collider.gameObject.tag != "Domino") return string.Empty;
+            return hit.collider.gameObject.name;
+        }
+
+        private static RaycastHit GetRaycastHit(Vector3 position)
         {
             RaycastHit hit;
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            var ray = Camera.main.ScreenPointToRay(position);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
             return hit;
         }

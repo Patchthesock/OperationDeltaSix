@@ -19,10 +19,12 @@ namespace Assets.Scripts.Controllers
 
         public void Initialize()
         {
+            _current = 0;
             _menuController.Initialize();
             _menuController.SubscribeToOnItemDropped(OnMenuItemRemoved);
             _menuController.SubscribeToOnItemSelected(OnMenuItemSelected);
             _ghostController.SubscribeToOnItemPlaced(OnItemPlaced);
+            _removalController.SubscribeToOnItemRemoved(OnItemRemoved);
         }
 
         private void OnMenuItemSelected(GameObject model)
@@ -39,14 +41,21 @@ namespace Assets.Scripts.Controllers
 
         private void OnItemPlaced(ObjectPlacementModel model)
         {
-            _dominoController.PlaceDomino(model.Position, model.Rotation);
+            _dominoController.PlaceDomino(GenerateName(), model.Position, model.Rotation);
         }
 
         private void OnItemRemoved(string name)
         {
-            
+            _dominoController.RemoveDomino(name);
         }
 
+        private string GenerateName()
+        {
+            _current = _current + 1;
+            return _current.ToString();
+        }
+
+        private int _current;
         private readonly MenuController _menuController;
         private readonly GhostController _ghostController;
         private readonly DominoController _dominoController;

@@ -63,6 +63,7 @@ namespace Assets.Scripts.Installers
             InstallCameraController();
             InstallDominoController();
             InstallMenuController();
+            InstallRemovalController();
             InstallGhostController();
             InstallPlacementController();
             InstallGameController();
@@ -105,6 +106,11 @@ namespace Assets.Scripts.Installers
             Container.Bind<MenuController.Settings>()
                 .FromInstance(_settings.MenuControllerSettings).AsSingle();
             Container.Bind<MenuController>().AsSingle();
+        }
+
+        private void InstallRemovalController()
+        {
+            Container.Bind<RemovalController>().AsSingle();
         }
 
         private void InstallGhostController()

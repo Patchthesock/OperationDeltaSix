@@ -5,9 +5,20 @@ namespace Assets.Scripts.Actors
 {
     public class Domino
     {
-        public Domino(DominoHooks hooks)
+        public Domino(string name, DominoHooks hooks)
         {
             _hooks = hooks;
+            _hooks.gameObject.name = name;
+        }
+
+        public string Name
+        {
+            get { return _hooks.gameObject.name; } 
+        }
+
+        public Transform Transform
+        {
+            get { return _hooks.Transform; }
         }
 
         public void SetPhysics(bool state)
@@ -20,11 +31,6 @@ namespace Assets.Scripts.Actors
             if (_hooks.Rigidbody == null) return;
             _hooks.Rigidbody.useGravity = state;
             _hooks.Rigidbody.isKinematic = !state;
-        }
-
-        public Transform Transform
-        {
-            get { return _hooks.Transform; }
         }
 
         private readonly DominoHooks _hooks;

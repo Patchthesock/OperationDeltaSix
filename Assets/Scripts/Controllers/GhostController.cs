@@ -39,7 +39,7 @@ namespace Assets.Scripts.Controllers
         {
             if (_ghost == null) return;
             _ghost.transform.position = _inputController.GetMousePosition();
-            _ghost.transform.rotation = GetSingleDominoRotation(_ghost.transform.position);
+            _ghost.transform.rotation = Quaternion.Lerp(_ghost.transform.rotation, GetSingleDominoRotation(_ghost.transform.position), Time.deltaTime * 50);
             if (_inputController.GetMouseClickPosition(0) != Vector3.zero)
                 OnItemPlaced(ModelFactory.CreateObjectPlacementModel(
                     _ghost,
@@ -55,6 +55,8 @@ namespace Assets.Scripts.Controllers
 
         private void OnItemPlaced(ObjectPlacementModel model)
         {
+            _timeLastPlaced = Time.time;
+            _positionLastPlaced = model.Position;
             foreach (var l in _onItemPlacedListerns)
             {
                 l(model);
@@ -74,13 +76,12 @@ namespace Assets.Scripts.Controllers
 
         private Quaternion GetSingleDominoRotation(Vector3 pos)
         {
-            if (Mathf.Abs(Time.time - _timeLastPlaced) > _settings.TimeToLine)
-                return GetDefaultSingleDominoRotation();
+            //if (Mathf.Abs(Time.time - _timeLastPlaced) > _settings.TimeToLine)
+            //    return GetDefaultSingleDominoRotation();
 
-            var rot = Quaternion.LookRotation(_positionLastPlaced - pos);
-            _positionLastPlaced = pos;
-            _timeLastPlaced = Time.time;
-            return rot;
+            return Quaternion.LookRotation(_positionLastPlaced - pos)
+                .eulerAngles == Vector3.zero ? GetDefaultSingleDominoRotation()
+                : Quaternion.LookRotation(_positionLastPlaced - pos);
         }
 
         private Quaternion GetDefaultSingleDominoRotation()
