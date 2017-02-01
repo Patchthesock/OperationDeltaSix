@@ -479,7 +479,7 @@ MonoBehaviour:
         GameObject: {fileID: 1512718420550064, guid: 915f046bb9f6c9441b4a35aa379efdd9,
           type: 2}
     GhostControllerSettings:
-      TimeToLine: 0
+      TimeToLine: 4
     LevelControllerSettings:
       Level: {fileID: 1825695332904158, guid: 7392aeb81149a544d86d65f6ae50cd5e, type: 2}
     CameraControllerSettings:
@@ -499,6 +499,7 @@ MonoBehaviour:
       Axes: 0
       Camera: {fileID: 1206933204709162, guid: d9dc46de742fa284eacc9d9c571336d9, type: 2}
     DominoControllerSettings:
+      MinimumDistance: 1
       Dominos:
       - {fileID: 1512718420550064, guid: 915f046bb9f6c9441b4a35aa379efdd9, type: 2}
 --- !u!114 &1758212519

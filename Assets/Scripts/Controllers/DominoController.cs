@@ -19,6 +19,11 @@ namespace Assets.Scripts.Controllers
             _prefabFactory = prefabFactory;
         }
 
+        public bool CanPlanDomino(Vector3 position)
+        {
+            return CanPlace(_settings.MinimumDistance, position, _activeDominos.Select(i => i.Transform.position));
+        }
+
         public void PlaceDomino(Vector3 position, Vector3 rotation)
         {
             if (!CanPlace(_settings.MinimumDistance, position, _activeDominos.Select(i => i.Transform.position)))
@@ -29,6 +34,14 @@ namespace Assets.Scripts.Controllers
             _activeDominos.Add(domino);
             domino.Transform.position = position;
             domino.Transform.rotation = Quaternion.Euler(rotation);
+        }
+
+        public void SetPhysics(bool state)
+        {
+            foreach (var d in _activeDominos)
+            {
+                d.SetPhysics(state);
+            }
         }
 
         private Domino GetDomino()
@@ -45,9 +58,11 @@ namespace Assets.Scripts.Controllers
                         ).GetComponent<DominoHooks>());
         }
 
-        private void RemoveDomino()
+        private void RemoveDomino(Domino model)
         {
-            
+            if (!_activeDominos.Contains(model)) return;
+            _activeDominos.Remove(model);
+            _nonActiveDominos.Add(model);
         }
 
         private static bool CanPlace(float minimumDistance, Vector3 position, IEnumerable<Vector3> active)

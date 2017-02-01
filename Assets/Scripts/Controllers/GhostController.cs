@@ -66,21 +66,21 @@ namespace Assets.Scripts.Controllers
             if (_cachedGhosts.ContainsKey(model.name)) return _cachedGhosts.FirstOrDefault(t => t.Key == model.name).Value;
             var ghost = _prefabFactory.Create(model);
             ghost.layer = 2;
+            ghost.GetComponent<Rigidbody>().isKinematic = true;
+            ghost.GetComponent<Rigidbody>().useGravity = false;
             _cachedGhosts.Add(model.name, ghost);
             return ghost;
         }
 
         private Quaternion GetSingleDominoRotation(Vector3 pos)
         {
-            if (Time.time - _timeLastPlaced <= _settings.TimeToLine)
-            {
-                var rot = Quaternion.LookRotation(_positionLastPlaced - pos);
-                _positionLastPlaced = pos;
-                return rot;
-            }
+            if (Mathf.Abs(Time.time - _timeLastPlaced) > _settings.TimeToLine)
+                return GetDefaultSingleDominoRotation();
+
+            var rot = Quaternion.LookRotation(_positionLastPlaced - pos);
             _positionLastPlaced = pos;
             _timeLastPlaced = Time.time;
-            return GetDefaultSingleDominoRotation();
+            return rot;
         }
 
         private Quaternion GetDefaultSingleDominoRotation()
@@ -104,6 +104,7 @@ namespace Assets.Scripts.Controllers
         public class Settings
         {
             public float TimeToLine;
+            
         }
     }
 }
