@@ -673,7 +673,7 @@ MonoBehaviour:
       MaxMinX: 100
       MaxMinZ: 100
       FlySpeed: 1
-      MinHeight: 5
+      MinHeight: 1
       MaxHeight: 20
       MinimumX: -360
       MaximumX: 360
