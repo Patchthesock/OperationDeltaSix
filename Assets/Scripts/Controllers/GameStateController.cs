@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assets.Scripts.Factories;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Controllers
@@ -13,27 +12,24 @@ namespace Assets.Scripts.Controllers
             _settings = settings;
         }
 
-        public void Initialize(GameStateFactory.GameStates initialState)
+        public void Initialize(bool isPlaying)
         {
-            _gameState = initialState;
+            _gameState = isPlaying;
             ChangeState(_gameState);
             if (_settings.PlayBtn == null) return;
             _settings.PlayBtn.onClick.AddListener(() =>
             {
-                ChangeState(
-                    _gameState == GameStateFactory.GameStates.Build
-                    ? GameStateFactory.GameStates.Play
-                    : GameStateFactory.GameStates.Build);
+                ChangeState(!_gameState);
             });
         }
 
-        public void SubscribeToOnGameStateChanged(Action<GameStateFactory.GameStates> onGameStateChanged)
+        public void SubscribeToOnGameStateChanged(Action<bool> onGameStateChanged)
         {
             if (_onGameStateChangedListeners.Contains(onGameStateChanged)) return;
             _onGameStateChangedListeners.Add(onGameStateChanged);
         }
 
-        private void OnGameStateChanged(GameStateFactory.GameStates state)
+        private void OnGameStateChanged(bool state)
         {
             foreach (var l in _onGameStateChangedListeners)
             {
@@ -41,15 +37,15 @@ namespace Assets.Scripts.Controllers
             }
         }
 
-        private void ChangeState(GameStateFactory.GameStates state)
+        private void ChangeState(bool state)
         {
             _gameState = state;
             OnGameStateChanged(_gameState);
         }
 
-        private GameStateFactory.GameStates _gameState;
+        private bool _gameState;
         private readonly Settings _settings;
-        private readonly List<Action<GameStateFactory.GameStates>> _onGameStateChangedListeners = new List<Action<GameStateFactory.GameStates>>();
+        private readonly List<Action<bool>> _onGameStateChangedListeners = new List<Action<bool>>();
 
         [Serializable]
         public class Settings

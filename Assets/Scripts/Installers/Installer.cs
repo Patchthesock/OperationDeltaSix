@@ -59,7 +59,6 @@ namespace Assets.Scripts.Installers
         private void InstallControllers()
         {
             InstallInputController();
-            InstallLevelController();
             InstallCameraController();
             InstallDominoController();
             InstallMenuController();
@@ -80,20 +79,12 @@ namespace Assets.Scripts.Installers
 
         private void InstallGameController()
         {
-            Container.Bind<ITickable>().To<GameController>().AsSingle();
             Container.Bind<GameController>().AsSingle();
         }
 
         private void InstallInputController()
         {
             Container.Bind<InputController>().AsSingle();
-        }
-
-        private void InstallLevelController()
-        {
-            Container.Bind<LevelController.Settings>()
-                .FromInstance(_settings.LevelControllerSettings).AsSingle();
-            Container.Bind<LevelController>().AsSingle();
         }
 
         private void InstallCameraController()
@@ -148,7 +139,6 @@ namespace Assets.Scripts.Installers
         {
             public MenuController.Settings MenuControllerSettings = null;
             public GhostController.Settings GhostControllerSettings = null;
-            public LevelController.Settings LevelControllerSettings = null;
             public CameraController.Settings CameraControllerSettings = null;
             public DominoController.Settings DominoControllerSettings = null;
             public GameStateController.Settings GameStateControllerSettings = null;
