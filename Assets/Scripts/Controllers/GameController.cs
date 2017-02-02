@@ -1,6 +1,7 @@
 ﻿using Assets.Scripts.Factories;
 using Assets.Scripts.States.Game;
 using Zenject;
+using UnityEngine;
 
 namespace Assets.Scripts.Controllers
 {
@@ -10,11 +11,13 @@ namespace Assets.Scripts.Controllers
             GameStateFactory stateFactory,
             LevelController levelController,
             CameraController cameraController,
+            GameStateController gameStateController,
             PlacementController placementController)
         {
             _stateFactory = stateFactory;
             _levelController = levelController;
             _cameraController = cameraController;
+            _gameStateController = gameStateController;
             _placementController = placementController;
         }
 
@@ -23,7 +26,8 @@ namespace Assets.Scripts.Controllers
             _levelController.Initialize();
             _cameraController.Initialize();
             _placementController.Initialize();
-            ChangeState(GameStateFactory.GameStates.Build);
+            _gameStateController.SubscribeToOnGameStateChanged(ChangeState);
+            _gameStateController.Initialize(GameStateFactory.GameStates.Build);
         }
 
         public void Tick()
@@ -36,12 +40,14 @@ namespace Assets.Scripts.Controllers
             if (_currentState != null) _currentState.Stop();
             _currentState = _stateFactory.Create(state, this);
             _currentState.Start();
+            Debug.Log(_currentState.ToString());
         }
 
         private GameState _currentState;
         private readonly GameStateFactory _stateFactory;
         private readonly LevelController _levelController;
         private readonly CameraController _cameraController;
+        private readonly GameStateController _gameStateController;
         private readonly PlacementController _placementController;
     }
 }

@@ -60,8 +60,7 @@ namespace Assets.Scripts.Controllers
             if (!Input.GetMouseButton(mouseButtonNumber)) return string.Empty;
             var hit = GetRaycastHit(Input.mousePosition);
             if (hit.collider == null) return string.Empty;
-            if (hit.collider.gameObject.tag != "Domino") return string.Empty;
-            return hit.collider.gameObject.name;
+            return hit.collider.gameObject.tag != "Domino" ? string.Empty : hit.collider.gameObject.name;
         }
 
         private static RaycastHit GetRaycastHit(Vector3 position)

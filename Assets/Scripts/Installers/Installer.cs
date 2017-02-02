@@ -66,11 +66,21 @@ namespace Assets.Scripts.Installers
             InstallRemovalController();
             InstallGhostController();
             InstallPlacementController();
+            InstallGameStateController();
             InstallGameController();
+        }
+
+        private void InstallGameStateController()
+        {
+            Container.Bind<GameStateController.Settings>()
+                .FromInstance(_settings.GameStateControllerSettings)
+                .AsSingle();
+            Container.Bind<GameStateController>().AsSingle();
         }
 
         private void InstallGameController()
         {
+            Container.Bind<ITickable>().To<GameController>().AsSingle();
             Container.Bind<GameController>().AsSingle();
         }
 
@@ -141,6 +151,7 @@ namespace Assets.Scripts.Installers
             public LevelController.Settings LevelControllerSettings = null;
             public CameraController.Settings CameraControllerSettings = null;
             public DominoController.Settings DominoControllerSettings = null;
+            public GameStateController.Settings GameStateControllerSettings = null;
         }
     }
 }

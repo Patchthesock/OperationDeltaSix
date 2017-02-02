@@ -10,7 +10,7 @@ namespace Assets.Scripts.States.Game
 
         public override void Update()
         {
-            
+
         }
     }
 }
