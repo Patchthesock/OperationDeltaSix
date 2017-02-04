@@ -15,7 +15,6 @@ public class collision : MonoBehaviour
 
     void OnCollisionEnter (Collision col)
     {
-    	Debug.Log("Fired");
         if(col.gameObject.tag == "Domino")
         {
         	index = Random.Range (0, audioFiles.Length);

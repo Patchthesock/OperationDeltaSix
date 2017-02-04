@@ -16,5 +16,12 @@ namespace Assets.Scripts.Models
                 Rotation = rotation
             };
         }
+
+        public static DominoInteractionModel CreateDominoInteractionModel(
+            Vector3 position,
+            Rigidbody rigidbody)
+        {
+            return new DominoInteractionModel(position, rigidbody);
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Scripts.Models;
 using UnityEngine;
 
 namespace Assets.Scripts.Controllers
@@ -61,6 +62,15 @@ namespace Assets.Scripts.Controllers
             var hit = GetRaycastHit(Input.mousePosition);
             if (hit.collider == null) return string.Empty;
             return hit.collider.gameObject.tag != "Domino" ? string.Empty : hit.collider.gameObject.name;
+        }
+
+        public DominoInteractionModel GetMouseClickDomino(int mouseButtonNumber)
+        {
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return null;
+            if (!Input.GetMouseButton(mouseButtonNumber)) return null;
+            var hit = GetRaycastHit(Input.mousePosition);
+            if (hit.collider == null) return null;
+            return hit.collider.gameObject.tag != "Domino" ? null : ModelFactory.CreateDominoInteractionModel(hit.normal, hit.rigidbody);
         }
 
         private static RaycastHit GetRaycastHit(Vector3 position)
