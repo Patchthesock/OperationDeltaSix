@@ -688,7 +688,7 @@ MonoBehaviour:
       Dominos:
       - {fileID: 1512718420550064, guid: 915f046bb9f6c9441b4a35aa379efdd9, type: 2}
     InteractControllerSettings:
-      DominoPushForce: {x: 100, y: 0, z: 0}
+      DominoPushForce: 100
     GameStateControllerSettings:
       PlayBtn: {fileID: 143191375}
 --- !u!114 &1758212519

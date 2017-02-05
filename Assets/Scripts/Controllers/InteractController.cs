@@ -31,7 +31,7 @@ namespace Assets.Scripts.Controllers
             if (domino == null) return;
             domino.Rigidbody
                 .AddForceAtPosition(
-                    _settings.DominoPushForce,
+                    domino.PositionToApplyForce.normalized * _settings.DominoPushForce,
                     domino.PositionToApplyForce,
                     ForceMode.Impulse);
         }
@@ -43,7 +43,7 @@ namespace Assets.Scripts.Controllers
         [Serializable]
         public class Settings
         {
-            public Vector3 DominoPushForce;
+            public float DominoPushForce;
         }
     }
 }
