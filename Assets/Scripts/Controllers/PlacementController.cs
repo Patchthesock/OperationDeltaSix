@@ -27,6 +27,14 @@ namespace Assets.Scripts.Controllers
             _removalController.SubscribeToOnItemRemoved(OnItemRemoved);
         }
 
+        public void SetState(bool isActive)
+        {
+            _menuController.SetState(isActive);
+            if (isActive) return;
+            _ghostController.Drop();
+            _removalController.Remove(false);
+        }
+
         private void OnMenuItemSelected(GameObject model)
         {
             _removalController.Remove(false);

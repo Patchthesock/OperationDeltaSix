@@ -28,6 +28,11 @@ namespace Assets.Scripts.Controllers
             }
         }
 
+        public void SetState(bool isActive)
+        {
+            SetMenuActive(isActive);
+        }
+
         public void SubscribeToOnItemDropped(Action onItemDropped)
         {
             if (_onItemDroppedListeners.Contains(onItemDropped)) return;
@@ -54,6 +59,16 @@ namespace Assets.Scripts.Controllers
             foreach (var l in _onItemSelectedListeners)
             {
                 l(model);
+            }
+        }
+
+        private void SetMenuActive(bool isActive)
+        {
+            _settings.RemoveButton.gameObject.SetActive(isActive);
+            foreach (var m in _settings.MenuOptions)
+            {
+                if (m.Button == null) continue;
+                m.Button.gameObject.SetActive(isActive);
             }
         }
 

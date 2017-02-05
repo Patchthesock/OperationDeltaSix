@@ -30,6 +30,7 @@ namespace Assets.Scripts.Controllers
         {
             _dominoController.SetPhysics(isPlaying);
             _interactController.SetState(isPlaying);
+            _placementController.SetState(!isPlaying);
             Physics.gravity = isPlaying ? new Vector3(0, -50, 0) : new Vector3(0, 0, 0);
         }
         
