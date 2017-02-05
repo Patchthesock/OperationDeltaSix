@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.Hooks
@@ -10,6 +11,8 @@ namespace Assets.Scripts.Hooks
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private AudioSource _audioSource;
         
+        public event Action<Collision> OnCollision = delegate { };
+
         public Collider Collider
         {
             get { return _collider; }
@@ -28,6 +31,11 @@ namespace Assets.Scripts.Hooks
         public AudioSource AudioSource
         {
             get { return _audioSource; }
+        }
+
+        private void OnCollisionEnter(Collision collision)
+        {
+            OnCollision(collision);
         }
     }
 }

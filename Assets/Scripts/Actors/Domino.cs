@@ -16,6 +16,7 @@ namespace Assets.Scripts.Actors
             _hooks = hooks;
             _settings = settings;
             _hooks.gameObject.name = name;
+            _hooks.OnCollision += OnCollisionEnter;
         }
 
         public string Name
@@ -58,7 +59,7 @@ namespace Assets.Scripts.Actors
         [Serializable]
         public class Settings
         {
-            public List<AudioClip> AudioClips;
+            public List<AudioClip> AudioClips = new List<AudioClip>();
         }
     }
 }
