@@ -1,13 +1,20 @@
-﻿using Assets.Scripts.Hooks;
+﻿using System;
+using System.Collections.Generic;
+using Assets.Scripts.Hooks;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Actors
 {
     public class Domino
     {
-        public Domino(string name, DominoHooks hooks)
+        public Domino(
+            string name,
+            Settings settings,
+            DominoHooks hooks)
         {
             _hooks = hooks;
+            _settings = settings;
             _hooks.gameObject.name = name;
         }
 
@@ -33,6 +40,25 @@ namespace Assets.Scripts.Actors
             _hooks.Rigidbody.isKinematic = !state;
         }
 
+        private void OnCollisionEnter(Collision col)
+        {
+            if (col.gameObject.tag != "Domino") return;
+            PlayAudio();
+        }
+
+        private void PlayAudio()
+        {
+            _hooks.AudioSource.clip = _settings.AudioClips[Random.Range(0, _settings.AudioClips.Count)];
+            _hooks.AudioSource.Play();
+        }
+
+        private readonly Settings _settings;
         private readonly DominoHooks _hooks;
+
+        [Serializable]
+        public class Settings
+        {
+            public List<AudioClip> AudioClips;
+        }
     }
 }

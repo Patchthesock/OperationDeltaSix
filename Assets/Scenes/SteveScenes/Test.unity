@@ -657,6 +657,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _settings:
+    DominoSettings:
+      AudioClips: []
     MenuControllerSettings:
       RemoveButton: {fileID: 869010246}
       MenuOptions:
@@ -670,15 +672,15 @@ MonoBehaviour:
       InitialRotaiton: {x: 0, y: 0, z: 0}
       MaxMinX: 100
       MaxMinZ: 100
-      FlySpeed: 1
-      MinHeight: 1
+      FlySpeed: 0.5
+      MinHeight: 0.5
       MaxHeight: 20
       MinimumX: -360
       MaximumX: 360
       MinimumY: -60
       MaximumY: 60
-      SensitivityX: 15
-      SensitivityY: 15
+      SensitivityX: 5
+      SensitivityY: 5
       Axes: 0
       Camera: {fileID: 1160267303303792, guid: d9dc46de742fa284eacc9d9c571336d9, type: 2}
     DominoControllerSettings:

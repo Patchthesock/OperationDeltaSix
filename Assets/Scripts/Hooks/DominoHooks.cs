@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Assets.Scripts.Hooks
 {
@@ -7,7 +8,8 @@ namespace Assets.Scripts.Hooks
         [SerializeField] private Collider _collider;
         [SerializeField] private Transform _transform;
         [SerializeField] private Rigidbody _rigidbody;
-
+        [SerializeField] private AudioSource _audioSource;
+        
         public Collider Collider
         {
             get { return _collider; }
@@ -21,6 +23,11 @@ namespace Assets.Scripts.Hooks
         public Rigidbody Rigidbody
         {
             get { return _rigidbody; }
+        }
+
+        public AudioSource AudioSource
+        {
+            get { return _audioSource; }
         }
     }
 }

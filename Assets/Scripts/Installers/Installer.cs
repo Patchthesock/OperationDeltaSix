@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Scripts.Actors;
 using Assets.Scripts.Controllers;
 using Assets.Scripts.Factories;
 using Assets.Scripts.Services;
@@ -107,6 +108,9 @@ namespace Assets.Scripts.Installers
 
         private void InstallDominoController()
         {
+            Container.Bind<Domino.Settings>()
+                .FromInstance(_settings.DominoSettings)
+                .AsSingle();
             Container.Bind<DominoController.Settings>()
                 .FromInstance(_settings.DominoControllerSettings).AsSingle();
             Container.Bind<DominoController>().AsSingle();
@@ -147,6 +151,7 @@ namespace Assets.Scripts.Installers
         [Serializable]
         private class Settings
         {
+            public Domino.Settings DominoSettings = null;
             public MenuController.Settings MenuControllerSettings = null;
             public GhostController.Settings GhostControllerSettings = null;
             public CameraController.Settings CameraControllerSettings = null;

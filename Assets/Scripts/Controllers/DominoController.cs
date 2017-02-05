@@ -13,10 +13,12 @@ namespace Assets.Scripts.Controllers
     {
         public DominoController(
             Settings settings,
-            PrefabFactory prefabFactory)
+            PrefabFactory prefabFactory,
+            Domino.Settings dominoSettings)
         {
             _settings = settings;
             _prefabFactory = prefabFactory;
+            _dominoSettings = dominoSettings;
         }
 
         public bool CanPlanDomino(Vector3 position)
@@ -63,6 +65,7 @@ namespace Assets.Scripts.Controllers
         {
             return new Domino(
                 name,
+                _dominoSettings,
                 _prefabFactory.Create(
                     _settings.Dominos[Random.Range(
                         0, _settings.Dominos.Count - 1)]
@@ -76,6 +79,7 @@ namespace Assets.Scripts.Controllers
 
         private readonly Settings _settings;
         private readonly PrefabFactory _prefabFactory;
+        private readonly Domino.Settings _dominoSettings;
         private readonly List<Domino> _activeDominos = new List<Domino>();
         private readonly List<Domino> _nonActiveDominos = new List<Domino>();
 
