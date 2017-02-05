@@ -9,7 +9,7 @@ namespace Assets.Scripts.Models
 
         public DominoInteractionModel(Vector3 position, Rigidbody rigidbody)
         {
-            PositionToApplyForce = position;
+            PositionToApplyForce = new Vector3(position.x, 0, position.z);
             Rigidbody = rigidbody;
         }
     }
