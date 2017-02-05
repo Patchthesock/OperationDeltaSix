@@ -86,8 +86,8 @@ namespace Assets.Scripts.Controllers
         [Serializable]
         public class Settings
         {
-            public float MinimumDistance;
-            public List<GameObject> Dominos;
+            public float MinimumDistance = 1;
+            public List<GameObject> Dominos = new List<GameObject>();
         }
     }
 }
