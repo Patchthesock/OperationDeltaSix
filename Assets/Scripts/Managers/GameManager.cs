@@ -32,7 +32,7 @@ namespace Assets
             Physics.gravity = state ? new Vector3(0, -50, 0) : new Vector3(0, 0, 0);
             HandObject.SetActive(state);
             IsPlaying = state;
-            PlayBtn.GetComponentInChildren<Text>().text = IsPlaying ? "Stop" : "Begin";
+            // PlayBtn.GetComponentInChildren<Text>().text = IsPlaying ? "Stop" : "Begin";
             PlayBtn.GetComponent<Image>().color = IsPlaying ? StartBtnColorNotActive : StartBtnColorActive;
 
             if (state) Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);

@@ -287,9 +287,10 @@ namespace Assets.Scripts.Managers
                 SetObject(SingleDomino);
 				foreach(Transform child in MainUI.transform)
 				{
-					child.GetComponent<Button>().interactable = true;
-					 GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
-					 GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+					// child.GetComponent<Button>().interactable = true;
+					GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
+					GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
+					MainUI.SetActive(false);
 				}
             });
 
@@ -299,9 +300,9 @@ namespace Assets.Scripts.Managers
                 SetObject(FiveDomino);
 				foreach(Transform child in MainUI.transform)
 				{
-					child.GetComponent<Button>().interactable = true;
-					GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
-					GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+					// child.GetComponent<Button>().interactable = true;
+					GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
+					GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
 				}
             });
 
@@ -309,9 +310,9 @@ namespace Assets.Scripts.Managers
             {
 				foreach(Transform child in MainUI.transform)
 				{
-					child.GetComponent<Button>().interactable = true;
-					GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
-					GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+					// child.GetComponent<Button>().interactable = true;
+					GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
+					GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
 				}
                 DestroyGhost();
                 SetObject(TenDomino);
@@ -323,9 +324,9 @@ namespace Assets.Scripts.Managers
                 SetObject(TwentyDomino);
 				foreach(Transform child in MainUI.transform)
 				{
-					child.GetComponent<Button>().interactable = true;
-					GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
-					GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+					// child.GetComponent<Button>().interactable = true;
+					GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
+					GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
 				}				
             });
 
@@ -335,9 +336,9 @@ namespace Assets.Scripts.Managers
                 SetObject(NintyLeft);
 				foreach(Transform child in MainUI.transform)
 				{
-					child.GetComponent<Button>().interactable = true;
-					GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
-					GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+					// child.GetComponent<Button>().interactable = true;
+					GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
+					GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
 				}				
             });
 
@@ -347,9 +348,9 @@ namespace Assets.Scripts.Managers
                 SetObject(NintyRight);
 				foreach(Transform child in MainUI.transform)
 				{
-					child.GetComponent<Button>().interactable = true;
-					GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
-					GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+					// child.GetComponent<Button>().interactable = true;
+					GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
+					GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
 				}
             });
 
@@ -359,9 +360,9 @@ namespace Assets.Scripts.Managers
                 SetObject(OneEightyTurn);
 				foreach(Transform child in MainUI.transform)
 				{
-					child.GetComponent<Button>().interactable = true;
-					GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
-					GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+					// child.GetComponent<Button>().interactable = true;
+					GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
+					GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
 				}				
             });
 
@@ -371,9 +372,9 @@ namespace Assets.Scripts.Managers
                 SetObject(BridgeProp);
                 foreach (Transform child in MainUI.transform)
                 {
-                    child.GetComponent<Button>().interactable = true;
-                    GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
-                    GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+                    // child.GetComponent<Button>().interactable = true;
+                    GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
+                    GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
                 }
             });
 
@@ -383,9 +384,9 @@ namespace Assets.Scripts.Managers
                 SetObject(StepSlideProp);
                 foreach (Transform child in MainUI.transform)
                 {
-                    child.GetComponent<Button>().interactable = true;
-                    GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
-                    GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+                    // child.GetComponent<Button>().interactable = true;
+                    GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
+                    GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
                 }
             });
 
@@ -395,9 +396,10 @@ namespace Assets.Scripts.Managers
                 DestroyGhost();
                 foreach (Transform child in MainUI.transform)
                 {
-                    child.GetComponent<Button>().interactable = true;
-                    GameObject.Find("UIControl").GetComponent<UIManager>().InventoryOpen = false;
-                    GameObject.Find("UIControl").GetComponent<UIManager>().ActiveInventory.SetActive(false);
+                    // child.GetComponent<Button>().interactable = true;
+                    GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
+                    GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
+					GameObject.Find("UIControl").GetComponent<RadialManager>().MainUI.SetActive(false);
                 }
             });
 

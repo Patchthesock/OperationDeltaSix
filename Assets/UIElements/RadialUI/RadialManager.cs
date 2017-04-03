@@ -46,7 +46,13 @@ public class RadialManager : MonoBehaviour
 			//GrandChild.GetComponent<Button>().interactable = true;
 			InventoryOpen = false;
 			ActiveInventory.SetActive(false);
+			MainUI.SetActive(false);
 		}
+	}
+	
+	public void ExitGame()
+	{
+		Application.Quit();
 	}
 	
 	void Update()
