@@ -68,6 +68,7 @@ public class RadialManager : MonoBehaviour
 		{
 			MainUI.transform.position = Input.mousePosition;
 			MainUI.SetActive(true);
+			InventoryOpen = true;
 		}
 	}	
 }
