@@ -147,9 +147,7 @@ namespace Assets.Scripts.Managers
 
             foreach (var o in dom.Dominos)
             {
-                _placedDominoManager.PlaceDomino(
-                    new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z),
-                    o.transform.rotation);
+                _placedDominoManager.PlaceDomino(o.transform.position, o.transform.rotation);
             }
             ForceMouseButtonRelease();
         }

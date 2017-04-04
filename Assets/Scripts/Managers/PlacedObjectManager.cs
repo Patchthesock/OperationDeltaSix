@@ -12,9 +12,17 @@ namespace Assets
         public void AddObject(GameObject model, Vector3 position, Quaternion rotation)
         {
             var objectToPlace = Instantiate(model);
+            foreach (Transform p in objectToPlace.transform)
+            {
+                foreach (Transform d in p.transform)
+                {
+                    if (d.gameObject.tag == "Domino") Destroy(d.gameObject);
+
+                }
+            }
             objectToPlace.GetComponentInChildren<Rigidbody>().isKinematic = true;
             objectToPlace.GetComponentInChildren<Rigidbody>().useGravity = false;
-            objectToPlace.transform.position = position + new Vector3(0, 1f, 0);
+            objectToPlace.transform.position = position;
             objectToPlace.transform.rotation = rotation;
             if (_placedObjects.Contains(objectToPlace)) return;
             _placedObjects.Add(objectToPlace);
