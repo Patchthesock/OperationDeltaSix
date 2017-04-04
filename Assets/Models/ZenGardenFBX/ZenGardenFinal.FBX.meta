@@ -1,0 +1,162 @@
+fileFormatVersion: 2
+guid: 3e3a5d75903925447b4729046dc8197a
+timeCreated: 1491333171
+licenseType: Free
+ModelImporter:
+  serializedVersion: 19
+  fileIDToRecycleName:
+    100000: Base
+    100002: Box001
+    100004: Foutain
+    100006: FoutainRim
+    100008: FoutainStand
+    100010: pCube14
+    100012: Plane002
+    100014: pPlane1
+    100016: Railings
+    100018: Rake
+    100020: Rectangle001
+    100022: Rock
+    100024: Rock02
+    100026: Sphere002
+    100028: Sphere003
+    100030: Sphere004
+    100032: transform1
+    100034: transform2
+    100036: WaterFall
+    100038: //RootNode
+    400000: Base
+    400002: Box001
+    400004: Foutain
+    400006: FoutainRim
+    400008: FoutainStand
+    400010: pCube14
+    400012: Plane002
+    400014: pPlane1
+    400016: Railings
+    400018: Rake
+    400020: Rectangle001
+    400022: Rock
+    400024: Rock02
+    400026: Sphere002
+    400028: Sphere003
+    400030: Sphere004
+    400032: transform1
+    400034: transform2
+    400036: WaterFall
+    400038: //RootNode
+    2300000: Base
+    2300002: Box001
+    2300004: Foutain
+    2300006: FoutainRim
+    2300008: FoutainStand
+    2300010: Plane002
+    2300012: Railings
+    2300014: Rake
+    2300016: Rectangle001
+    2300018: Rock
+    2300020: Rock02
+    2300022: Sphere002
+    2300024: Sphere003
+    2300026: Sphere004
+    2300028: WaterFall
+    3300000: Base
+    3300002: Box001
+    3300004: Foutain
+    3300006: FoutainRim
+    3300008: FoutainStand
+    3300010: Plane002
+    3300012: Railings
+    3300014: Rake
+    3300016: Rectangle001
+    3300018: Rock
+    3300020: Rock02
+    3300022: Sphere002
+    3300024: Sphere003
+    3300026: Sphere004
+    3300028: WaterFall
+    4300000: Railings
+    4300002: Base
+    4300004: Box001
+    4300006: Rock02
+    4300008: Sphere002
+    4300010: Sphere003
+    4300012: Sphere004
+    4300014: Rock
+    4300016: Rectangle001
+    4300018: Plane002
+    4300020: FoutainStand
+    4300022: Foutain
+    4300024: FoutainRim
+    4300026: WaterFall
+    4300028: Rake
+    7400000: Take 001
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 10
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
