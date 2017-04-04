@@ -85,38 +85,73 @@ namespace Assets.Scripts.Managers
             _ghostObject.transform.rotation = GetDefaultRotation();
             var placementPosition = GetPlacementPosition(0);
             if (placementPosition == new Vector3()) return;
-            
-            // Give to Place Manager
-            if (_selectedObject.tag == "MultiDomino")
-            {
-                if (_mouseLock) return;
-                if (!_placedDominoManager.CanPlaceDomino(placementPosition))
-                {
-                    Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
-                }
-                if (!_placedDominoManager.CanPlaceDomino(placementPosition)) return;
-                var dom = _ghostObject.GetComponent<DominoHooks>();
-                if (dom == null) return;
 
-                foreach (var o in dom.Dominos)
-                {
-                    _placedDominoManager.PlaceDomino(
-                        new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z),
-                        o.transform.rotation);
-                }
-                ForceMouseButtonRelease();
-            }
-            if (_selectedObject.tag == "Domino")
+            switch (_selectedObject.tag)
             {
-                if (!_placedDominoManager.CanPlaceDomino(placementPosition))
-                {
-                    Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
-                }
-                if (!_placedDominoManager.CanPlaceDomino(ghostPos)) return;
-                _placedDominoManager.PlaceDomino(ghostPos, GetSingleRotation(ghostPos));
-                _timeLastPlaced = Time.time;
+                case "MultiDomino":
+                    PlaceMutliDomino(ghostPos, placementPosition);
+                    break;
+                case "Domino":
+                    PlaceDomino(ghostPos, placementPosition);
+                    break;
+                case "Object":
+                    PlaceProp(ghostPos, placementPosition);
+                    break;
+                default:
+                    break;
             }
-            if (_selectedObject.tag == "Object") { }
+        }
+
+        private void PlaceMutliDomino(Vector3 ghostPos, Vector3 placementPosition)
+        {
+            if (_mouseLock) return;
+            if (!_placedDominoManager.CanPlaceDomino(placementPosition))
+            {
+                Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+                return;
+            }
+            var dom = _ghostObject.GetComponent<DominoHooks>();
+            if (dom == null) return;
+
+            foreach (var o in dom.Dominos)
+            {
+                _placedDominoManager.PlaceDomino(
+                    new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z),
+                    o.transform.rotation);
+            }
+            ForceMouseButtonRelease();
+        }
+
+        private void PlaceDomino(Vector3 ghostPos, Vector3 placementPosition)
+        {
+            if (!_placedDominoManager.CanPlaceDomino(placementPosition))
+            {
+                Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+                return;
+            }
+            _placedDominoManager.PlaceDomino(ghostPos, GetSingleRotation(ghostPos));
+            _timeLastPlaced = Time.time;
+        }
+
+        private void PlaceProp(Vector3 ghostPos, Vector3 placementPosition)
+        {
+            if (_mouseLock) return;
+            if (!_placedDominoManager.CanPlaceDomino(placementPosition))
+            {
+                Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+                return;
+            }
+            _placedObjectManager.AddObject(_ghostObject, ghostPos, _ghostObject.transform.rotation);
+            var dom = _ghostObject.GetComponent<DominoHooks>();
+            if (dom == null) return;
+
+            foreach (var o in dom.Dominos)
+            {
+                _placedDominoManager.PlaceDomino(
+                    new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z),
+                    o.transform.rotation);
+            }
+            ForceMouseButtonRelease();
         }
 
         private static Vector3 GetPlacementPosition(int mouseButtonNumber)
