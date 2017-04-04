@@ -16,6 +16,7 @@ public class RadialManager : MonoBehaviour
 	public void DominoesButton()
 	{
 		DominoesInventory.SetActive(true);
+		PropsInventory.SetActive(false);
 		ActiveInventory = DominoesInventory;
 		/* Controls the MainUI elements and turns them off on selection
 		foreach(Transform child in MainUI.transform)
@@ -30,11 +31,13 @@ public class RadialManager : MonoBehaviour
 	public void PropsButton()
 	{
 		PropsInventory.SetActive(true);
+		DominoesInventory.SetActive(false);
 		ActiveInventory = PropsInventory;
-		foreach(Transform child in MainUI.transform)
+		/* foreach(Transform child in MainUI.transform)
 		{
 			child.GetComponent<Button>().interactable = false;
 		}
+		*/
 		InventoryOpen = true;
 	}
 
