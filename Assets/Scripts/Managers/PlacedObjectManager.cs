@@ -1,25 +1,14 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.UI;
 
-namespace Assets
+namespace Assets.Scripts.Managers
 {
     public class PlacedObjectManager : MonoBehaviour
     {
-        public float MinDistanceBetweenObjects;
-
         public void AddObject(GameObject model, Vector3 position, Quaternion rotation)
         {
             var objectToPlace = Instantiate(model);
-            foreach (Transform p in objectToPlace.transform)
-            {
-                foreach (Transform d in p.transform)
-                {
-                    if (d.gameObject.tag == "Domino") Destroy(d.gameObject);
-
-                }
-            }
+            foreach (Transform p in objectToPlace.transform) foreach (Transform d in p.transform) if (d.gameObject.tag == "Domino") Destroy(d.gameObject);
             objectToPlace.GetComponentInChildren<Rigidbody>().isKinematic = true;
             objectToPlace.GetComponentInChildren<Rigidbody>().useGravity = false;
             objectToPlace.transform.position = position;
@@ -30,10 +19,7 @@ namespace Assets
 
         public void AddObject(IEnumerable<SaveManager.ObjectPosition> dominos)
         {
-            foreach (var o in dominos)
-            {
-                AddObject(o.GameObject, o.Position, o.Rotation);
-            }
+            foreach (var o in dominos) AddObject(o.GameObject, o.Position, o.Rotation);
         }
 
         public IEnumerable<GameObject> GetPlacedObjects()
@@ -41,37 +27,21 @@ namespace Assets
             return _placedObjects;
         } 
 
-        public bool CanPlaceObject(Vector3 position)
-        {
-            return _placedObjects.All(o => !(Vector3.Distance(o.transform.position, position) < MinDistanceBetweenObjects));
-        }
-
         public void RemoveObject(GameObject o)
         {
             _placedObjects.Remove(o);
             Destroy(o);
         }
 
-        public void RemoveObjects()
-        {
-            foreach (var o in _placedObjects.ToList())
-            {
-                RemoveObject(o);
-            }
-        }
-
         private readonly List<GameObject> _placedObjects = new List<GameObject>();
 
         [HideInInspector]
-        public static PlacedObjectManager instance = null;
+        public static PlacedObjectManager Instance;
 
         private void Awake()
         {
-            if (instance == null)
-                instance = this;
-            else if (instance != this)
-                Destroy(gameObject);
-
+            if (Instance == null) Instance = this;
+            else if (Instance != this) Destroy(gameObject);
             DontDestroyOnLoad(gameObject);
         }
     }

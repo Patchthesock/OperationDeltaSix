@@ -35,8 +35,6 @@ namespace Assets.Scripts.Managers
         public GameObject BridgeProp;
         public GameObject StepSlideProp;
 
-        public GameObject MainUI;
-
         public float TimeToLine;
         public CursorMode normalCursor;
         public Texture2D cursorCantPlaceTexture;
@@ -50,17 +48,13 @@ namespace Assets.Scripts.Managers
             Destroy(_ghostObject);
         }
 
+        // ReSharper disable once UnusedMember.Local
         private void Update()
         {
             if (!_isActive) return;
-            if (Input.GetMouseButtonUp(0))
-            {
-                _mouseLock = false;
-            }
-            if (Input.GetKey(KeyCode.Escape))
-            {
-                DestroyGhost();
-            }
+            if (Input.GetMouseButtonUp(0)) _mouseLock = false;
+            if (Input.GetKey(KeyCode.Escape)) DestroyGhost();
+            
             Setup();
 
             if (_removingObjects)
@@ -68,88 +62,66 @@ namespace Assets.Scripts.Managers
                 RemoveItem();
                 return;
             }
+            if (_selectedObject != null) AddItem(_selectedObject.tag, GetPlacementPosition(), _ghostObject, _placedDominoManager);
+        }
 
-            if (_selectedObject == null) return;
-            var ghostPos = GetPlacementPosition();
-            if (ghostPos == new Vector3() || !_placedDominoManager.CanPlaceDomino(ghostPos))
+        private void AddItem(string objectTag, Vector3 ghostPos, GameObject ghostObject, PlacedDominoManager dominoManager)
+        {
+            if (ghostPos == new Vector3() || !Functions.CanPlaceObject(dominoManager.GetPlacedDominos(), ghostPos, 0.5f))
             {
-                _ghostObject.transform.position = new Vector3(999, 999, 999);
+                ghostObject.transform.position = new Vector3(999, 999, 999);
                 Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+                return;
             }
-            else
-            {
-                _ghostObject.transform.position = ghostPos;
-                Cursor.SetCursor(null, Vector2.zero, normalCursor);
-            }
+            ghostObject.transform.position = ghostPos;
+            Cursor.SetCursor(null, Vector2.zero, normalCursor);
 
-            _ghostObject.transform.rotation = GetDefaultRotation();
+            ghostObject.transform.rotation = GetDefaultRotation();
             var placementPosition = GetPlacementPosition(0);
             if (placementPosition == new Vector3()) return;
+            if (!Functions.CanPlaceObject(dominoManager.GetPlacedDominos(), placementPosition, 0.5f))
+            {
+                Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+                return;
+            }
 
-            switch (_selectedObject.tag)
+            switch (objectTag)
             {
                 case "MultiDomino":
-                    PlaceMutliDomino(ghostPos, placementPosition);
+                    PlaceMutliDomino(ghostPos);
                     break;
                 case "Domino":
-                    PlaceDomino(ghostPos, placementPosition);
+                    PlaceDomino(ghostPos);
                     break;
                 case "Object":
-                    PlaceProp(ghostPos, placementPosition);
-                    break;
-                default:
+                    PlaceProp(ghostPos);
                     break;
             }
         }
 
-        private void PlaceMutliDomino(Vector3 ghostPos, Vector3 placementPosition)
+        private void PlaceMutliDomino(Vector3 ghostPos)
         {
             if (_mouseLock) return;
-            if (!_placedDominoManager.CanPlaceDomino(placementPosition))
-            {
-                Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
-                return;
-            }
             var dom = _ghostObject.GetComponent<DominoHooks>();
             if (dom == null) return;
-
-            foreach (var o in dom.Dominos)
-            {
-                _placedDominoManager.PlaceDomino(
-                    new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z),
-                    o.transform.rotation);
-            }
-            ForceMouseButtonRelease();
+            foreach (var o in dom.Dominos) _placedDominoManager.PlaceDomino(new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z), o.transform.rotation);
+            _mouseLock = true;
         }
 
-        private void PlaceDomino(Vector3 ghostPos, Vector3 placementPosition)
+        private void PlaceDomino(Vector3 ghostPos)
         {
-            if (!_placedDominoManager.CanPlaceDomino(placementPosition))
-            {
-                Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
-                return;
-            }
             _placedDominoManager.PlaceDomino(ghostPos, GetSingleRotation(ghostPos));
             _timeLastPlaced = Time.time;
         }
 
-        private void PlaceProp(Vector3 ghostPos, Vector3 placementPosition)
+        private void PlaceProp(Vector3 ghostPos)
         {
             if (_mouseLock) return;
-            if (!_placedDominoManager.CanPlaceDomino(placementPosition))
-            {
-                Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
-                return;
-            }
             _placedObjectManager.AddObject(_ghostObject, ghostPos, _ghostObject.transform.rotation);
             var dom = _ghostObject.GetComponent<DominoHooks>();
             if (dom == null) return;
-
-            foreach (var o in dom.Dominos)
-            {
-                _placedDominoManager.PlaceDomino(o.transform.position, o.transform.rotation);
-            }
-            ForceMouseButtonRelease();
+            foreach (var o in dom.Dominos) _placedDominoManager.PlaceDomino(o.transform.position, o.transform.rotation);
+            _mouseLock = true;
         }
 
         private static Vector3 GetPlacementPosition(int mouseButtonNumber)
@@ -199,22 +171,11 @@ namespace Assets.Scripts.Managers
 
         private void SetObject(GameObject model)
         {
-            // Ghost the Object
             _removingObjects = false;
             _selectedObject = model;
-            _ghostObject = Instantiate(_selectedObject);
-            
-            if (_ghostObject.GetComponent<DominoHooks>())
-            {
-                foreach (var o in _ghostObject.GetComponent<DominoHooks>().Dominos)
-                {
-                    TurnOffDominoPhysics(o);
-                }
-            }
-            else
-            {
-                TurnOffDominoPhysics(_ghostObject);
-            }
+            _ghostObject = Instantiate(_selectedObject); // Ghost the Object
+            if (_ghostObject.GetComponent<DominoHooks>()) foreach (var o in _ghostObject.GetComponent<DominoHooks>().Dominos) Functions.TurnOffGameObjectPhysics(o);
+            else Functions.TurnOffGameObjectPhysics(_ghostObject);
         }
 
         private void RemoveObjects()
@@ -231,18 +192,7 @@ namespace Assets.Scripts.Managers
             Destroy(_ghostObject);
         }
 
-        private static void TurnOffDominoPhysics(GameObject o)
-        {
-            o.gameObject.layer = 2;
-            if (o.GetComponent<Collider>() != null)
-            {
-                o.GetComponent<Collider>().isTrigger = true;
-            }
-
-            if (o.GetComponent<Rigidbody>() == null) return;
-            o.GetComponent<Rigidbody>().isKinematic = true;
-            o.GetComponent<Rigidbody>().useGravity = false;
-        }
+        
 
         private static void RemoveItem()
         {
@@ -257,183 +207,52 @@ namespace Assets.Scripts.Managers
                 case "Ground":
                     return;
                 case "Domino":
-                    PlacedDominoManager.instance.RemoveDomino(hit.collider.gameObject);
+                    PlacedDominoManager.Instance.RemoveDomino(hit.collider.gameObject);
                     break;
                 case "Object":
-                    PlacedObjectManager.instance.RemoveObject(hit.collider.gameObject);
+                    PlacedObjectManager.Instance.RemoveObject(hit.collider.gameObject);
                     break;
             }
         }
 
         private void Setup()
         {
-            if (_gameManager == null)
-            {
-                _gameManager = GameManager.instance;
-                return;
-            }
-
-            if (_placedObjectManager == null)
-            {
-                _placedObjectManager = PlacedObjectManager.instance;
-                return;
-            }
-
-            if (_placedDominoManager == null)
-            {
-                _placedDominoManager = PlacedDominoManager.instance;
-            }
+            if (_gameManager == null) _gameManager = GameManager.instance;
+            if (_placedObjectManager == null) _placedObjectManager = PlacedObjectManager.Instance;
+            if (_placedDominoManager == null) _placedDominoManager = PlacedDominoManager.Instance;
         }
 
-        private void ForceMouseButtonRelease()
+        private void OnCreateButtonClick(GameObject model)
         {
-            _mouseLock = true;
+            DestroyGhost();
+            TurnOffMenuUi();
+            SetObject(model);
         }
 
-        private bool _mouseLock = false;
-        private bool _removingObjects = false;
-        private bool _isActive = true;
-        private Vector3 _positionLastPlaced;
-        private GameObject _selectedObject;
-        private GameObject _ghostObject;
-        private GameManager _gameManager;
-        private PlacedObjectManager _placedObjectManager;
-        private PlacedDominoManager _placedDominoManager;
-        private float _timeLastPlaced;
-
-
-        [HideInInspector]
-        public static PlacementManager instance = null;
-
-        private void Awake()
+        private void TurnOffMenuUi()
         {
-            if (instance == null)
-                instance = this;
-            else if (instance != this)
-                Destroy(gameObject);
-            DontDestroyOnLoad(gameObject);
-            _removingObjects = false;
+            _radialManager.InventoryOpen = false;
+            _radialManager.MainUI.SetActive(false);
+            _radialManager.ActiveInventory.SetActive(false);
+        }
 
-            DominoOneBtn.onClick.AddListener(() =>
-            {
-                DestroyGhost();
-                SetObject(SingleDomino);
-				foreach(Transform child in MainUI.transform)
-				{
-					// child.GetComponent<Button>().interactable = true;
-					GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
-					GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
-					MainUI.SetActive(false);
-				}
-            });
-
-            DominoFiveBtn.onClick.AddListener(() =>
-            {
-                DestroyGhost();
-                SetObject(FiveDomino);
-				foreach(Transform child in MainUI.transform)
-				{
-					// child.GetComponent<Button>().interactable = true;
-					GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
-					GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
-				}
-            });
-
-            DominoTenBtn.onClick.AddListener(() =>
-            {
-				foreach(Transform child in MainUI.transform)
-				{
-					// child.GetComponent<Button>().interactable = true;
-					GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
-					GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
-				}
-                DestroyGhost();
-                SetObject(TenDomino);
-            });
-
-            DominoTwentyBtn.onClick.AddListener(() =>
-            {
-                DestroyGhost();
-                SetObject(TwentyDomino);
-				foreach(Transform child in MainUI.transform)
-				{
-					// child.GetComponent<Button>().interactable = true;
-					GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
-					GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
-				}				
-            });
-
-            DominoNintyLeftBtn.onClick.AddListener(() =>
-            {
-                DestroyGhost();
-                SetObject(NintyLeft);
-				foreach(Transform child in MainUI.transform)
-				{
-					// child.GetComponent<Button>().interactable = true;
-					GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
-					GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
-				}				
-            });
-
-            DominoNintyRightBtn.onClick.AddListener(() =>
-            {
-                DestroyGhost();
-                SetObject(NintyRight);
-				foreach(Transform child in MainUI.transform)
-				{
-					// child.GetComponent<Button>().interactable = true;
-					GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
-					GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
-				}
-            });
-
-            DominoOneEightyTurnBtn.onClick.AddListener(() =>
-            {
-                DestroyGhost();
-                SetObject(OneEightyTurn);
-				foreach(Transform child in MainUI.transform)
-				{
-					// child.GetComponent<Button>().interactable = true;
-					GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
-					GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
-				}				
-            });
-
-            PropBridgeBtn.onClick.AddListener(() =>
-            {
-                DestroyGhost();
-                SetObject(BridgeProp);
-                foreach (Transform child in MainUI.transform)
-                {
-                    // child.GetComponent<Button>().interactable = true;
-                    GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
-                    GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
-                }
-            });
-
-            PropStepSlideBtn.onClick.AddListener(() =>
-            {
-                DestroyGhost();
-                SetObject(StepSlideProp);
-                foreach (Transform child in MainUI.transform)
-                {
-                    // child.GetComponent<Button>().interactable = true;
-                    GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
-                    GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
-                }
-            });
+        private void SetupButtons()
+        {
+            DominoTenBtn.onClick.AddListener(() => { OnCreateButtonClick(TenDomino); });
+            DominoFiveBtn.onClick.AddListener(() => { OnCreateButtonClick(FiveDomino); });
+            PropBridgeBtn.onClick.AddListener(() => { OnCreateButtonClick(BridgeProp); });
+            DominoOneBtn.onClick.AddListener(() => { OnCreateButtonClick(SingleDomino); });
+            DominoNintyLeftBtn.onClick.AddListener(() => { OnCreateButtonClick(NintyLeft); });
+            DominoTwentyBtn.onClick.AddListener(() => { OnCreateButtonClick(TwentyDomino); });
+            PropStepSlideBtn.onClick.AddListener(() => { OnCreateButtonClick(StepSlideProp); });
+            DominoNintyRightBtn.onClick.AddListener(() => { OnCreateButtonClick(NintyRight); });
+            DominoOneEightyTurnBtn.onClick.AddListener(() => { OnCreateButtonClick(OneEightyTurn); });
 
             ClearDominos.onClick.AddListener(() =>
             {
-                PlacedDominoManager.instance.RemoveDomino();
                 DestroyGhost();
-                foreach (Transform child in MainUI.transform)
-                {
-                    // child.GetComponent<Button>().interactable = true;
-                    GameObject.Find("UIControl").GetComponent<RadialManager>().InventoryOpen = false;
-                    GameObject.Find("UIControl").GetComponent<RadialManager>().ActiveInventory.SetActive(false);
-					GameObject.Find("UIControl").GetComponent<RadialManager>().MainUI.SetActive(false);
-                }
+                TurnOffMenuUi();
+                PlacedDominoManager.Instance.RemoveDomino();
             });
 
             RemoveBtn.onClick.AddListener(() =>
@@ -441,6 +260,37 @@ namespace Assets.Scripts.Managers
                 DestroyGhost();
                 RemoveObjects();
             });
+        }
+
+        private bool _mouseLock;
+        private bool _removingObjects;
+        private bool _isActive = true;
+        private Vector3 _positionLastPlaced;
+        private GameObject _selectedObject;
+        private GameObject _ghostObject;
+        private GameManager _gameManager;
+        private RadialManager _radialManager;
+        private PlacedObjectManager _placedObjectManager;
+        private PlacedDominoManager _placedDominoManager;
+        private float _timeLastPlaced;
+
+        [HideInInspector]
+        public static PlacementManager Instance;
+
+        // ReSharper disable once UnusedMember.Local
+        private void Awake()
+        {
+            // Setting up as Singleton
+            if (Instance == null) Instance = this;
+            else if (Instance != this) Destroy(gameObject);
+            DontDestroyOnLoad(gameObject);
+            _removingObjects = false;
+
+            // Setup Menu
+            _radialManager = GameObject.Find("UIControl").GetComponent<RadialManager>();
+
+            // Set up Buttons
+            SetupButtons();
         }
     }
 }

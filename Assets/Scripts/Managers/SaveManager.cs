@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using Assets.Scripts.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets
+namespace Assets.Scripts.Managers
 {
     public class SaveManager : MonoBehaviour
     {
@@ -19,10 +18,8 @@ namespace Assets
 
         private void Awake()
         {
-            if (instance == null)
-                instance = this;
-            else if (instance != this)
-                Destroy(gameObject);
+            if (instance == null) instance = this;
+            else if (instance != this) Destroy(gameObject);
             DontDestroyOnLoad(gameObject);
             Init();
         }
@@ -34,8 +31,8 @@ namespace Assets
             ResetBtn.onClick.AddListener(() =>
             {
                 GameManager.instance.PlayControl(false);
-                PlacedObjectManager.instance.AddObject(_placedObjects);
-                PlacedDominoManager.instance.PlaceDomino(_placedDominos);
+                PlacedObjectManager.Instance.AddObject(_placedObjects);
+                PlacedDominoManager.Instance.PlaceDomino(_placedDominos);
             });
             LoadData();
         }
@@ -43,14 +40,14 @@ namespace Assets
         public void Save()
         {
             _placedObjects.Clear();
-            _placedObjects.AddRange(PlacedObjectManager.instance.GetPlacedObjects().ToList().Select(t => new ObjectPosition
+            _placedObjects.AddRange(PlacedObjectManager.Instance.GetPlacedObjects().ToList().Select(t => new ObjectPosition
             {
                 GameObject = t,
                 Position = t.transform.position,
                 Rotation = t.transform.rotation
             }).ToList());
             _placedDominos.Clear();
-            _placedDominos.AddRange(PlacedDominoManager.instance.GetPlacedDominos().ToList().Select(t => new ObjectPosition
+            _placedDominos.AddRange(PlacedDominoManager.Instance.GetPlacedDominos().ToList().Select(t => new ObjectPosition
             {
                 Position = t.transform.position,
                 Rotation = t.transform.rotation
