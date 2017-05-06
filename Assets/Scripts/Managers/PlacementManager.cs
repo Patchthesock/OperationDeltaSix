@@ -146,7 +146,7 @@ namespace Assets.Scripts.Managers
 
         private static Quaternion GetDefaultRotation()
         {
-            var rotation = CameraManager.instance.TheCamera.transform.rotation.eulerAngles;
+            var rotation = CameraManager.Instance.TheCamera.transform.rotation.eulerAngles;
             rotation = new Vector3(0, rotation.y, rotation.z);
             return Quaternion.Euler(rotation);
         }
@@ -192,8 +192,6 @@ namespace Assets.Scripts.Managers
             Destroy(_ghostObject);
         }
 
-        
-
         private static void RemoveItem()
         {
             if (!Input.GetMouseButtonDown(0)) return;
@@ -217,7 +215,7 @@ namespace Assets.Scripts.Managers
 
         private void Setup()
         {
-            if (_gameManager == null) _gameManager = GameManager.instance;
+            if (_gameManager == null) _gameManager = GameManager.Instance;
             if (_placedObjectManager == null) _placedObjectManager = PlacedObjectManager.Instance;
             if (_placedDominoManager == null) _placedDominoManager = PlacedDominoManager.Instance;
         }

@@ -7,15 +7,11 @@ namespace Assets.Scripts.Managers
     {
         public Button PlayBtn;
         public GameObject HandObject;
-        public Color StartBtnColorActive;
-        public Color StartBtnColorNotActive;
-
         public bool IsPlaying { get; private set; }
 
         private void InitGame()
         {
             PlayControl(false);
-            PlayBtn.GetComponent<Image>().color = StartBtnColorActive;
             PlayBtn.onClick.AddListener(() => { PlayControl(!IsPlaying); });
         }
 
@@ -25,7 +21,6 @@ namespace Assets.Scripts.Managers
             Physics.gravity = state ? new Vector3(0, -50, 0) : new Vector3(0, 0, 0);
             HandObject.SetActive(state);
             IsPlaying = state;
-            PlayBtn.GetComponent<Image>().color = IsPlaying ? StartBtnColorNotActive : StartBtnColorActive;
 
             if (state) Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             if (PlacementManager.Instance == null) return;
@@ -37,15 +32,12 @@ namespace Assets.Scripts.Managers
         private bool _showCredit = false;
 
         [HideInInspector]
-        public static GameManager instance = null;
+        public static GameManager Instance;
 
         private void Awake()
         {
-            if (instance == null)
-                instance = this;
-            else if (instance != this)
-                Destroy(gameObject);
-
+            if (Instance == null) Instance = this;
+            else if (Instance != this) Destroy(gameObject);
             DontDestroyOnLoad(gameObject);
             InitGame();
         }

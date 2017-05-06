@@ -11,22 +11,14 @@ namespace Assets.Scripts.Managers
 
         public void PlaceDomino(Vector3 position, Quaternion rotation)
         {
-            GameObject objectToPlace;
             if (_nonActiveDominos.Count > 0)
             {
-                objectToPlace = _nonActiveDominos.First();
+                var objectToPlace = _nonActiveDominos.First();
                 _nonActiveDominos.Remove(objectToPlace);
                 objectToPlace.SetActive(true);
+                PlaceObject(objectToPlace, position,rotation);
             }
-            else objectToPlace = Instantiate(Functions.PickRandomObject(Dominos));
-            
-            objectToPlace.GetComponentInChildren<Rigidbody>().isKinematic = true;
-            objectToPlace.GetComponentInChildren<Rigidbody>().useGravity = false;
-            objectToPlace.transform.position = position;
-            objectToPlace.transform.rotation = rotation;
-            objectToPlace.transform.SetParent(ARBoard.transform);
-            if (_placedDominos.Contains(objectToPlace)) return;
-            _placedDominos.Add(objectToPlace);
+            else PlaceObject(Instantiate(Functions.PickRandomObject(Dominos)), position, rotation);
         }
 
         public void PlaceDomino(IEnumerable<SaveManager.ObjectPosition> dominos)
@@ -59,6 +51,17 @@ namespace Assets.Scripts.Managers
             _placedDominos.Remove(o);
             _nonActiveDominos.Add(o);
             o.SetActive(false);
+        }
+
+        private void PlaceObject(GameObject model, Vector3 position, Quaternion rotation)
+        {
+            model.GetComponentInChildren<Rigidbody>().isKinematic = true;
+            model.GetComponentInChildren<Rigidbody>().useGravity = false;
+            model.transform.position = position;
+            model.transform.rotation = rotation;
+            model.transform.SetParent(ARBoard.transform);
+            if (_placedDominos.Contains(model)) return;
+            _placedDominos.Add(model);
         }
 
         private readonly List<GameObject> _placedDominos = new List<GameObject>();

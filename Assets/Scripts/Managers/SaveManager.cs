@@ -30,7 +30,7 @@ namespace Assets.Scripts.Managers
             SaveBtn.onClick.AddListener(Save);
             ResetBtn.onClick.AddListener(() =>
             {
-                GameManager.instance.PlayControl(false);
+                GameManager.Instance.PlayControl(false);
                 PlacedObjectManager.Instance.AddObject(_placedObjects);
                 PlacedDominoManager.Instance.PlaceDomino(_placedDominos);
             });
