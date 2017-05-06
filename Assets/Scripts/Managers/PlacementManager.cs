@@ -6,24 +6,6 @@ namespace Assets.Scripts.Managers
 {
     public class PlacementManager : MonoBehaviour
     {
-        // Domino Buttons
-        public Button DominoOneBtn;
-        public Button DominoFiveBtn;
-        public Button DominoTenBtn;
-        public Button DominoTwentyBtn;
-        public Button DominoNintyLeftBtn;
-        public Button DominoNintyRightBtn;
-        public Button DominoOneEightyTurnBtn;
-
-        // Prop Buttons
-        public Button PropBridgeBtn;
-        public Button PropStepSlideBtn;
-
-        public Button ClearDominos;
-        public Button RemoveBtn;
-        public Button DominoMenuBtn;
-        public Button PropMenuBtn;
-
         public GameObject SingleDomino;
         public GameObject FiveDomino;
         public GameObject TenDomino;
@@ -44,7 +26,6 @@ namespace Assets.Scripts.Managers
             _isActive = state;
             SetMenu(state);
             _removingObjects = false;
-            _selectedObject = null;
             Destroy(_ghostObject);
         }
 
@@ -62,10 +43,10 @@ namespace Assets.Scripts.Managers
                 RemoveItem();
                 return;
             }
-            if (_selectedObject != null) AddItem(_selectedObject.tag, GetPlacementPosition(), _ghostObject, _placedDominoManager);
+            if (_ghostObject != null) AddItem(GetPlacementPosition() + new Vector3(0, 0.6f, 0), _ghostObject, _placedDominoManager);
         }
 
-        private void AddItem(string objectTag, Vector3 ghostPos, GameObject ghostObject, PlacedDominoManager dominoManager)
+        private void AddItem(Vector3 ghostPos, GameObject ghostObject, PlacedDominoManager dominoManager)
         {
             if (ghostPos == new Vector3() || !Functions.CanPlaceObject(dominoManager.GetPlacedDominos(), ghostPos, 0.5f))
             {
@@ -85,7 +66,7 @@ namespace Assets.Scripts.Managers
                 return;
             }
 
-            switch (objectTag)
+            switch (ghostObject.tag)
             {
                 case "MultiDomino":
                     PlaceMutliDomino(ghostPos);
@@ -99,18 +80,9 @@ namespace Assets.Scripts.Managers
             }
         }
 
-        private void PlaceMutliDomino(Vector3 ghostPos)
-        {
-            if (_mouseLock) return;
-            var dom = _ghostObject.GetComponent<DominoHooks>();
-            if (dom == null) return;
-            foreach (var o in dom.Dominos) _placedDominoManager.PlaceDomino(new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z), o.transform.rotation);
-            _mouseLock = true;
-        }
-
         private void PlaceDomino(Vector3 ghostPos)
         {
-            _placedDominoManager.PlaceDomino(ghostPos, GetSingleRotation(ghostPos));
+            _placedDominoManager.PlaceDomino(ghostPos, GetSingleDominoRotation(ghostPos));
             _timeLastPlaced = Time.time;
         }
 
@@ -124,15 +96,19 @@ namespace Assets.Scripts.Managers
             _mouseLock = true;
         }
 
+        private void PlaceMutliDomino(Vector3 ghostPos)
+        {
+            if (_mouseLock) return;
+            var dom = _ghostObject.GetComponent<DominoHooks>();
+            if (dom == null) return;
+            foreach (var o in dom.Dominos) _placedDominoManager.PlaceDomino(new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z), o.transform.rotation);
+            _mouseLock = true;
+        }
+
         private static Vector3 GetPlacementPosition(int mouseButtonNumber)
         {
-            if(UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return new Vector3();
-            if (!Input.GetMouseButton(mouseButtonNumber)) return new Vector3();
-            RaycastHit hit;
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Physics.Raycast(ray, out hit, Mathf.Infinity);
-            if (hit.collider == null) return new Vector3();
-            return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point;
+            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return new Vector3();
+            return !Input.GetMouseButton(mouseButtonNumber) ? new Vector3() : GetPlacementPosition();
         }
 
         private static Vector3 GetPlacementPosition()
@@ -141,17 +117,10 @@ namespace Assets.Scripts.Managers
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
             if (hit.collider == null) return new Vector3();
-            return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point + new Vector3(0,0.6f,0);
+            return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point;
         }
 
-        private static Quaternion GetDefaultRotation()
-        {
-            var rotation = CameraManager.Instance.TheCamera.transform.rotation.eulerAngles;
-            rotation = new Vector3(0, rotation.y, rotation.z);
-            return Quaternion.Euler(rotation);
-        }
-
-        private Quaternion GetSingleRotation(Vector3 pos)
+        private Quaternion GetSingleDominoRotation(Vector3 pos)
         {
             if (Time.time - _timeLastPlaced <= TimeToLine)
             {
@@ -163,6 +132,13 @@ namespace Assets.Scripts.Managers
             return GetDefaultRotation();
         }
 
+        private static Quaternion GetDefaultRotation()
+        {
+            var rotation = CameraManager.Instance.TheCamera.transform.rotation.eulerAngles;
+            rotation = new Vector3(0, rotation.y, rotation.z);
+            return Quaternion.Euler(rotation);
+        }
+
         private void SetMenu(bool state)
         {
             DominoMenuBtn.gameObject.SetActive(state);
@@ -172,8 +148,7 @@ namespace Assets.Scripts.Managers
         private void SetObject(GameObject model)
         {
             _removingObjects = false;
-            _selectedObject = model;
-            _ghostObject = Instantiate(_selectedObject); // Ghost the Object
+            _ghostObject = Instantiate(model); // Ghost the Object
             if (_ghostObject.GetComponent<DominoHooks>()) foreach (var o in _ghostObject.GetComponent<DominoHooks>().Dominos) Functions.TurnOffGameObjectPhysics(o);
             else Functions.TurnOffGameObjectPhysics(_ghostObject);
         }
@@ -181,13 +156,11 @@ namespace Assets.Scripts.Managers
         private void RemoveObjects()
         {
             _removingObjects = true;
-            _selectedObject = null;
         }
 
         private void DestroyGhost()
         {
             Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-            _selectedObject = null;
             if (_ghostObject == null) return;
             Destroy(_ghostObject);
         }
@@ -264,7 +237,6 @@ namespace Assets.Scripts.Managers
         private bool _removingObjects;
         private bool _isActive = true;
         private Vector3 _positionLastPlaced;
-        private GameObject _selectedObject;
         private GameObject _ghostObject;
         private GameManager _gameManager;
         private RadialManager _radialManager;
