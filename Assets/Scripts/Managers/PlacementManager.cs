@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using Assets.Scripts.Components;
-using Assets.Scripts.Models;
+using Assets.Scripts.Components.GameModels;
+using Assets.Scripts.Interfaces;
 using UnityEngine;
 using Zenject;
 
@@ -9,60 +11,79 @@ namespace Assets.Scripts.Managers
     public class PlacementManager : ITickable
     {
         public PlacementManager(
-            Menu menu,
             Settings settings,
             PrefabFactory prefabFactory,
             PlacedDominoManager placedDominoManager,
             PlacedObjectManager placedObjectManager)
         {
-            _menu = menu;
             _settings = settings;
             _prefabFactory = prefabFactory;
             _placedDominoManager = placedDominoManager;
             _placedObjectManager = placedObjectManager;
-
-            SetupButtons();
+            _typeDict = new Dictionary<Type, int>
+            {
+                { typeof(Domino), 0 },
+                { typeof(Dominos), 1 }
+            };
         }
 
-        public void SetActive(bool state)
+        public void OnCreate(IPlacementable model)
         {
-            _isActive = state;
-            SetMenu(state);
+            DestroyGhost();
             _removingObjects = false;
-            //Destroy(_ghostObject); // TODO
+            _ghostPlaceObject = model;
+            _ghostObject = GetPlacementGameObject(model);
+        }
+
+        public void DestroyGhost()
+        {
+            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            _ghostPlaceObject = null;
+            if (_ghostObject == null) return;
+            _ghostObject.transform.position = new Vector3(999, 999, 999);
+            _ghostObject = null;
         }
 
         public void Tick()
         {
-            if (!_isActive) return;
-            if (Input.GetMouseButtonUp(0)) _mouseLock = false;
             if (Input.GetKey(KeyCode.Escape)) DestroyGhost();
-
+            if (Input.GetMouseButtonUp(0) && _mouseLock) _mouseLock = false;
             if (_removingObjects)
             {
                 RemoveItem();
                 return;
             }
-            if (_ghostObject != null) AddItem(GetPlacementPosition() + new Vector3(0, 0.6f, 0), _ghostObject, _placedDominoManager);
+
+
+            // TODO: Problem here
+            var ghostPos = GetPlacementPosition() + new Vector3(0, 0.6f, 0);
+            UpdateGhostPosition(ghostPos, _ghostObject, _placedDominoManager);
+            AddItem(ghostPos, _ghostObject, _placedDominoManager);
+        }
+
+
+        private void UpdateGhostPosition(Vector3 ghostPos, GameObject ghostObject, PlacedDominoManager dominoManager)
+        {
+            if (ghostObject == null) return;
+            if (ghostPos == new Vector3() || !Functions.CanPlaceObject(dominoManager.GetPlacedDominos(), ghostPos, 0.5f))
+            {
+                ghostObject.transform.position = new Vector3(999, 999, 999);
+                Cursor.SetCursor(_settings.CursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+                return;
+            }
+            ghostObject.transform.position = ghostPos;
+            ghostObject.transform.rotation = GetDefaultRotation();
+            Cursor.SetCursor(null, Vector2.zero, _settings.NormalCursor);
         }
 
         private void AddItem(Vector3 ghostPos, GameObject ghostObject, PlacedDominoManager dominoManager)
         {
-            if (ghostPos == new Vector3() || !Functions.CanPlaceObject(dominoManager.GetPlacedDominos(), ghostPos, 0.5f))
-            {
-                ghostObject.transform.position = new Vector3(999, 999, 999);
-                Cursor.SetCursor(_settings.cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
-                return;
-            }
-            ghostObject.transform.position = ghostPos;
-            Cursor.SetCursor(null, Vector2.zero, _settings.normalCursor);
-
-            ghostObject.transform.rotation = GetDefaultRotation();
+            if (ghostObject == null) return;
             var placementPosition = GetPlacementPosition(0);
             if (placementPosition == new Vector3()) return;
             if (!Functions.CanPlaceObject(dominoManager.GetPlacedDominos(), placementPosition, 0.5f))
             {
-                Cursor.SetCursor(_settings.cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+                Cursor.SetCursor(_settings.CursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
                 return;
             }
 
@@ -89,19 +110,19 @@ namespace Assets.Scripts.Managers
         private void PlaceProp(Vector3 ghostPos)
         {
             if (_mouseLock) return;
-            _placedObjectManager.AddObject(_ghostObject, ghostPos, _ghostObject.transform.rotation);
-            var dom = _ghostObject.GetComponent<DominoHooks>();
+            var dom = (Dominos)_ghostPlaceObject;
             if (dom == null) return;
-            foreach (var o in dom.Dominos) _placedDominoManager.PlaceDomino(o.transform.position, o.transform.rotation);
+            _placedObjectManager.AddObject(dom.gameObject, ghostPos, dom.gameObject.transform.rotation);
+            foreach (var o in dom.Domino) _placedDominoManager.PlaceDomino(o.transform.position, o.transform.rotation);
             _mouseLock = true;
         }
 
         private void PlaceMutliDomino(Vector3 ghostPos)
         {
             if (_mouseLock) return;
-            var dom = _ghostObject.GetComponent<DominoHooks>();
+            var dom = (Dominos)_ghostPlaceObject;
             if (dom == null) return;
-            foreach (var o in dom.Dominos) _placedDominoManager.PlaceDomino(new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z), o.transform.rotation);
+            foreach (var o in dom.Domino) _placedDominoManager.PlaceDomino(new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z), o.transform.rotation);
             _mouseLock = true;
         }
 
@@ -139,30 +160,23 @@ namespace Assets.Scripts.Managers
             return Quaternion.Euler(rotation);
         }
 
-        private void SetMenu(bool state)
+        private GameObject GetPlacementGameObject(IPlacementable model)
         {
-            _menu.DominoMenuBtn.gameObject.SetActive(state);
-            _menu.PropMenuBtn.gameObject.SetActive(state);
-        }
+            if (_spawnedGhostPlaceObjects.ContainsKey(model)) return _spawnedGhostPlaceObjects[model];
+            var ghostObject = _prefabFactory.Instantiate(model.GetGameObject()); // Ghost the Object
+            _spawnedGhostPlaceObjects.Add(model, ghostObject);
 
-        private void SetObject(GameObject model)
-        {
-            _removingObjects = false;
-            _ghostObject = _prefabFactory.Instantiate(model); // Ghost the Object
-            if (_ghostObject.GetComponent<DominoHooks>()) foreach (var o in _ghostObject.GetComponent<DominoHooks>().Dominos) Functions.TurnOffGameObjectPhysics(o);
-            else Functions.TurnOffGameObjectPhysics(_ghostObject);
-        }
-
-        private void RemoveObjects()
-        {
-            _removingObjects = true;
-        }
-
-        private void DestroyGhost()
-        {
-            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-            if (_ghostObject == null) return;
-            //Destroy(_ghostObject); TODO
+            switch (_typeDict[model.GetType()])
+            {
+                case 0:
+                    Functions.TurnOffGameObjectPhysics(ghostObject);
+                    break;
+                case 1:
+                    var d = (Dominos)model;
+                    foreach (var o in d.Domino) Functions.TurnOffGameObjectPhysics(o.gameObject);
+                    break;
+            }
+            return ghostObject;
         }
 
         private void RemoveItem()
@@ -179,78 +193,33 @@ namespace Assets.Scripts.Managers
                     return;
                 case "Domino":
                     _placedDominoManager.RemoveDomino(hit.collider.gameObject);
-                    break;
+                    return;
                 case "Object":
                     _placedObjectManager.RemoveObject(hit.collider.gameObject);
-                    break;
+                    return;
             }
-        }
-
-        private void OnCreateButtonClick(GameObject model)
-        {
-            DestroyGhost();
-            SetObject(model);
-        }
-
-        private void SetupButtons()
-        {
-            _menu.DominoTenBtn.onClick.AddListener(() => { OnCreateButtonClick(_settings.TenDomino); });
-            _menu.DominoFiveBtn.onClick.AddListener(() => { OnCreateButtonClick(_settings.FiveDomino); });
-            _menu.PropBridgeBtn.onClick.AddListener(() => { OnCreateButtonClick(_settings.BridgeProp); });
-            _menu.DominoOneBtn.onClick.AddListener(() => { OnCreateButtonClick(_settings.SingleDomino); });
-            _menu.DominoNintyLeftBtn.onClick.AddListener(() => { OnCreateButtonClick(_settings.NintyLeft); });
-            _menu.DominoTwentyBtn.onClick.AddListener(() => { OnCreateButtonClick(_settings.TwentyDomino); });
-            _menu.PropStepSlideBtn.onClick.AddListener(() => { OnCreateButtonClick(_settings.StepSlideProp); });
-            _menu.DominoNintyRightBtn.onClick.AddListener(() => { OnCreateButtonClick(_settings.NintyRight); });
-            _menu.DominoOneEightyTurnBtn.onClick.AddListener(() => { OnCreateButtonClick(_settings.OneEightyTurn); });
-
-            _menu.ClearDominos.onClick.AddListener(() =>
-            {
-                DestroyGhost();
-                _placedDominoManager.RemoveDomino();
-            });
-
-            _menu.RemoveBtn.onClick.AddListener(() =>
-            {
-                DestroyGhost();
-                RemoveObjects();
-            });
         }
 
         private bool _mouseLock;
         private bool _removingObjects;
-        private bool _isActive = true;
         private float _timeLastPlaced;
         private Vector3 _positionLastPlaced;
         private GameObject _ghostObject;
-        private RadialManager _radialManager;
+        private IPlacementable _ghostPlaceObject;
         
-        private readonly Menu _menu;
         private readonly Settings _settings;
         private readonly PrefabFactory _prefabFactory;
+        private readonly Dictionary<Type, int> _typeDict;
         private readonly PlacedObjectManager _placedObjectManager;
         private readonly PlacedDominoManager _placedDominoManager;
+        private readonly Dictionary<IPlacementable, GameObject> _spawnedGhostPlaceObjects = new Dictionary<IPlacementable, GameObject>();
 
         [Serializable]
         public class Settings
         {
-            // Dominos
-            public GameObject SingleDomino;
-            public GameObject FiveDomino;
-            public GameObject TenDomino;
-            public GameObject TwentyDomino;
-            public GameObject NintyLeft;
-            public GameObject NintyRight;
-            public GameObject OneEightyTurn;
-
-            // Props
-            public GameObject BridgeProp;
-            public GameObject StepSlideProp;
-
-            // Settings
             public float TimeToLine;
-            public CursorMode normalCursor;
-            public Texture2D cursorCantPlaceTexture;
+            public CursorMode NormalCursor;
+            public Texture2D CursorCantPlaceTexture;
         }
     }
 }

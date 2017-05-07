@@ -38,8 +38,8 @@
 //        public GameObject MainUI;
 
 //        public float TimeToLine;
-//        public CursorMode normalCursor;
-//        public Texture2D cursorCantPlaceTexture;
+//        public CursorMode NormalCursor;
+//        public Texture2D CursorCantPlaceTexture;
 
 //        public void SetActive(bool state)
 //        {
@@ -74,12 +74,12 @@
 //            if (ghostPos == new Vector3() || !_placedDominoManager.CanPlaceDomino(ghostPos))
 //            {
 //                _ghostObject.transform.position = new Vector3(999, 999, 999);
-//                Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+//                Cursor.SetCursor(CursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
 //            }
 //            else
 //            {
 //                _ghostObject.transform.position = ghostPos;
-//                Cursor.SetCursor(null, Vector2.zero, normalCursor);
+//                Cursor.SetCursor(null, Vector2.zero, NormalCursor);
 //            }
 
 //            _ghostObject.transform.rotation = GetDefaultRotation();
@@ -92,7 +92,7 @@
 //                if (_mouseLock) return;
 //                if (!_placedDominoManager.CanPlaceDomino(placementPosition))
 //                {
-//                    Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+//                    Cursor.SetCursor(CursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
 //                }
 //                if (!_placedDominoManager.CanPlaceDomino(placementPosition)) return;
 //                var dom = _ghostObject.GetComponent<DominoHooks>();
@@ -110,7 +110,7 @@
 //            {
 //                if (!_placedDominoManager.CanPlaceDomino(placementPosition))
 //                {
-//                    Cursor.SetCursor(cursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+//                    Cursor.SetCursor(CursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
 //                }
 //                if (!_placedDominoManager.CanPlaceDomino(ghostPos)) return;
 //                _placedDominoManager.PlaceDomino(ghostPos, GetSingleRotation(ghostPos));

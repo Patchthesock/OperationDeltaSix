@@ -1,7 +1,6 @@
 ﻿using System;
 using Assets.Scripts.Components;
 using Assets.Scripts.Managers;
-using Assets.Scripts.Models;
 using Zenject;
 
 namespace Assets.Scripts.Installers
@@ -12,19 +11,33 @@ namespace Assets.Scripts.Installers
 
         public override void InstallBindings()
         {
-            Container.Bind<Menu>().FromInstance(GameSettings.Menu).AsSingle();
             Container.Bind<PrefabFactory>().AsSingle();
             Container.Bind<PlacedDominoManager.Settings>()
                 .FromInstance(GameSettings.PlacedDominoManagerSettings)
                 .AsSingle();
             Container.Bind<PlacedDominoManager>().AsSingle();
             Container.Bind<PlacedObjectManager>().AsSingle();
+
+            Container.Bind<SaveManager.Settings>()
+                .FromInstance(GameSettings.SaveManagerSettings)
+                .AsSingle();
+
             Container.Bind<SaveManager>().AsSingle();
+
             Container.Bind<PlacementManager.Settings>()
                 .FromInstance(GameSettings.PlacementManagerSettings)
                 .AsSingle();
+
             Container.Bind<PlacementManager>().AsSingle();
             Container.Bind<ITickable>().To<PlacementManager>().AsSingle();
+
+            Container.Bind<MenuManager.Settings>()
+                .FromInstance(GameSettings.MenuManagerSettings)
+                .AsSingle();
+
+            Container.Bind<MenuManager>().AsSingle();
+            Container.Bind<IInitializable>().To<MenuManager>().AsSingle();
+
             Container.Bind<GameManager.Settings>()
                 .FromInstance(GameSettings.GameManagerSettings)
                 .AsSingle();
@@ -35,7 +48,8 @@ namespace Assets.Scripts.Installers
         [Serializable]
         public class Settings
         {
-            public Menu Menu;
+            public MenuManager.Settings MenuManagerSettings;
+            public SaveManager.Settings SaveManagerSettings;
             public GameManager.Settings GameManagerSettings;
             public PlacementManager.Settings PlacementManagerSettings;
             public PlacedDominoManager.Settings PlacedDominoManagerSettings;

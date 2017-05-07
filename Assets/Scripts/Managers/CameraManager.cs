@@ -30,7 +30,7 @@ namespace Assets.Scripts.Managers
                     _dragOrigin = Input.mousePosition;
                 }
 
-                var pos = UnityEngine.Camera.main.ScreenToViewportPoint(Input.mousePosition - _dragOrigin);
+                var pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - _dragOrigin);
                 TheCamera.transform.Translate(new Vector3(pos.x, 0, pos.y) * -1 * FlySpeed, Space.Self);
                 TheCamera.transform.position = new Vector3(TheCamera.transform.position.x, _height, TheCamera.transform.position.z);
             }

@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using Assets.Scripts.Models;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Managers
 {
     public class SaveManager
     {
         public SaveManager(
-            Menu menu,
+            Settings settings,
             PlacedDominoManager placedDominoManager,
             PlacedObjectManager placedObjectManager)
         {
             _placedDominoManager = placedDominoManager;
             _placedObjectManager = placedObjectManager;
-            menu.SaveBtn.onClick.AddListener(Save);
-            menu.ResetBtn.onClick.AddListener(() =>
+            settings.SaveBtn.onClick.AddListener(Save);
+            settings.ResetBtn.onClick.AddListener(() =>
             {
                 _placedObjectManager.AddObject(_placedObjects);
                 _placedDominoManager.PlaceDomino(_placedDominos);
@@ -125,5 +125,12 @@ namespace Assets.Scripts.Managers
 
         private readonly PlacedDominoManager _placedDominoManager;
         private readonly PlacedObjectManager _placedObjectManager;
+
+        [Serializable]
+        public class Settings
+        {
+            public Button SaveBtn;
+            public Button ResetBtn;
+        }
     }
 }

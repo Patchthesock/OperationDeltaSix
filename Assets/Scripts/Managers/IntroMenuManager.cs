@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class IntroMenuManager : MonoBehaviour 
 {
@@ -9,7 +8,7 @@ public class IntroMenuManager : MonoBehaviour
 	
 	public void NewGameButton()
 	{
-		Application.LoadLevel("ZenGarden");
+        SceneManager.LoadScene("ZenGarden");
 	}
 	
 	public void ExitGame()
