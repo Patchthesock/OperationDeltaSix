@@ -3,36 +3,25 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
+using Assets.Scripts.Models;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Assets.Scripts.Managers
 {
-    public class SaveManager : MonoBehaviour
+    public class SaveManager
     {
-        public Button SaveBtn;
-        public Button ResetBtn;
-
-        [HideInInspector]
-        public static SaveManager instance = null;
-
-        private void Awake()
+        public SaveManager(
+            Menu menu,
+            PlacedDominoManager placedDominoManager,
+            PlacedObjectManager placedObjectManager)
         {
-            if (instance == null) instance = this;
-            else if (instance != this) Destroy(gameObject);
-            DontDestroyOnLoad(gameObject);
-            Init();
-        }
-
-        private void Init()
-        {
-            if (SaveBtn == null) return;
-            SaveBtn.onClick.AddListener(Save);
-            ResetBtn.onClick.AddListener(() =>
+            _placedDominoManager = placedDominoManager;
+            _placedObjectManager = placedObjectManager;
+            menu.SaveBtn.onClick.AddListener(Save);
+            menu.ResetBtn.onClick.AddListener(() =>
             {
-                GameManager.Instance.PlayControl(false);
-                PlacedObjectManager.Instance.AddObject(_placedObjects);
-                PlacedDominoManager.Instance.PlaceDomino(_placedDominos);
+                _placedObjectManager.AddObject(_placedObjects);
+                _placedDominoManager.PlaceDomino(_placedDominos);
             });
             LoadData();
         }
@@ -40,14 +29,14 @@ namespace Assets.Scripts.Managers
         public void Save()
         {
             _placedObjects.Clear();
-            _placedObjects.AddRange(PlacedObjectManager.Instance.GetPlacedObjects().ToList().Select(t => new ObjectPosition
+            _placedObjects.AddRange(_placedObjectManager.GetPlacedObjects().ToList().Select(t => new ObjectPosition
             {
                 GameObject = t,
                 Position = t.transform.position,
                 Rotation = t.transform.rotation
             }).ToList());
             _placedDominos.Clear();
-            _placedDominos.AddRange(PlacedDominoManager.Instance.GetPlacedDominos().ToList().Select(t => new ObjectPosition
+            _placedDominos.AddRange(_placedDominoManager.GetPlacedDominos().ToList().Select(t => new ObjectPosition
             {
                 Position = t.transform.position,
                 Rotation = t.transform.rotation
@@ -133,5 +122,8 @@ namespace Assets.Scripts.Managers
                 Rotation = Quaternion.Euler(new Vector3(d.RotX, d.RotY, d.RotZ))
             }).ToList();
         }
+
+        private readonly PlacedDominoManager _placedDominoManager;
+        private readonly PlacedObjectManager _placedObjectManager;
     }
 }

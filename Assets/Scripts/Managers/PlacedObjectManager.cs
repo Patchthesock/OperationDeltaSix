@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Managers
 {
-    public class PlacedObjectManager : MonoBehaviour
+    public class PlacedObjectManager
     {
         public void AddObject(GameObject model, Vector3 position, Quaternion rotation)
         {
@@ -34,15 +34,5 @@ namespace Assets.Scripts.Managers
         }
 
         private readonly List<GameObject> _placedObjects = new List<GameObject>();
-
-        [HideInInspector]
-        public static PlacedObjectManager Instance;
-
-        private void Awake()
-        {
-            if (Instance == null) Instance = this;
-            else if (Instance != this) Destroy(gameObject);
-            DontDestroyOnLoad(gameObject);
-        }
     }
 }

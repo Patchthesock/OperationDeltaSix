@@ -1,13 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
 namespace Assets.Scripts.Managers
 {
-    public class PlacedDominoManager : MonoBehaviour
+    public class PlacedDominoManager
     {
-        public GameObject ARBoard;
-        public List<GameObject> Dominos;
+        public PlacedDominoManager(Settings settings)
+        {
+            _settings = settings;
+        }
 
         public void PlaceDomino(Vector3 position, Quaternion rotation)
         {
@@ -18,7 +21,7 @@ namespace Assets.Scripts.Managers
                 objectToPlace.SetActive(true);
                 PlaceObject(objectToPlace, position,rotation);
             }
-            else PlaceObject(Instantiate(Functions.PickRandomObject(Dominos)), position, rotation);
+            else PlaceObject(Instantiate(Functions.PickRandomObject(_settings.Dominos)), position, rotation);
         }
 
         public void PlaceDomino(IEnumerable<SaveManager.ObjectPosition> dominos)
@@ -59,22 +62,20 @@ namespace Assets.Scripts.Managers
             model.GetComponentInChildren<Rigidbody>().useGravity = false;
             model.transform.position = position;
             model.transform.rotation = rotation;
-            model.transform.SetParent(ARBoard.transform);
+            model.transform.SetParent(_settings.ARBoard.transform);
             if (_placedDominos.Contains(model)) return;
             _placedDominos.Add(model);
         }
 
+        private readonly Settings _settings;
         private readonly List<GameObject> _placedDominos = new List<GameObject>();
         private readonly List<GameObject> _nonActiveDominos = new List<GameObject>();
 
-        [HideInInspector]
-        public static PlacedDominoManager Instance;
-
-        private void Awake()
+        [Serializable]
+        public class Settings
         {
-            if (Instance == null) Instance = this;
-            else if (Instance != this) Destroy(gameObject);
-            DontDestroyOnLoad(gameObject);
+            public GameObject ARBoard;
+            public List<GameObject> Dominos;
         }
     }
 }

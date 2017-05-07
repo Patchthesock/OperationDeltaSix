@@ -1,45 +1,49 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
+﻿using System;
+using Assets.Scripts.Models;
+using UnityEngine;
 
 namespace Assets.Scripts.Managers
 {
-    public class GameManager : MonoBehaviour
+    public class GameManager
     {
-        public Button PlayBtn;
-        public GameObject HandObject;
-        public bool IsPlaying { get; private set; }
-
-        private void InitGame()
+        public GameManager(
+            Menu menu,
+            Settings settings,
+            SaveManager saveManager,
+            PlacementManager placementManager,
+            PlacedDominoManager placedDominoManager)
         {
+            _settings = settings;
+            _saveManager = saveManager;
+            _placementManager = placementManager;
+            _placedDominoManager = placedDominoManager;
+
             PlayControl(false);
-            PlayBtn.onClick.AddListener(() => { PlayControl(!IsPlaying); });
+            menu.PlayBtn.onClick.AddListener(() => { PlayControl(!_isPlaying); });
         }
 
-        public void PlayControl(bool state)
+        private void PlayControl(bool state)
         {
-            if(state) SaveManager.instance.Save();
-            Physics.gravity = state ? new Vector3(0, -50, 0) : new Vector3(0, 0, 0);
-            HandObject.SetActive(state);
-            IsPlaying = state;
-
+            _isPlaying = state;
+            if (state) _saveManager.Save(); // Autosave when in play
+            _placementManager.SetActive(!state);
+            _settings.HandObject.SetActive(state);
+            _placedDominoManager.SetDominoPhysics(state);
             if (state) Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
-            if (PlacementManager.Instance == null) return;
-            PlacementManager.Instance.SetActive(!state);
-            if (PlacedDominoManager.Instance == null) return;
-            PlacedDominoManager.Instance.SetDominoPhysics(state);
+            Physics.gravity = state ? new Vector3(0, _settings.Gravity, 0) : new Vector3(0, 0, 0);
         }
 
-        private bool _showCredit = false;
+        private bool _isPlaying;
+        private readonly Settings _settings;
+        private readonly SaveManager _saveManager;
+        private readonly PlacementManager _placementManager;
+        private readonly PlacedDominoManager _placedDominoManager;
 
-        [HideInInspector]
-        public static GameManager Instance;
-
-        private void Awake()
+        [Serializable]
+        public class Settings
         {
-            if (Instance == null) Instance = this;
-            else if (Instance != this) Destroy(gameObject);
-            DontDestroyOnLoad(gameObject);
-            InitGame();
+            public float Gravity = -50;
+            public GameObject HandObject;
         }
     }
 }
