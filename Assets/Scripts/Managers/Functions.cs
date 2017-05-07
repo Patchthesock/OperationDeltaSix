@@ -25,5 +25,19 @@ namespace Assets.Scripts.Managers
         {
             return objects.All(o => !(Vector3.Distance(o.transform.position, position) < minDistance));
         }
+
+        public static Vector3 GetPlacementPosition()
+        {
+            RaycastHit hit;
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Physics.Raycast(ray, out hit, Mathf.Infinity);
+            if (hit.collider == null) return new Vector3();
+            return hit.collider.gameObject.tag != "Ground" ? Vector3.zero : hit.point;
+        }
+
+        public static bool GetMouseButtonInput(int mouseButtonNumber)
+        {
+            return !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(mouseButtonNumber);
+        }
     }
 }

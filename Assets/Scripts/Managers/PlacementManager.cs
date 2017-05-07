@@ -13,13 +13,14 @@ namespace Assets.Scripts.Managers
         public PlacementManager(
             Settings settings,
             PrefabFactory prefabFactory,
-            PlacedDominoManager placedDominoManager,
-            PlacedObjectManager placedObjectManager)
+            PlacedDominoManager placedDominoManager
+            //PlacedObjectManager placedObjectManager
+            )
         {
             _settings = settings;
             _prefabFactory = prefabFactory;
             _placedDominoManager = placedDominoManager;
-            _placedObjectManager = placedObjectManager;
+            //_placedObjectManager = placedObjectManager;
             _typeDict = new Dictionary<Type, int>
             {
                 { typeof(Domino), 0 },
@@ -30,7 +31,6 @@ namespace Assets.Scripts.Managers
         public void OnCreate(IPlacementable model)
         {
             DestroyGhost();
-            _removingObjects = false;
             _ghostPlaceObject = model;
             _ghostObject = GetPlacementGameObject(model);
         }
@@ -48,57 +48,46 @@ namespace Assets.Scripts.Managers
         {
             if (Input.GetKey(KeyCode.Escape)) DestroyGhost();
             if (Input.GetMouseButtonUp(0) && _mouseLock) _mouseLock = false;
-            if (_removingObjects)
-            {
-                RemoveItem();
-                return;
-            }
-
-
-            // TODO: Problem here
-            var ghostPos = GetPlacementPosition() + new Vector3(0, 0.6f, 0);
-            UpdateGhostPosition(ghostPos, _ghostObject, _placedDominoManager);
-            AddItem(ghostPos, _ghostObject, _placedDominoManager);
+            if (_ghostObject == null) return;
+            var ghostPos = Functions.GetPlacementPosition() == Vector3.zero ? Vector3.zero : Functions.GetPlacementPosition() + new Vector3(0, 0.6f, 0);
+            if (ghostPos == Vector3.zero) return;
+            if (!IsValidPosition(ghostPos, _ghostObject, _placedDominoManager)) return;
+            UpdateGhostPosition(ghostPos, _ghostObject);
+            if (Functions.GetMouseButtonInput(0)) AddItem(ghostPos, _typeDict[_ghostPlaceObject.GetType()]);
         }
 
-
-        private void UpdateGhostPosition(Vector3 ghostPos, GameObject ghostObject, PlacedDominoManager dominoManager)
+        private void UpdateGhostPosition(Vector3 ghostPos, GameObject ghostObject)
         {
-            if (ghostObject == null) return;
-            if (ghostPos == new Vector3() || !Functions.CanPlaceObject(dominoManager.GetPlacedDominos(), ghostPos, 0.5f))
-            {
-                ghostObject.transform.position = new Vector3(999, 999, 999);
-                Cursor.SetCursor(_settings.CursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
-                return;
-            }
             ghostObject.transform.position = ghostPos;
             ghostObject.transform.rotation = GetDefaultRotation();
             Cursor.SetCursor(null, Vector2.zero, _settings.NormalCursor);
         }
 
-        private void AddItem(Vector3 ghostPos, GameObject ghostObject, PlacedDominoManager dominoManager)
+        private void AddItem(Vector3 ghostPos, int typeDict)
         {
-            if (ghostObject == null) return;
-            var placementPosition = GetPlacementPosition(0);
-            if (placementPosition == new Vector3()) return;
-            if (!Functions.CanPlaceObject(dominoManager.GetPlacedDominos(), placementPosition, 0.5f))
+            switch (typeDict)
             {
-                Cursor.SetCursor(_settings.CursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
-                return;
-            }
-
-            switch (ghostObject.tag)
-            {
-                case "MultiDomino":
-                    PlaceMutliDomino(ghostPos);
-                    break;
-                case "Domino":
+                case 0:
                     PlaceDomino(ghostPos);
-                    break;
-                case "Object":
-                    PlaceProp(ghostPos);
-                    break;
+                    return;
+                case 1:
+                    PlaceMutliDomino(ghostPos);
+                    return;
+                default:
+                    Debug.Log("PlacementManager.AddItem: Unknown Type");
+                    return;
+                //case "Object":
+                //    PlaceProp(ghostPos);
+                //    break;
             }
+        }
+
+        private bool IsValidPosition(Vector3 pos, GameObject ghostObject, PlacedDominoManager dominoManager)
+        {
+            if (Functions.CanPlaceObject(dominoManager.GetPlacedDominos(), pos, 0.5f)) return true;
+            ghostObject.transform.position = new Vector3(999, 999, 999);
+            Cursor.SetCursor(_settings.CursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+            return false;
         }
 
         private void PlaceDomino(Vector3 ghostPos)
@@ -107,15 +96,15 @@ namespace Assets.Scripts.Managers
             _timeLastPlaced = Time.time;
         }
 
-        private void PlaceProp(Vector3 ghostPos)
-        {
-            if (_mouseLock) return;
-            var dom = (Dominos)_ghostPlaceObject;
-            if (dom == null) return;
-            _placedObjectManager.AddObject(dom.gameObject, ghostPos, dom.gameObject.transform.rotation);
-            foreach (var o in dom.Domino) _placedDominoManager.PlaceDomino(o.transform.position, o.transform.rotation);
-            _mouseLock = true;
-        }
+        //private void PlaceProp(Vector3 ghostPos)
+        //{
+        //    if (_mouseLock) return;
+        //    var dom = (Dominos)_ghostPlaceObject;
+        //    if (dom == null) return;
+        //    _placedObjectManager.AddObject(dom.gameObject, ghostPos, dom.gameObject.transform.rotation);
+        //    foreach (var o in dom.Domino) _placedDominoManager.PlaceDomino(o.transform.position, o.transform.rotation);
+        //    _mouseLock = true;
+        //}
 
         private void PlaceMutliDomino(Vector3 ghostPos)
         {
@@ -124,21 +113,6 @@ namespace Assets.Scripts.Managers
             if (dom == null) return;
             foreach (var o in dom.Domino) _placedDominoManager.PlaceDomino(new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z), o.transform.rotation);
             _mouseLock = true;
-        }
-
-        private static Vector3 GetPlacementPosition(int mouseButtonNumber)
-        {
-            if (UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject()) return new Vector3();
-            return !Input.GetMouseButton(mouseButtonNumber) ? new Vector3() : GetPlacementPosition();
-        }
-
-        private static Vector3 GetPlacementPosition()
-        {
-            RaycastHit hit;
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Physics.Raycast(ray, out hit, Mathf.Infinity);
-            if (hit.collider == null) return new Vector3();
-            return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point;
         }
 
         private Quaternion GetSingleDominoRotation(Vector3 pos)
@@ -179,29 +153,7 @@ namespace Assets.Scripts.Managers
             return ghostObject;
         }
 
-        private void RemoveItem()
-        {
-            if (!Input.GetMouseButtonDown(0)) return;
-            RaycastHit hit;
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Physics.Raycast(ray, out hit, Mathf.Infinity);
-            if (hit.collider == null) return;
-
-            switch (hit.collider.gameObject.tag)
-            {
-                case "Ground":
-                    return;
-                case "Domino":
-                    _placedDominoManager.RemoveDomino(hit.collider.gameObject);
-                    return;
-                case "Object":
-                    _placedObjectManager.RemoveObject(hit.collider.gameObject);
-                    return;
-            }
-        }
-
         private bool _mouseLock;
-        private bool _removingObjects;
         private float _timeLastPlaced;
         private Vector3 _positionLastPlaced;
         private GameObject _ghostObject;
@@ -210,7 +162,7 @@ namespace Assets.Scripts.Managers
         private readonly Settings _settings;
         private readonly PrefabFactory _prefabFactory;
         private readonly Dictionary<Type, int> _typeDict;
-        private readonly PlacedObjectManager _placedObjectManager;
+        //private readonly PlacedObjectManager _placedObjectManager;
         private readonly PlacedDominoManager _placedDominoManager;
         private readonly Dictionary<IPlacementable, GameObject> _spawnedGhostPlaceObjects = new Dictionary<IPlacementable, GameObject>();
 

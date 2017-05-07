@@ -11,38 +11,53 @@ namespace Assets.Scripts.Installers
 
         public override void InstallBindings()
         {
-            Container.Bind<PrefabFactory>().AsSingle();
-            Container.Bind<PlacedDominoManager.Settings>()
-                .FromInstance(GameSettings.PlacedDominoManagerSettings)
-                .AsSingle();
-            Container.Bind<PlacedDominoManager>().AsSingle();
-            Container.Bind<PlacedObjectManager>().AsSingle();
+            InstallPlacedManagers(Container, GameSettings.PlacedDominoManagerSettings);
+            InstallSaveManager(Container, GameSettings.SaveManagerSettings);
+            InstallRemovalManager(Container);
+            InstallPlacementManager(Container, GameSettings.PlacementManagerSettings);
+            InstallMenuManager(Container, GameSettings.MenuManagerSettings);
+            InstallGameManager(Container, GameSettings.GameManagerSettings);
+        }
 
-            Container.Bind<SaveManager.Settings>()
-                .FromInstance(GameSettings.SaveManagerSettings)
-                .AsSingle();
+        private void InstallPlacedManagers(DiContainer container, PlacedDominoManager.Settings settings)
+        {
+            container.Bind<PrefabFactory>().AsSingle();
+            container.Bind<PlacedDominoManager.Settings>().FromInstance(settings).AsSingle();
+            container.Bind<PlacedDominoManager>().AsSingle();
+            container.Bind<PlacedObjectManager>().AsSingle();
+        }
 
-            Container.Bind<SaveManager>().AsSingle();
+        private void InstallSaveManager(DiContainer container, SaveManager.Settings settings)
+        {
+            container.Bind<SaveManager.Settings>().FromInstance(settings).AsSingle();
+            container.Bind<SaveManager>().AsSingle();
+        }
 
-            Container.Bind<PlacementManager.Settings>()
-                .FromInstance(GameSettings.PlacementManagerSettings)
-                .AsSingle();
+        private void InstallRemovalManager(DiContainer container)
+        {
+            container.Bind<ITickable>().To<RemovalManager>().AsSingle();
+            container.Bind<RemovalManager>().AsSingle();
+        }
 
-            Container.Bind<PlacementManager>().AsSingle();
-            Container.Bind<ITickable>().To<PlacementManager>().AsSingle();
+        private void InstallPlacementManager(DiContainer container, PlacementManager.Settings settings)
+        {
+            container.Bind<PlacementManager.Settings>().FromInstance(settings).AsSingle();
+            container.Bind<PlacementManager>().AsSingle();
+            container.Bind<ITickable>().To<PlacementManager>().AsSingle();
+        }
 
-            Container.Bind<MenuManager.Settings>()
-                .FromInstance(GameSettings.MenuManagerSettings)
-                .AsSingle();
+        private void InstallMenuManager(DiContainer container, MenuManager.Settings settings)
+        {
+            container.Bind<MenuManager.Settings>().FromInstance(settings).AsSingle();
+            container.Bind<MenuManager>().AsSingle();
+            container.Bind<IInitializable>().To<MenuManager>().AsSingle();
+        }
 
-            Container.Bind<MenuManager>().AsSingle();
-            Container.Bind<IInitializable>().To<MenuManager>().AsSingle();
-
-            Container.Bind<GameManager.Settings>()
-                .FromInstance(GameSettings.GameManagerSettings)
-                .AsSingle();
-            Container.Bind<GameManager>().AsSingle();
-            Container.Bind<IInitializable>().To<GameManager>().AsSingle();
+        private void InstallGameManager(DiContainer container, GameManager.Settings settings)
+        {
+            container.Bind<GameManager.Settings>().FromInstance(settings).AsSingle();
+            container.Bind<GameManager>().AsSingle();
+            container.Bind<IInitializable>().To<GameManager>().AsSingle();
         }
 
         [Serializable]
