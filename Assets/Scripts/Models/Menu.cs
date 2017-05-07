@@ -1,7 +1,9 @@
-﻿using UnityEngine.UI;
+﻿using System;
+using UnityEngine.UI;
 
 namespace Assets.Scripts.Models
 {
+    [Serializable]
     public class Menu
     {
         // Domino Buttons

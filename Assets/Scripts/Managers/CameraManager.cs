@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Managers
 {
-    public class Camera : MonoBehaviour
+    public class CameraManager : MonoBehaviour
     {
         public GameObject TheCamera;
         public float MinHeight;
@@ -14,13 +14,9 @@ namespace Assets.Scripts.Managers
 
         private float _height;
         private Vector3 _dragOrigin;
-        
-        private float _accelerationAmount = 1.5f;
-        private readonly float _accelerationRatio = 3;
-        private readonly float _slowDownRatio = 0.2f;
 
         [HideInInspector]
-        public static Camera Instance;
+        public static CameraManager Instance;
 
         private void Update()
         {

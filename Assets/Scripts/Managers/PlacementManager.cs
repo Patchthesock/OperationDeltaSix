@@ -11,11 +11,13 @@ namespace Assets.Scripts.Managers
         public PlacementManager(
             Menu menu,
             Settings settings,
+            PrefabFactory prefabFactory,
             PlacedDominoManager placedDominoManager,
             PlacedObjectManager placedObjectManager)
         {
             _menu = menu;
             _settings = settings;
+            _prefabFactory = prefabFactory;
             _placedDominoManager = placedDominoManager;
             _placedObjectManager = placedObjectManager;
 
@@ -112,7 +114,7 @@ namespace Assets.Scripts.Managers
         private static Vector3 GetPlacementPosition()
         {
             RaycastHit hit;
-            var ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
             if (hit.collider == null) return new Vector3();
             return hit.collider.gameObject.tag != "Ground" ? new Vector3() : hit.point;
@@ -132,7 +134,7 @@ namespace Assets.Scripts.Managers
 
         private static Quaternion GetDefaultRotation()
         {
-            var rotation = Camera.Instance.TheCamera.transform.rotation.eulerAngles;
+            var rotation = CameraManager.Instance.TheCamera.transform.rotation.eulerAngles;
             rotation = new Vector3(0, rotation.y, rotation.z);
             return Quaternion.Euler(rotation);
         }
@@ -146,7 +148,7 @@ namespace Assets.Scripts.Managers
         private void SetObject(GameObject model)
         {
             _removingObjects = false;
-            //_ghostObject = Instantiate(model); // Ghost the Object // TODO
+            _ghostObject = _prefabFactory.Instantiate(model); // Ghost the Object
             if (_ghostObject.GetComponent<DominoHooks>()) foreach (var o in _ghostObject.GetComponent<DominoHooks>().Dominos) Functions.TurnOffGameObjectPhysics(o);
             else Functions.TurnOffGameObjectPhysics(_ghostObject);
         }
@@ -167,7 +169,7 @@ namespace Assets.Scripts.Managers
         {
             if (!Input.GetMouseButtonDown(0)) return;
             RaycastHit hit;
-            var ray = UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition);
+            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
             if (hit.collider == null) return;
 
@@ -187,15 +189,7 @@ namespace Assets.Scripts.Managers
         private void OnCreateButtonClick(GameObject model)
         {
             DestroyGhost();
-            TurnOffMenuUi();
             SetObject(model);
-        }
-
-        private void TurnOffMenuUi()
-        {
-            _radialManager.InventoryOpen = false;
-            _radialManager.MainUI.SetActive(false);
-            _radialManager.ActiveInventory.SetActive(false);
         }
 
         private void SetupButtons()
@@ -213,7 +207,6 @@ namespace Assets.Scripts.Managers
             _menu.ClearDominos.onClick.AddListener(() =>
             {
                 DestroyGhost();
-                TurnOffMenuUi();
                 _placedDominoManager.RemoveDomino();
             });
 
@@ -234,6 +227,7 @@ namespace Assets.Scripts.Managers
         
         private readonly Menu _menu;
         private readonly Settings _settings;
+        private readonly PrefabFactory _prefabFactory;
         private readonly PlacedObjectManager _placedObjectManager;
         private readonly PlacedDominoManager _placedDominoManager;
 
