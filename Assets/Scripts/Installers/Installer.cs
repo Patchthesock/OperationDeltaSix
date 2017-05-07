@@ -1,21 +1,26 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using Assets.Scripts.Components;
 using Assets.Scripts.Managers;
+using Assets.Scripts.Models;
 using Zenject;
 
-public class Installer : MonoInstaller
+namespace Assets.Scripts.Installers
 {
-    public override void InstallBindings()
+    public class Installer : MonoInstaller
     {
-        Container.Bind<PlacedDominoManager.Settings>().AsSingle();
-        Container.Bind<PlacedDominoManager>().AsSingle();
-        Container.Bind<PlacedObjectManager>().AsSingle();
-        Container.Bind<SaveManager>().AsSingle();
-        Container.Bind<PlacementManager.Settings>().AsSingle();
-        Container.Bind<PlacementManager>().AsSingle();
-        Container.Bind<GameManager.Settings>().AsSingle();
-        Container.Bind<GameManager>().AsSingle();
+        public override void InstallBindings()
+        {
+            Container.Bind<Menu>().AsSingle();
+            Container.Bind<PrefabFactory>().AsSingle();
+            Container.Bind<PlacedDominoManager.Settings>().AsSingle();
+            Container.Bind<PlacedDominoManager>().AsSingle();
+            Container.Bind<PlacedObjectManager>().AsSingle();
+            Container.Bind<SaveManager>().AsSingle();
+            Container.Bind<PlacementManager.Settings>().AsSingle();
+            Container.Bind<PlacementManager>().AsSingle();
+            Container.Bind<ITickable>().To<PlacementManager>().AsSingle();
+            Container.Bind<GameManager.Settings>().AsSingle();
+            Container.Bind<GameManager>().AsSingle();
+            Container.Bind<IInitializable>().To<GameManager>().AsSingle();
+        }
     }
-
-
 }

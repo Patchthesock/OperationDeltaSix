@@ -1,10 +1,11 @@
 ﻿using System;
 using Assets.Scripts.Models;
 using UnityEngine;
+using Zenject;
 
 namespace Assets.Scripts.Managers
 {
-    public class GameManager
+    public class GameManager : IInitializable
     {
         public GameManager(
             Menu menu,
@@ -17,9 +18,12 @@ namespace Assets.Scripts.Managers
             _saveManager = saveManager;
             _placementManager = placementManager;
             _placedDominoManager = placedDominoManager;
-
-            PlayControl(false);
             menu.PlayBtn.onClick.AddListener(() => { PlayControl(!_isPlaying); });
+        }
+
+        public void Initialize()
+        {
+            PlayControl(false);
         }
 
         private void PlayControl(bool state)

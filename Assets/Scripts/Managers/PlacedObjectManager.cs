@@ -1,14 +1,20 @@
 ﻿using System.Collections.Generic;
+using Assets.Scripts.Components;
 using UnityEngine;
 
 namespace Assets.Scripts.Managers
 {
     public class PlacedObjectManager
     {
+        public PlacedObjectManager(PrefabFactory prefabFactory)
+        {
+            _prefabFactory = prefabFactory;
+        }
+
         public void AddObject(GameObject model, Vector3 position, Quaternion rotation)
         {
-            var objectToPlace = Instantiate(model);
-            foreach (Transform p in objectToPlace.transform) foreach (Transform d in p.transform) if (d.gameObject.tag == "Domino") Destroy(d.gameObject);
+            var objectToPlace = _prefabFactory.Instantiate(model);
+            foreach (Transform p in objectToPlace.transform) foreach (Transform d in p.transform) if (d.gameObject.tag == "Domino")// Destroy(d.gameObject);
             objectToPlace.GetComponentInChildren<Rigidbody>().isKinematic = true;
             objectToPlace.GetComponentInChildren<Rigidbody>().useGravity = false;
             objectToPlace.transform.position = position;
@@ -30,9 +36,10 @@ namespace Assets.Scripts.Managers
         public void RemoveObject(GameObject o)
         {
             _placedObjects.Remove(o);
-            Destroy(o);
+            //Destroy(o);
         }
 
+        private readonly PrefabFactory _prefabFactory;
         private readonly List<GameObject> _placedObjects = new List<GameObject>();
     }
 }

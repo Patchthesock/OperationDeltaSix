@@ -1,27 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Components;
 using UnityEngine;
 
 namespace Assets.Scripts.Managers
 {
     public class PlacedDominoManager
     {
-        public PlacedDominoManager(Settings settings)
+        public PlacedDominoManager(
+            Settings settings,
+            PrefabFactory prefabFactory)
         {
             _settings = settings;
+            _prefabFactory = prefabFactory;
         }
 
         public void PlaceDomino(Vector3 position, Quaternion rotation)
         {
-            if (_nonActiveDominos.Count > 0)
+            if (_nonActiveDominos.Count <= 0) PlaceObject(_prefabFactory.Instantiate(Functions.PickRandomObject(_settings.Dominos)), position, rotation);
+            else
             {
                 var objectToPlace = _nonActiveDominos.First();
                 _nonActiveDominos.Remove(objectToPlace);
                 objectToPlace.SetActive(true);
                 PlaceObject(objectToPlace, position,rotation);
             }
-            else PlaceObject(Instantiate(Functions.PickRandomObject(_settings.Dominos)), position, rotation);
         }
 
         public void PlaceDomino(IEnumerable<SaveManager.ObjectPosition> dominos)
@@ -68,6 +72,7 @@ namespace Assets.Scripts.Managers
         }
 
         private readonly Settings _settings;
+        private readonly PrefabFactory _prefabFactory;
         private readonly List<GameObject> _placedDominos = new List<GameObject>();
         private readonly List<GameObject> _nonActiveDominos = new List<GameObject>();
 
