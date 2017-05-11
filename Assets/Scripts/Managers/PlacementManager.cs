@@ -73,12 +73,13 @@ namespace Assets.Scripts.Managers
                 case 1:
                     PlaceMutliDomino(ghostPos);
                     return;
+                //case 2:
+                //    PlaceProp(ghostPos);
+                //    break;
                 default:
                     Debug.Log("PlacementManager.AddItem: Unknown Type");
                     return;
-                //case "Object":
-                //    PlaceProp(ghostPos);
-                //    break;
+                
             }
         }
 
@@ -86,7 +87,7 @@ namespace Assets.Scripts.Managers
         {
             if (Functions.CanPlaceObject(dominoManager.GetPlacedDominos(), pos, 0.5f)) return true;
             ghostObject.transform.position = new Vector3(999, 999, 999);
-            Cursor.SetCursor(_settings.CursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
+            //Cursor.SetCursor(_settings.CursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
             return false;
         }
 

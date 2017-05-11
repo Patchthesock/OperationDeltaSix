@@ -66,7 +66,7 @@ namespace Assets.Scripts.Managers
             model.GetComponentInChildren<Rigidbody>().useGravity = false;
             model.transform.position = position;
             model.transform.rotation = rotation;
-            model.transform.SetParent(_settings.ARBoard.transform);
+            //model.transform.SetParent(_settings.ArBoard.transform);
             if (_placedDominos.Contains(model)) return;
             _placedDominos.Add(model);
         }
@@ -79,7 +79,7 @@ namespace Assets.Scripts.Managers
         [Serializable]
         public class Settings
         {
-            public GameObject ARBoard;
+            public GameObject ArBoard;
             public List<GameObject> Dominos;
         }
     }
