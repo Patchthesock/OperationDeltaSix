@@ -103,8 +103,6 @@ namespace Assets.Scripts.Managers
             // Props
             public SelectableDominosProp BridgeProp;
             public SelectableDominosProp StepSlideProp;
-
-            
         }
     }
 }

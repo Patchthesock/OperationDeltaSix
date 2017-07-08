@@ -14,8 +14,6 @@ namespace Assets.Scripts.Managers
         public void AddObject(GameObject model, Vector3 position, Quaternion rotation)
         {
             var objectToPlace = _prefabFactory.Instantiate(model);
-            //objectToPlace.GetComponentInChildren<Rigidbody>().isKinematic = true;
-            //objectToPlace.GetComponentInChildren<Rigidbody>().useGravity = false;
             objectToPlace.transform.position = position;
             objectToPlace.transform.rotation = rotation;
             if (_placedObjects.Contains(objectToPlace)) return;
