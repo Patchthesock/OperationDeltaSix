@@ -50,8 +50,12 @@ namespace Assets.Scripts.Managers
 
         private void Create(IPlacementable model)
         {
-            _removalManager.SetActive(false);
-            _placementManager.OnCreate(model);
+            if (model == null) UnityEngine.Debug.Log("Missing Prefab");
+            else
+            {
+                _removalManager.SetActive(false);
+                _placementManager.OnCreate(model);
+            }
         }
 
         private readonly Settings _settings;

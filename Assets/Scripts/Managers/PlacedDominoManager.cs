@@ -60,6 +60,7 @@ namespace Assets.Scripts.Managers
         private void PlaceNewDomino(Vector3 position, Quaternion rotation)
         {
             var d = _prefabFactory.Instantiate(Functions.PickRandomObject(_settings.Dominos));
+            if (_settings.ParentContainer != null) d.transform.SetParent(_settings.ParentContainer.transform);
             d.GetComponent<Domino>().SetAudioManager(_audioManager);
             PlaceObject(d, position, rotation);
         }
@@ -78,7 +79,6 @@ namespace Assets.Scripts.Managers
             model.GetComponentInChildren<Rigidbody>().useGravity = false;
             model.transform.position = position;
             model.transform.rotation = rotation;
-            //model.transform.SetParent(_settings.ArBoard.transform);
             if (_placedDominos.Contains(model)) return;
             _placedDominos.Add(model);
         }
@@ -92,7 +92,7 @@ namespace Assets.Scripts.Managers
         [Serializable]
         public class Settings
         {
-            public GameObject ArBoard;
+            public GameObject ParentContainer;
             public List<GameObject> Dominos;
         }
     }

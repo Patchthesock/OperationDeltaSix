@@ -37,7 +37,6 @@ namespace Assets.Scripts.Managers
 
         public void DestroyGhost()
         {
-            Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             _ghostPlaceObject = null;
             if (_ghostObject == null) return;
             _ghostObject.transform.position = new Vector3(999, 999, 999);
