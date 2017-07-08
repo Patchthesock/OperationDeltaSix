@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Managers
 {
@@ -17,6 +19,7 @@ namespace Assets.Scripts.Managers
 
         private readonly Settings _settings;
 
+        [Serializable]
         public class Settings
         {
             public List<AudioClip> DominoCollision;

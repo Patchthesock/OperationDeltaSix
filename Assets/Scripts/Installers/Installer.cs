@@ -16,6 +16,7 @@ namespace Assets.Scripts.Installers
             InstallRemovalManager(Container);
             InstallPlacementManager(Container, GameSettings.PlacementManagerSettings);
             InstallMenuManager(Container, GameSettings.MenuManagerSettings);
+            InstallAudioManager(Container, GameSettings.AudioManagerSettings);
             InstallGameManager(Container, GameSettings.GameManagerSettings);
         }
 
@@ -53,6 +54,12 @@ namespace Assets.Scripts.Installers
             container.Bind<IInitializable>().To<MenuManager>().AsSingle();
         }
 
+        private void InstallAudioManager(DiContainer container, AudioManager.Settings settings)
+        {
+            container.Bind<AudioManager.Settings>().FromInstance(settings).AsSingle();
+            container.Bind<AudioManager>().AsSingle();
+        }
+
         private void InstallGameManager(DiContainer container, GameManager.Settings settings)
         {
             container.Bind<GameManager.Settings>().FromInstance(settings).AsSingle();
@@ -66,6 +73,7 @@ namespace Assets.Scripts.Installers
             public MenuManager.Settings MenuManagerSettings;
             public SaveManager.Settings SaveManagerSettings;
             public GameManager.Settings GameManagerSettings;
+            public AudioManager.Settings AudioManagerSettings;
             public PlacementManager.Settings PlacementManagerSettings;
             public PlacedDominoManager.Settings PlacedDominoManagerSettings;
         }

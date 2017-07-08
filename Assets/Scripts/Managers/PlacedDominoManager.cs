@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Components;
+using Assets.Scripts.Components.GameModels;
 using UnityEngine;
 
 namespace Assets.Scripts.Managers
@@ -10,22 +11,18 @@ namespace Assets.Scripts.Managers
     {
         public PlacedDominoManager(
             Settings settings,
+            AudioManager audioManager,
             PrefabFactory prefabFactory)
         {
             _settings = settings;
+            _audioManager = audioManager;
             _prefabFactory = prefabFactory;
         }
 
         public void PlaceDomino(Vector3 position, Quaternion rotation)
         {
-            if (_nonActiveDominos.Count <= 0) PlaceObject(_prefabFactory.Instantiate(Functions.PickRandomObject(_settings.Dominos)), position, rotation);
-            else
-            {
-                var objectToPlace = _nonActiveDominos.First();
-                _nonActiveDominos.Remove(objectToPlace);
-                objectToPlace.SetActive(true);
-                PlaceObject(objectToPlace, position,rotation);
-            }
+            if (_nonActiveDominos.Count <= 0) PlaceNewDomino(position, rotation);
+            else PlaceExistingDomino(position, rotation);
         }
 
         public void PlaceDomino(IEnumerable<SaveManager.ObjectPosition> dominos)
@@ -60,6 +57,21 @@ namespace Assets.Scripts.Managers
             o.SetActive(false);
         }
 
+        private void PlaceNewDomino(Vector3 position, Quaternion rotation)
+        {
+            var d = _prefabFactory.Instantiate(Functions.PickRandomObject(_settings.Dominos));
+            d.GetComponent<Domino>().SetAudioManager(_audioManager);
+            PlaceObject(d, position, rotation);
+        }
+
+        private void PlaceExistingDomino(Vector3 position, Quaternion rotation)
+        {
+            var objectToPlace = _nonActiveDominos.First();
+            _nonActiveDominos.Remove(objectToPlace);
+            objectToPlace.SetActive(true);
+            PlaceObject(objectToPlace, position, rotation);
+        }
+        
         private void PlaceObject(GameObject model, Vector3 position, Quaternion rotation)
         {
             model.GetComponentInChildren<Rigidbody>().isKinematic = true;
@@ -72,6 +84,7 @@ namespace Assets.Scripts.Managers
         }
 
         private readonly Settings _settings;
+        private readonly AudioManager _audioManager;
         private readonly PrefabFactory _prefabFactory;
         private readonly List<GameObject> _placedDominos = new List<GameObject>();
         private readonly List<GameObject> _nonActiveDominos = new List<GameObject>();

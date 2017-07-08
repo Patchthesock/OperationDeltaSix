@@ -53,25 +53,24 @@ namespace Assets.Scripts.Managers
             if (ghostPos == Vector3.zero) return;
             if (!IsValidPosition(ghostPos, _ghostObject, _placedDominoManager)) return;
             UpdateGhostPosition(ghostPos, _ghostObject);
-            if (Functions.GetMouseButtonInput(0)) AddItem(ghostPos, _typeDict[_ghostPlaceObject.GetType()]);
+            if (Functions.GetMouseButtonInput(0)) AddItem(_ghostObject, _typeDict[_ghostPlaceObject.GetType()]);
         }
 
         private void UpdateGhostPosition(Vector3 ghostPos, GameObject ghostObject)
         {
             ghostObject.transform.position = ghostPos;
             ghostObject.transform.rotation = GetDefaultRotation();
-            Cursor.SetCursor(null, Vector2.zero, _settings.NormalCursor);
         }
 
-        private void AddItem(Vector3 ghostPos, int typeDict)
+        private void AddItem(GameObject ghost, int typeDict)
         {
             switch (typeDict)
             {
                 case 0:
-                    PlaceDomino(ghostPos);
+                    PlaceDomino(ghost);
                     return;
                 case 1:
-                    PlaceMutliDomino(ghostPos);
+                    PlaceMutliDomino(ghost);
                     return;
                 //case 2:
                 //    PlaceProp(ghostPos);
@@ -87,13 +86,12 @@ namespace Assets.Scripts.Managers
         {
             if (Functions.CanPlaceObject(dominoManager.GetPlacedDominos(), pos, 0.5f)) return true;
             ghostObject.transform.position = new Vector3(999, 999, 999);
-            //Cursor.SetCursor(_settings.CursorCantPlaceTexture, Vector2.zero, CursorMode.Auto);
             return false;
         }
 
-        private void PlaceDomino(Vector3 ghostPos)
+        private void PlaceDomino(GameObject ghost)
         {
-            _placedDominoManager.PlaceDomino(ghostPos, GetSingleDominoRotation(ghostPos));
+            _placedDominoManager.PlaceDomino(ghost.transform.position, GetSingleDominoRotation(ghost.transform.position));
             _timeLastPlaced = Time.time;
         }
 
@@ -107,12 +105,12 @@ namespace Assets.Scripts.Managers
         //    _mouseLock = true;
         //}
 
-        private void PlaceMutliDomino(Vector3 ghostPos)
+        private void PlaceMutliDomino(GameObject ghost)
         {
             if (_mouseLock) return;
-            var dom = (Dominos)_ghostPlaceObject;
+            var dom = ghost.GetComponent<Dominos>();
             if (dom == null) return;
-            foreach (var o in dom.Domino) _placedDominoManager.PlaceDomino(new Vector3(o.transform.position.x, ghostPos.y, o.transform.position.z), o.transform.rotation);
+            foreach (var o in dom.Domino) _placedDominoManager.PlaceDomino(o.transform.position, o.transform.rotation);
             _mouseLock = true;
         }
 
@@ -126,13 +124,6 @@ namespace Assets.Scripts.Managers
             }
             _positionLastPlaced = pos;
             return GetDefaultRotation();
-        }
-
-        private static Quaternion GetDefaultRotation()
-        {
-            var rotation = CameraManager.Instance.TheCamera.transform.rotation.eulerAngles;
-            rotation = new Vector3(0, rotation.y, rotation.z);
-            return Quaternion.Euler(rotation);
         }
 
         private GameObject GetPlacementGameObject(IPlacementable model)
@@ -154,6 +145,13 @@ namespace Assets.Scripts.Managers
             return ghostObject;
         }
 
+        private static Quaternion GetDefaultRotation()
+        {
+            var rotation = CameraManager.Instance.TheCamera.transform.rotation.eulerAngles;
+            rotation = new Vector3(0, rotation.y, rotation.z);
+            return Quaternion.Euler(rotation);
+        }
+
         private bool _mouseLock;
         private float _timeLastPlaced;
         private Vector3 _positionLastPlaced;
@@ -171,8 +169,6 @@ namespace Assets.Scripts.Managers
         public class Settings
         {
             public float TimeToLine;
-            public CursorMode NormalCursor;
-            public Texture2D CursorCantPlaceTexture;
         }
     }
 }
