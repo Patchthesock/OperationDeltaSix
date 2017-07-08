@@ -35,7 +35,7 @@ namespace Assets.Scripts.Managers
             _settings.SingleDomino.SelectButton.onClick.AddListener(() => { Create(_settings.SingleDomino.Domino); });
             _settings.TwentyDominos.SelectButton.onClick.AddListener(() => { Create(_settings.TwentyDominos.Dominos); });
             _settings.StepSlideProp.SelectButton.onClick.AddListener(() => { Create(_settings.StepSlideProp.Dominos); });
-            _settings.OneEightyTurn.SelectButton.onClick.AddListener(() => {  });
+            _settings.OneEightyTurn.SelectButton.onClick.AddListener(() => { Create(_settings.OneEightyTurn.Dominos); });
             _settings.ClearDominos.onClick.AddListener(() =>
             {
                 _placementManager.DestroyGhost();

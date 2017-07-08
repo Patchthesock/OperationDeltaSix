@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using Assets.Scripts.Interfaces;
+﻿using Assets.Scripts.Interfaces;
 using Assets.Scripts.Managers;
 using UnityEngine;
 
@@ -33,15 +32,5 @@ namespace Assets.Scripts.Components.GameModels
         }
 
         private AudioManager _audioManager;
-    }
-
-    public class Dominos : MonoBehaviour, IPlacementable
-    {
-        public List<Domino> Domino;
-
-        public GameObject GetGameObject()
-        {
-            return gameObject;
-        }
     }
 }
