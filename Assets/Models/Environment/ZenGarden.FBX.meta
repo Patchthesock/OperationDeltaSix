@@ -90,6 +90,21 @@ ModelImporter:
     4300024: FoutainRim
     4300026: WaterFall
     4300028: Rake
+    6400000: Base
+    6400002: Box001
+    6400004: Foutain
+    6400006: FoutainRim
+    6400008: FoutainStand
+    6400010: Plane002
+    6400012: Railings
+    6400014: Rake
+    6400016: Rectangle001
+    6400018: Rock
+    6400020: Rock02
+    6400022: Sphere002
+    6400024: Sphere003
+    6400026: Sphere004
+    6400028: WaterFall
     7400000: Take 001
     9500000: //RootNode
   materials:
@@ -119,11 +134,11 @@ ModelImporter:
   meshes:
     lODScreenPercentages: []
     globalScale: 10
-    meshCompression: 0
-    addColliders: 0
+    meshCompression: 3
+    addColliders: 1
     importBlendShapes: 1
     swapUVChannels: 0
-    generateSecondaryUV: 0
+    generateSecondaryUV: 1
     useFileUnits: 1
     optimizeMeshForGPU: 1
     keepQuads: 0
@@ -137,7 +152,7 @@ ModelImporter:
     normalSmoothAngle: 60
     normalImportMode: 0
     tangentImportMode: 3
-  importAnimation: 1
+  importAnimation: 0
   copyAvatar: 0
   humanDescription:
     serializedVersion: 2
@@ -153,10 +168,10 @@ ModelImporter:
     rootMotionBoneName: 
     rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
     hasTranslationDoF: 0
-    hasExtraRoot: 0
+    hasExtraRoot: 1
     skeletonHasParents: 1
   lastHumanDescriptionAvatarSource: {instanceID: 0}
-  animationType: 2
+  animationType: 0
   humanoidOversampling: 1
   additionalBone: 0
   userData: 
