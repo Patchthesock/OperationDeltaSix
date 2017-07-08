@@ -25,7 +25,7 @@ namespace Assets.Scripts.Installers
             container.Bind<PrefabFactory>().AsSingle();
             container.Bind<PlacedDominoManager.Settings>().FromInstance(settings).AsSingle();
             container.Bind<PlacedDominoManager>().AsSingle();
-            container.Bind<PlacedObjectManager>().AsSingle();
+            container.Bind<PlacedDominoPropManager>().AsSingle();
         }
 
         private void InstallSaveManager(DiContainer container, SaveManager.Settings settings)

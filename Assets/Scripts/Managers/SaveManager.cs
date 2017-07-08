@@ -13,7 +13,7 @@ namespace Assets.Scripts.Managers
         public SaveManager(
             Settings settings,
             PlacedDominoManager placedDominoManager,
-            PlacedObjectManager placedObjectManager)
+            PlacedDominoPropManager placedObjectManager)
         {
             _placedDominoManager = placedDominoManager;
             _placedObjectManager = placedObjectManager;
@@ -124,7 +124,7 @@ namespace Assets.Scripts.Managers
         }
 
         private readonly PlacedDominoManager _placedDominoManager;
-        private readonly PlacedObjectManager _placedObjectManager;
+        private readonly PlacedDominoPropManager _placedObjectManager;
 
         [Serializable]
         public class Settings

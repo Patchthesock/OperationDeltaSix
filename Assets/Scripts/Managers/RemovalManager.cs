@@ -7,7 +7,7 @@ namespace Assets.Scripts.Managers
     {
         public RemovalManager(
             PlacedDominoManager placedDominoManager,
-            PlacedObjectManager placedObjectManager)
+            PlacedDominoPropManager placedObjectManager)
         {
             _isActive = false;
             _placedDominoManager = placedDominoManager;
@@ -47,6 +47,6 @@ namespace Assets.Scripts.Managers
 
         private bool _isActive;
         private readonly PlacedDominoManager _placedDominoManager;
-        private readonly PlacedObjectManager _placedObjectManager;
+        private readonly PlacedDominoPropManager _placedObjectManager;
     }
 }

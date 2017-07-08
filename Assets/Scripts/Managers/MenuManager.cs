@@ -29,13 +29,13 @@ namespace Assets.Scripts.Managers
         {
             _settings.NintyLeft.SelectButton.onClick.AddListener(() => { Create(_settings.NintyLeft.Dominos); });
             _settings.NintyRight.SelectButton.onClick.AddListener(() => { Create(_settings.NintyRight.Dominos); });
-            _settings.BridgeProp.SelectButton.onClick.AddListener(() => { Create(_settings.BridgeProp.Dominos); });
             _settings.TenDominos.SelectButton.onClick.AddListener(() => { Create(_settings.TenDominos.Dominos); });
             _settings.FiveDominos.SelectButton.onClick.AddListener(() => { Create(_settings.FiveDominos.Dominos); });
             _settings.SingleDomino.SelectButton.onClick.AddListener(() => { Create(_settings.SingleDomino.Domino); });
+            _settings.BridgeProp.SelectButton.onClick.AddListener(() => { Create(_settings.BridgeProp.DominosProp); });
             _settings.TwentyDominos.SelectButton.onClick.AddListener(() => { Create(_settings.TwentyDominos.Dominos); });
-            _settings.StepSlideProp.SelectButton.onClick.AddListener(() => { Create(_settings.StepSlideProp.Dominos); });
             _settings.OneEightyTurn.SelectButton.onClick.AddListener(() => { Create(_settings.OneEightyTurn.Dominos); });
+            _settings.StepSlideProp.SelectButton.onClick.AddListener(() => { Create(_settings.StepSlideProp.DominosProp); });
             _settings.ClearDominos.onClick.AddListener(() =>
             {
                 _placementManager.DestroyGhost();
@@ -78,6 +78,13 @@ namespace Assets.Scripts.Managers
         }
 
         [Serializable]
+        public class SelectableDominosProp
+        {
+            public Button SelectButton;
+            public DominosProp DominosProp;
+        }
+
+        [Serializable]
         public class Settings
         {
             // Clear
@@ -94,8 +101,8 @@ namespace Assets.Scripts.Managers
             public SelectableDominos OneEightyTurn;
 
             // Props
-            public SelectableDominos BridgeProp;
-            public SelectableDominos StepSlideProp;
+            public SelectableDominosProp BridgeProp;
+            public SelectableDominosProp StepSlideProp;
 
             
         }

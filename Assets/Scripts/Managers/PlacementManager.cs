@@ -13,18 +13,19 @@ namespace Assets.Scripts.Managers
         public PlacementManager(
             Settings settings,
             PrefabFactory prefabFactory,
-            PlacedDominoManager placedDominoManager
-            //PlacedObjectManager placedObjectManager
+            PlacedDominoManager placedDominoManager,
+            PlacedDominoPropManager placedDominoPropManager
             )
         {
             _settings = settings;
             _prefabFactory = prefabFactory;
             _placedDominoManager = placedDominoManager;
-            //_placedObjectManager = placedObjectManager;
+            _placedDominoPropManager = placedDominoPropManager;
             _typeDict = new Dictionary<Type, int>
             {
                 { typeof(Domino), 0 },
-                { typeof(Dominos), 1 }
+                { typeof(Dominos), 1 },
+                { typeof(DominosProp), 2}
             };
         }
 
@@ -55,12 +56,6 @@ namespace Assets.Scripts.Managers
             if (Functions.GetMouseButtonInput(0)) AddItem(_ghostObject, _typeDict[_ghostPlaceObject.GetType()]);
         }
 
-        private void UpdateGhostPosition(Vector3 ghostPos, GameObject ghostObject)
-        {
-            ghostObject.transform.position = ghostPos;
-            ghostObject.transform.rotation = GetDefaultRotation();
-        }
-
         private void AddItem(GameObject ghost, int typeDict)
         {
             switch (typeDict)
@@ -69,23 +64,15 @@ namespace Assets.Scripts.Managers
                     PlaceDomino(ghost);
                     return;
                 case 1:
-                    PlaceMutliDomino(ghost);
+                    PlaceDominos(ghost);
                     return;
-                //case 2:
-                //    PlaceProp(ghostPos);
-                //    break;
+                case 2:
+                    PlaceDominosProp(ghost);
+                    break;
                 default:
                     Debug.Log("PlacementManager.AddItem: Unknown Type");
                     return;
-                
             }
-        }
-
-        private bool IsValidPosition(Vector3 pos, GameObject ghostObject, PlacedDominoManager dominoManager)
-        {
-            if (Functions.CanPlaceObject(dominoManager.GetPlacedDominos(), pos, 0.5f)) return true;
-            ghostObject.transform.position = new Vector3(999, 999, 999);
-            return false;
         }
 
         private void PlaceDomino(GameObject ghost)
@@ -93,24 +80,28 @@ namespace Assets.Scripts.Managers
             _placedDominoManager.PlaceDomino(ghost.transform.position, GetSingleDominoRotation(ghost.transform.position));
             _timeLastPlaced = Time.time;
         }
-
-        //private void PlaceProp(Vector3 ghostPos)
-        //{
-        //    if (_mouseLock) return;
-        //    var dom = (Dominos)_ghostPlaceObject;
-        //    if (dom == null) return;
-        //    _placedObjectManager.AddObject(dom.gameObject, ghostPos, dom.gameObject.transform.rotation);
-        //    foreach (var o in dom.Domino) _placedDominoManager.PlaceDomino(o.transform.position, o.transform.rotation);
-        //    _mouseLock = true;
-        //}
-
-        private void PlaceMutliDomino(GameObject ghost)
+        
+        private void PlaceDominos(GameObject ghost)
         {
             if (_mouseLock) return;
-            var dom = ghost.GetComponent<Dominos>();
-            if (dom == null) return;
-            foreach (var o in dom.Domino) _placedDominoManager.PlaceDomino(o.transform.position, o.transform.rotation);
+            PlaceDominos(ghost.GetComponent<Dominos>());
             _mouseLock = true;
+        }
+
+        private void PlaceDominosProp(GameObject ghost)
+        {
+            if (_mouseLock) return;
+            var dom = ghost.GetComponent<DominosProp>();
+            PlaceDominos(dom.Dominos);
+            if (dom.Prop == null) return;
+            _placedDominoPropManager.AddObject(dom.Prop, ghost.transform.position, ghost.transform.rotation);
+            _mouseLock = true;
+        }
+
+        private void PlaceDominos(Dominos dominos)
+        {
+            if (dominos == null) return;
+            foreach (var o in dominos.Domino) _placedDominoManager.PlaceDomino(o.transform.position, o.transform.rotation);
         }
 
         private Quaternion GetSingleDominoRotation(Vector3 pos)
@@ -137,11 +128,21 @@ namespace Assets.Scripts.Managers
                     Functions.TurnOffGameObjectPhysics(ghostObject);
                     break;
                 case 1:
-                    var d = (Dominos)model;
+                    var d = (Dominos) model;
                     foreach (var o in d.Domino) Functions.TurnOffGameObjectPhysics(o.gameObject);
+                    break;
+                case 2:
+                    var e = (DominosProp) model;
+                    foreach (var o in e.Dominos.Domino) Functions.TurnOffGameObjectPhysics(o.gameObject); 
                     break;
             }
             return ghostObject;
+        }
+
+        private static void UpdateGhostPosition(Vector3 ghostPos, GameObject ghostObject)
+        {
+            ghostObject.transform.position = ghostPos;
+            ghostObject.transform.rotation = GetDefaultRotation();
         }
 
         private static Quaternion GetDefaultRotation()
@@ -149,6 +150,13 @@ namespace Assets.Scripts.Managers
             var rotation = CameraManager.Instance.TheCamera.transform.rotation.eulerAngles;
             rotation = new Vector3(0, rotation.y, rotation.z);
             return Quaternion.Euler(rotation);
+        }
+
+        private static bool IsValidPosition(Vector3 pos, GameObject ghostObject, PlacedDominoManager dominoManager)
+        {
+            if (Functions.CanPlaceObject(dominoManager.GetPlacedDominos(), pos, 0.5f)) return true;
+            ghostObject.transform.position = new Vector3(999, 999, 999);
+            return false;
         }
 
         private bool _mouseLock;
@@ -160,8 +168,8 @@ namespace Assets.Scripts.Managers
         private readonly Settings _settings;
         private readonly PrefabFactory _prefabFactory;
         private readonly Dictionary<Type, int> _typeDict;
-        //private readonly PlacedObjectManager _placedObjectManager;
         private readonly PlacedDominoManager _placedDominoManager;
+        private readonly PlacedDominoPropManager _placedDominoPropManager;
         private readonly Dictionary<IPlacementable, GameObject> _spawnedGhostPlaceObjects = new Dictionary<IPlacementable, GameObject>();
 
         [Serializable]
