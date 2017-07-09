@@ -30,6 +30,7 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+*.exe
 
 # Binary Save files
 *.binary
