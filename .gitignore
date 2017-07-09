@@ -33,7 +33,7 @@ sysinfo.txt
 *.exe
 
 # Binary Save files
-*.binary
+*.domino
 
 # Max files
 *.max

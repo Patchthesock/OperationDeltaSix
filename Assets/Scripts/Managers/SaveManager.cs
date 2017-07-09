@@ -95,7 +95,7 @@ namespace Assets.Scripts.Managers
             };
             if (!Directory.Exists("Saves")) Directory.CreateDirectory("Saves");
             var formatter = new BinaryFormatter();
-            var dominosFile = File.Create("Saves/dominos.binary");
+            var dominosFile = File.Create("Saves/dominos.domino");
             //var objectsFile = File.Create("saves/objects.binary");
             formatter.Serialize(dominosFile, data);
             //formatter.Serialize(objectsFile, objects);
@@ -108,7 +108,7 @@ namespace Assets.Scripts.Managers
             if (!Directory.Exists("Saves")) return;
             var formatter = new BinaryFormatter();
             if (!File.Exists("Saves/dominos.binary")) return;
-            var dominosFile = File.Open("Saves/dominos.binary", FileMode.Open);
+            var dominosFile = File.Open("Saves/dominos.domino", FileMode.Open);
             //var objectsFile = File.Open("Saves/objects.binary", FileMode.Open);
             var dom = (ListObjectPositionSave)formatter.Deserialize(dominosFile);
             //_placedObjects = (List<ObjectPosition>)formatter.Deserialize(objectsFile);
