@@ -22,6 +22,7 @@ namespace Assets.Scripts.Managers
 
         public void Initialize()
         {
+            Application.targetFrameRate = -1; // Set to target default framerate
             PlayControl(false);
         }
 
