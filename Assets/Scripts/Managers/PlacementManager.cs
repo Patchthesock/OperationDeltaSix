@@ -14,8 +14,7 @@ namespace Assets.Scripts.Managers
             Settings settings,
             PrefabFactory prefabFactory,
             PlacedDominoManager placedDominoManager,
-            PlacedDominoPropManager placedDominoPropManager
-            )
+            PlacedDominoPropManager placedDominoPropManager)
         {
             _settings = settings;
             _prefabFactory = prefabFactory;
@@ -133,7 +132,10 @@ namespace Assets.Scripts.Managers
                     break;
                 case 2:
                     var e = (DominosProp) model;
-                    foreach (var o in e.Dominos.Domino) Functions.TurnOffGameObjectPhysics(o.gameObject); 
+                    foreach (var o in e.Dominos.Domino) Functions.TurnOffGameObjectPhysics(o.gameObject);
+                    break;
+                default:
+                    Debug.Log("PlacementManager.GetPlacementGameObject(IPlacementable): Unknown type");
                     break;
             }
             return ghostObject;
