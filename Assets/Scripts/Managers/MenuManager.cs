@@ -32,10 +32,14 @@ namespace Assets.Scripts.Managers
             _settings.TenDominos.SelectButton.onClick.AddListener(() => { Create(_settings.TenDominos.Dominos); });
             _settings.FiveDominos.SelectButton.onClick.AddListener(() => { Create(_settings.FiveDominos.Dominos); });
             _settings.SingleDomino.SelectButton.onClick.AddListener(() => { Create(_settings.SingleDomino.Domino); });
-            _settings.BridgeProp.SelectButton.onClick.AddListener(() => { Create(_settings.BridgeProp.DominosProp); });
             _settings.TwentyDominos.SelectButton.onClick.AddListener(() => { Create(_settings.TwentyDominos.Dominos); });
             _settings.OneEightyTurn.SelectButton.onClick.AddListener(() => { Create(_settings.OneEightyTurn.Dominos); });
-            _settings.StepSlideProp.SelectButton.onClick.AddListener(() => { Create(_settings.StepSlideProp.DominosProp); });
+
+            _settings.LowStep.SelectButton.onClick.AddListener(() => { Create(_settings.LowStep.DominosProp); });
+            _settings.HighStep.SelectButton.onClick.AddListener(() => { Create(_settings.HighStep.DominosProp); });
+            _settings.LowBridge.SelectButton.onClick.AddListener(() => { Create(_settings.LowBridge.DominosProp); });
+            _settings.HighBridge.SelectButton.onClick.AddListener(() => { Create(_settings.HighBridge.DominosProp); });
+            _settings.DownSlide.SelectButton.onClick.AddListener(() => { Create(_settings.DownSlide.DominosProp); });
             _settings.ClearDominos.onClick.AddListener(() =>
             {
                 _placementManager.DestroyGhost();
@@ -101,8 +105,11 @@ namespace Assets.Scripts.Managers
             public SelectableDominos OneEightyTurn;
 
             // Props
-            public SelectableDominosProp BridgeProp;
-            public SelectableDominosProp StepSlideProp;
+            public SelectableDominosProp LowStep;
+            public SelectableDominosProp HighStep;
+            public SelectableDominosProp DownSlide;
+            public SelectableDominosProp LowBridge;
+            public SelectableDominosProp HighBridge;
         }
     }
 }

@@ -25,6 +25,15 @@ ModelImporter:
     100034: transform2
     100036: WaterFall
     100038: //RootNode
+    100040: Sphere001
+    100042: Sphere003 1
+    100044: Sphere005
+    100046: Sphere006
+    100048: Sphere007
+    100050: Sphere008
+    100052: Sphere009
+    100054: Sphere010
+    100056: Sphere011
     400000: Base
     400002: Box001
     400004: Foutain
@@ -45,6 +54,15 @@ ModelImporter:
     400034: transform2
     400036: WaterFall
     400038: //RootNode
+    400040: Sphere001
+    400042: Sphere003 1
+    400044: Sphere005
+    400046: Sphere006
+    400048: Sphere007
+    400050: Sphere008
+    400052: Sphere009
+    400054: Sphere010
+    400056: Sphere011
     2300000: Base
     2300002: Box001
     2300004: Foutain
@@ -60,6 +78,15 @@ ModelImporter:
     2300024: Sphere003
     2300026: Sphere004
     2300028: WaterFall
+    2300030: Sphere001
+    2300032: Sphere003 1
+    2300034: Sphere005
+    2300036: Sphere006
+    2300038: Sphere007
+    2300040: Sphere008
+    2300042: Sphere009
+    2300044: Sphere010
+    2300046: Sphere011
     3300000: Base
     3300002: Box001
     3300004: Foutain
@@ -75,6 +102,15 @@ ModelImporter:
     3300024: Sphere003
     3300026: Sphere004
     3300028: WaterFall
+    3300030: Sphere001
+    3300032: Sphere003 1
+    3300034: Sphere005
+    3300036: Sphere006
+    3300038: Sphere007
+    3300040: Sphere008
+    3300042: Sphere009
+    3300044: Sphere010
+    3300046: Sphere011
     4300000: Railings
     4300002: Base
     4300004: Box001
@@ -90,6 +126,15 @@ ModelImporter:
     4300024: FoutainRim
     4300026: WaterFall
     4300028: Rake
+    4300030: Sphere001
+    4300032: Sphere003
+    4300034: Sphere005
+    4300036: Sphere006
+    4300038: Sphere007
+    4300040: Sphere008
+    4300042: Sphere009
+    4300044: Sphere010
+    4300046: Sphere011
     6400000: Base
     6400002: Box001
     6400004: Foutain
@@ -105,6 +150,15 @@ ModelImporter:
     6400024: Sphere003
     6400026: Sphere004
     6400028: WaterFall
+    6400030: Sphere001
+    6400032: Sphere003 1
+    6400034: Sphere005
+    6400036: Sphere006
+    6400038: Sphere007
+    6400040: Sphere008
+    6400042: Sphere009
+    6400044: Sphere010
+    6400046: Sphere011
     7400000: Take 001
     9500000: //RootNode
   materials:
