@@ -35,11 +35,11 @@ namespace Assets.Scripts.Managers
             _settings.TwentyDominos.SelectButton.onClick.AddListener(() => { Create(_settings.TwentyDominos.Dominos); });
             _settings.OneEightyTurn.SelectButton.onClick.AddListener(() => { Create(_settings.OneEightyTurn.Dominos); });
 
-            _settings.LowStep.SelectButton.onClick.AddListener(() => { Create(_settings.LowStep.DominosProp); });
-            _settings.HighStep.SelectButton.onClick.AddListener(() => { Create(_settings.HighStep.DominosProp); });
-            _settings.LowBridge.SelectButton.onClick.AddListener(() => { Create(_settings.LowBridge.DominosProp); });
-            _settings.HighBridge.SelectButton.onClick.AddListener(() => { Create(_settings.HighBridge.DominosProp); });
-            _settings.DownSlide.SelectButton.onClick.AddListener(() => { Create(_settings.DownSlide.DominosProp); });
+            //_settings.LowStep.SelectButton.onClick.AddListener(() => { Create(_settings.LowStep.DominosProp); });
+            //_settings.HighStep.SelectButton.onClick.AddListener(() => { Create(_settings.HighStep.DominosProp); });
+            //_settings.LowBridge.SelectButton.onClick.AddListener(() => { Create(_settings.LowBridge.DominosProp); });
+            //_settings.HighBridge.SelectButton.onClick.AddListener(() => { Create(_settings.HighBridge.DominosProp); });
+            //_settings.DownSlide.SelectButton.onClick.AddListener(() => { Create(_settings.DownSlide.DominosProp); });
             _settings.ClearDominos.onClick.AddListener(() =>
             {
                 _placementManager.DestroyGhost();
