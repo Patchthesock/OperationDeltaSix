@@ -15,7 +15,7 @@ namespace Assets.Scripts.Installers
             InstallPlacedManagers(Container, GameSettings.PlacedDominoManagerSettings);
             InstallLocalFilePersistance(Container);
             InstallSaveManager(Container);
-            InstallSaveGuiManager(Container, GameSettings.SaveGui, GameSettings.LoadGui, GameSettings.SaveGuiManagerSettings);
+            InstallSaveGuiManager(Container, GameSettings.SaveGui, GameSettings.LoadGui);
             InstallRemovalManager(Container);
             InstallPlacementManager(Container, GameSettings.PlacementManagerSettings);
             InstallMenuManager(Container, GameSettings.MenuManagerSettings);
@@ -41,11 +41,10 @@ namespace Assets.Scripts.Installers
             container.Bind<SaveManager>().AsSingle();
         }
 
-        private static void InstallSaveGuiManager(DiContainer container, SaveGui saveGui, LoadGui loadGui, SaveGuiManager.Settings settings)
+        private static void InstallSaveGuiManager(DiContainer container, SaveGui saveGui, LoadGui loadGui)
         {
             container.Bind<SaveGui>().FromInstance(saveGui).AsSingle();
             container.Bind<LoadGui>().FromInstance(loadGui).AsSingle();
-            container.Bind<SaveGuiManager.Settings>().FromInstance(settings).AsSingle();
             container.Bind<SaveGuiManager>().AsSingle();
         }
 
@@ -90,7 +89,6 @@ namespace Assets.Scripts.Installers
             public MenuManager.Settings MenuManagerSettings;
             public GameManager.Settings GameManagerSettings;
             public AudioManager.Settings AudioManagerSettings;
-            public SaveGuiManager.Settings SaveGuiManagerSettings;
             public PlacementManager.Settings PlacementManagerSettings;
             public PlacedDominoManager.Settings PlacedDominoManagerSettings;
         }

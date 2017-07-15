@@ -10,17 +10,19 @@ namespace Assets.Scripts.Managers
         public SaveGuiManager(
             SaveGui saveGui,
             LoadGui loadGui,
-            Settings settings,
             SaveManager saveManager)
         {
             _saveGui = saveGui;
             _loadGui = loadGui;
-            _saveManager = saveManager;
+            _saveManager = saveManager;   
+        }
+
+        public void Initialize(Settings settings)
+        {
             _saveGuiActiveState = false;
             _loadGuiActiveState = false;
-
-            saveGui.SaveBtn.onClick.AddListener(Save);
-            loadGui.LoadBtn.onClick.AddListener(Load);
+            _saveGui.SaveBtn.onClick.AddListener(Save);
+            _loadGui.LoadBtn.onClick.AddListener(Load);
             settings.ResetBtn.onClick.AddListener(Reset);
             settings.SaveGuiBtn.onClick.AddListener(ToggleSaveGui);
             settings.LoadGuiBtn.onClick.AddListener(ToggleLoadGui);
@@ -29,6 +31,7 @@ namespace Assets.Scripts.Managers
         private void ToggleSaveGui()
         {
             _saveGuiActiveState = !_saveGuiActiveState;
+            Debug.Log("Fired");
             _saveGui.SetActive(_saveGuiActiveState);
         }
 

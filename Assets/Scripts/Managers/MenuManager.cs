@@ -11,11 +11,13 @@ namespace Assets.Scripts.Managers
         public MenuManager(
             Settings settings,
             RemovalManager removalManager,
+            SaveGuiManager saveGuiManager,
             PlacementManager placementManager,
             PlacedDominoManager placedDominoManager)
         {
             _settings = settings;
             _removalManager = removalManager;
+            _saveGuiManager = saveGuiManager;
             _placementManager = placementManager;
             _placedDominoManager = placedDominoManager;
         }
@@ -23,6 +25,7 @@ namespace Assets.Scripts.Managers
         public void Initialize()
         {
             SetupButtons();
+            _saveGuiManager.Initialize(_settings.SaveSettings);
         }
 
         private void SetupButtons()
@@ -64,6 +67,7 @@ namespace Assets.Scripts.Managers
 
         private readonly Settings _settings;
         private readonly RemovalManager _removalManager;
+        private readonly SaveGuiManager _saveGuiManager;
         private readonly PlacementManager _placementManager;
         private readonly PlacedDominoManager _placedDominoManager;
 
@@ -110,6 +114,8 @@ namespace Assets.Scripts.Managers
             public SelectableDominosProp DownSlide;
             public SelectableDominosProp LowBridge;
             public SelectableDominosProp HighBridge;
+
+            public SaveGuiManager.Settings SaveSettings;
         }
     }
 }
