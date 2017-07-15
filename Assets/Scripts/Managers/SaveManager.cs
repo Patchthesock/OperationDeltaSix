@@ -38,6 +38,11 @@ namespace Assets.Scripts.Managers
             if (model.Dominos != null) _placedObjectManager.AddObject(model.Dominos);
             if (model.DominoProps != null) _placedDominoManager.PlaceDomino(model.DominoProps);
         }
+
+        public string[] GetSaveList()
+        {
+            return _localFilePersistance.GetSaveList();
+        }
         
         private static List<SaveObject> GameObjectToSaveObject(IEnumerable<GameObject> model)
         {

@@ -34,6 +34,8 @@ namespace Assets.Scripts.Managers
         {
             _saveGuiActiveState = !_saveGuiActiveState;
             _saveGui.SetActive(_saveGuiActiveState);
+            if (!_saveGuiActiveState) return;
+            _saveGui.SetSaveList(_saveManager.GetSaveList());
         }
 
         private void ToggleLoadGui()

@@ -13,5 +13,10 @@ namespace Assets.Scripts.Components
         {
             gameObject.SetActive(state);
         }
+
+        public void SetSaveList(string[] saveList)
+        {
+            
+        }
     }
 }

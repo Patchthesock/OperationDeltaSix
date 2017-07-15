@@ -26,6 +26,11 @@ namespace Assets.Scripts.Service
             };
         }
 
+        public string[] GetSaveList()
+        {
+            return Directory.GetDirectories("Saves");
+        }
+
         private static IEnumerable<SaveManager.SaveObject> LoadDataFromFile(string saveName, string objectListName)
         {
             if (!Directory.Exists("Saves")) return null;
