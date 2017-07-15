@@ -18,6 +18,7 @@ namespace Assets.Scripts.Service
 
         public SaveManager.SaveModel Load(string saveName)
         {
+            if (string.IsNullOrEmpty(saveName)) return null;
             return new SaveManager.SaveModel
             {
                 Name = saveName,
@@ -33,11 +34,11 @@ namespace Assets.Scripts.Service
 
         private static IEnumerable<SaveManager.SaveObject> LoadDataFromFile(string saveName, string objectListName)
         {
-            if (!Directory.Exists("Saves")) return null;
-            if (!Directory.Exists("Saves/" + saveName)) return null;
-            if (!File.Exists("Saves/" + saveName + "/" + objectListName)) return null;
+            if (!Directory.Exists("Saves")) return new List<SaveManager.SaveObject>();
+            if (!Directory.Exists("Saves/" + saveName)) return new List<SaveManager.SaveObject>();
+            if (!File.Exists("Saves/" + saveName + "/" + objectListName + ".domino")) return new List<SaveManager.SaveObject>();
 
-            var file = File.Open("Saves/" + saveName + "/" + objectListName, FileMode.Open);
+            var file = File.Open("Saves/" + saveName + "/" + objectListName + ".domino", FileMode.Open);
             var formatter = new BinaryFormatter();
             var objs = (ListObjectPositionSave) formatter.Deserialize(file);
             file.Close();
@@ -55,7 +56,7 @@ namespace Assets.Scripts.Service
             if (!Directory.Exists("Saves")) Directory.CreateDirectory("Saves");
             if (!Directory.Exists("Saves/" + saveName)) Directory.CreateDirectory("Saves/" + saveName);
             
-            var file = File.Create("Saves/" + saveName + "/" + objectListName +".domino");
+            var file = File.Create("Saves/" + saveName + "/" + objectListName + ".domino");
             var formatter = new BinaryFormatter();
             formatter.Serialize(file, new ListObjectPositionSave(objects.Select(d => new ObjectPositionSave(d.Name, d.Position, d.Rotation)).ToList()));
             file.Close();

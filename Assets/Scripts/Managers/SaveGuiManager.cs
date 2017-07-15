@@ -25,7 +25,7 @@ namespace Assets.Scripts.Managers
             _loadGui.LoadBtn.onClick.AddListener(Load);
             _saveGui.CloseBtn.onClick.AddListener(Close);
             _loadGui.CloseBtn.onClick.AddListener(Close);
-            settings.ResetBtn.onClick.AddListener(Reset);
+            //settings.ResetBtn.onClick.AddListener(Reset);
             settings.SaveGuiBtn.onClick.AddListener(ToggleSaveGui);
             settings.LoadGuiBtn.onClick.AddListener(ToggleLoadGui);
         }
@@ -87,7 +87,7 @@ namespace Assets.Scripts.Managers
         [Serializable]
         public class Settings
         {
-            public Button ResetBtn;
+            //public Button ResetBtn;
             public Button SaveGuiBtn;
             public Button LoadGuiBtn;
         }

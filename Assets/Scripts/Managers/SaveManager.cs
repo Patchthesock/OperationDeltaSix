@@ -35,8 +35,9 @@ namespace Assets.Scripts.Managers
                 Debug.Log("Load Failed");
                 return;
             }
-            if (model.Dominos != null) _placedObjectManager.AddObject(model.Dominos);
-            if (model.DominoProps != null) _placedDominoManager.PlaceDomino(model.DominoProps);
+            
+            if (model.Dominos.Count > 0) _placedDominoManager.PlaceDomino(model.Dominos);
+            if (model.DominoProps.Count > 0) _placedObjectManager.AddObject(model.DominoProps);
         }
 
         public string[] GetSaveList()
