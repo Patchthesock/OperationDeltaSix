@@ -30,10 +30,10 @@ namespace Assets.Scripts.Service
         {
             if (!Directory.Exists("Saves")) return null;
             if (!Directory.Exists("Saves/" + saveName)) return null;
-
-            var formatter = new BinaryFormatter();
             if (!File.Exists("Saves/" + saveName + "/" + objectListName)) return null;
+
             var file = File.Open("Saves/" + saveName + "/" + objectListName, FileMode.Open);
+            var formatter = new BinaryFormatter();
             var objs = (ListObjectPositionSave) formatter.Deserialize(file);
             file.Close();
 
@@ -49,9 +49,9 @@ namespace Assets.Scripts.Service
         {
             if (!Directory.Exists("Saves")) Directory.CreateDirectory("Saves");
             if (!Directory.Exists("Saves/" + saveName)) Directory.CreateDirectory("Saves/" + saveName);
-
-            var formatter = new BinaryFormatter();
+            
             var file = File.Create("Saves/" + saveName + "/" + objectListName +".domino");
+            var formatter = new BinaryFormatter();
             formatter.Serialize(file, new ListObjectPositionSave(objects.Select(d => new ObjectPositionSave(d.Name, d.Position, d.Rotation)).ToList()));
             file.Close();
         }

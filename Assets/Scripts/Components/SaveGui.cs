@@ -7,6 +7,7 @@ namespace Assets.Scripts.Components
     {
         public Text SaveTxt;
         public Button SaveBtn;
+        public Button CloseBtn;
 
         public void SetActive(bool state)
         {

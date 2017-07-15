@@ -35,8 +35,8 @@ namespace Assets.Scripts.Managers
                 Debug.Log("Load Failed");
                 return;
             }
-            _placedObjectManager.AddObject(model.Dominos);
-            _placedDominoManager.PlaceDomino(model.DominoProps);
+            if (model.Dominos != null) _placedObjectManager.AddObject(model.Dominos);
+            if (model.DominoProps != null) _placedDominoManager.PlaceDomino(model.DominoProps);
         }
         
         private static List<SaveObject> GameObjectToSaveObject(IEnumerable<GameObject> model)
