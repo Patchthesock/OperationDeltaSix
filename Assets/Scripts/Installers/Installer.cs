@@ -1,6 +1,7 @@
 ﻿using System;
 using Assets.Scripts.Components;
 using Assets.Scripts.Managers;
+using Assets.Scripts.Service;
 using Zenject;
 
 namespace Assets.Scripts.Installers
@@ -12,7 +13,9 @@ namespace Assets.Scripts.Installers
         public override void InstallBindings()
         {
             InstallPlacedManagers(Container, GameSettings.PlacedDominoManagerSettings);
-            InstallSaveManager(Container, GameSettings.SaveManagerSettings);
+            InstallLocalFilePersistance(Container);
+            InstallSaveManager(Container);
+            InstallSaveGuiManager(Container, GameSettings.SaveGui, GameSettings.LoadGui, GameSettings.SaveGuiManagerSettings);
             InstallRemovalManager(Container);
             InstallPlacementManager(Container, GameSettings.PlacementManagerSettings);
             InstallMenuManager(Container, GameSettings.MenuManagerSettings);
@@ -20,7 +23,7 @@ namespace Assets.Scripts.Installers
             InstallGameManager(Container, GameSettings.GameManagerSettings);
         }
 
-        private void InstallPlacedManagers(DiContainer container, PlacedDominoManager.Settings settings)
+        private static void InstallPlacedManagers(DiContainer container, PlacedDominoManager.Settings settings)
         {
             container.Bind<PrefabFactory>().AsSingle();
             container.Bind<PlacedDominoManager.Settings>().FromInstance(settings).AsSingle();
@@ -28,39 +31,51 @@ namespace Assets.Scripts.Installers
             container.Bind<PlacedDominoPropManager>().AsSingle();
         }
 
-        private void InstallSaveManager(DiContainer container, SaveManager.Settings settings)
+        private static void InstallLocalFilePersistance(DiContainer container)
         {
-            container.Bind<SaveManager.Settings>().FromInstance(settings).AsSingle();
+            container.Bind<LocalFilePersistance>().AsSingle();
+        }
+
+        private static void InstallSaveManager(DiContainer container)
+        {
             container.Bind<SaveManager>().AsSingle();
         }
 
-        private void InstallRemovalManager(DiContainer container)
+        private static void InstallSaveGuiManager(DiContainer container, SaveGui saveGui, LoadGui loadGui, SaveGuiManager.Settings settings)
+        {
+            container.Bind<SaveGui>().FromInstance(saveGui).AsSingle();
+            container.Bind<LoadGui>().FromInstance(loadGui).AsSingle();
+            container.Bind<SaveGuiManager.Settings>().FromInstance(settings).AsSingle();
+            container.Bind<SaveGuiManager>().AsSingle();
+        }
+
+        private static void InstallRemovalManager(DiContainer container)
         {
             container.Bind<ITickable>().To<RemovalManager>().AsSingle();
             container.Bind<RemovalManager>().AsSingle();
         }
 
-        private void InstallPlacementManager(DiContainer container, PlacementManager.Settings settings)
+        private static void InstallPlacementManager(DiContainer container, PlacementManager.Settings settings)
         {
             container.Bind<PlacementManager.Settings>().FromInstance(settings).AsSingle();
             container.Bind<PlacementManager>().AsSingle();
             container.Bind<ITickable>().To<PlacementManager>().AsSingle();
         }
 
-        private void InstallMenuManager(DiContainer container, MenuManager.Settings settings)
+        private static void InstallMenuManager(DiContainer container, MenuManager.Settings settings)
         {
             container.Bind<MenuManager.Settings>().FromInstance(settings).AsSingle();
             container.Bind<MenuManager>().AsSingle();
             container.Bind<IInitializable>().To<MenuManager>().AsSingle();
         }
 
-        private void InstallAudioManager(DiContainer container, AudioManager.Settings settings)
+        private static void InstallAudioManager(DiContainer container, AudioManager.Settings settings)
         {
             container.Bind<AudioManager.Settings>().FromInstance(settings).AsSingle();
             container.Bind<AudioManager>().AsSingle();
         }
 
-        private void InstallGameManager(DiContainer container, GameManager.Settings settings)
+        private static void InstallGameManager(DiContainer container, GameManager.Settings settings)
         {
             container.Bind<GameManager.Settings>().FromInstance(settings).AsSingle();
             container.Bind<GameManager>().AsSingle();
@@ -70,10 +85,12 @@ namespace Assets.Scripts.Installers
         [Serializable]
         public class Settings
         {
+            public SaveGui SaveGui;
+            public LoadGui LoadGui;
             public MenuManager.Settings MenuManagerSettings;
-            public SaveManager.Settings SaveManagerSettings;
             public GameManager.Settings GameManagerSettings;
             public AudioManager.Settings AudioManagerSettings;
+            public SaveGuiManager.Settings SaveGuiManagerSettings;
             public PlacementManager.Settings PlacementManagerSettings;
             public PlacedDominoManager.Settings PlacedDominoManagerSettings;
         }

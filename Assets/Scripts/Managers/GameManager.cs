@@ -29,7 +29,7 @@ namespace Assets.Scripts.Managers
         private void PlayControl(bool state)
         {
             _isPlaying = state;
-            if (state) _saveManager.Save(); // Autosave when in play
+            if (state) _saveManager.Save("auto"); // Autosave when in play
             _placementManager.DestroyGhost();
             _settings.HandObject.SetActive(state);
             _placedDominoManager.SetDominoPhysics(state);

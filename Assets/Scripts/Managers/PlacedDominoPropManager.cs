@@ -20,9 +20,16 @@ namespace Assets.Scripts.Managers
             _placedObjects.Add(objectToPlace);
         }
 
-        public void AddObject(IEnumerable<SaveManager.ObjectPosition> dominos)
+        public void AddObject(IEnumerable<SaveManager.SaveObject> model)
         {
-            foreach (var o in dominos) AddObject(o.GameObject, o.Position, o.Rotation);
+            foreach (var o in model) AddObject(o.Name, o.Position, o.Rotation);
+        }
+
+        private void AddObject(string name, Vector3 position, Quaternion rotation)
+        {
+            var r = Resources.Load(name, typeof(GameObject)) as GameObject;
+            if (r == null) return;
+            AddObject(r, position, rotation);
         }
 
         public IEnumerable<GameObject> GetPlacedObjects()

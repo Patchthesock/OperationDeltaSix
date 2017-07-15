@@ -1,136 +1,75 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
+using Assets.Scripts.Service;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Assets.Scripts.Managers
 {
     public class SaveManager
     {
         public SaveManager(
-            Settings settings,
             PlacedDominoManager placedDominoManager,
+            LocalFilePersistance localFilePersistance,
             PlacedDominoPropManager placedObjectManager)
         {
             _placedDominoManager = placedDominoManager;
             _placedObjectManager = placedObjectManager;
-            settings.SaveBtn.onClick.AddListener(Save);
-            settings.ResetBtn.onClick.AddListener(() =>
+            _localFilePersistance = localFilePersistance;
+        }
+
+        public void Save(string saveName)
+        {
+            _localFilePersistance.Save(new SaveModel
             {
-                _placedObjectManager.AddObject(_placedObjects);
-                _placedDominoManager.PlaceDomino(_placedDominos);
+                Name = saveName,
+                Dominos = GameObjectToSaveObject(_placedDominoManager.GetPlacedDominos()),
+                DominoProps = GameObjectToSaveObject(_placedObjectManager.GetPlacedObjects())
             });
-            LoadData();
         }
 
-        public void Save()
+        public void Load(string saveName)
         {
-            _placedObjects.Clear();
-            _placedObjects.AddRange(_placedObjectManager.GetPlacedObjects().ToList().Select(t => new ObjectPosition
+            var model = _localFilePersistance.Load(saveName);
+            if (model == null)
             {
-                GameObject = t,
-                Position = t.transform.position,
-                Rotation = t.transform.rotation
-            }).ToList());
-            _placedDominos.Clear();
-            _placedDominos.AddRange(_placedDominoManager.GetPlacedDominos().ToList().Select(t => new ObjectPosition
-            {
-                Position = t.transform.position,
-                Rotation = t.transform.rotation
-            }));
-
-            SaveDataToFile(_placedDominos, _placedObjects);
-        }
-
-        private List<ObjectPosition> _placedObjects = new List<ObjectPosition>();
-        private List<ObjectPosition> _placedDominos = new List<ObjectPosition>();
-
-        public class ObjectPosition
-        {
-            public Vector3 Position;
-            public Quaternion Rotation;
-            public GameObject GameObject;
-        }
-
-        [Serializable]
-        public class ObjectPositionSave
-        {
-            public float PosX;
-            public float PosY;
-            public float PosZ;
-
-            public float RotX;
-            public float RotY;
-            public float RotZ;
-
-            public ObjectPositionSave(Vector3 position, Quaternion rotation)
-            {
-                PosX = position.x;
-                PosY = position.y;
-                PosZ = position.z;
-
-                var rot = rotation.eulerAngles;
-                RotX = rot.x;
-                RotY = rot.y;
-                RotZ = rot.z;
+                Debug.Log("Load Failed");
+                return;
             }
-
-            public ObjectPositionSave() { }
+            _placedObjectManager.AddObject(model.Dominos);
+            _placedDominoManager.PlaceDomino(model.DominoProps);
+        }
+        
+        private static List<SaveObject> GameObjectToSaveObject(IEnumerable<GameObject> model)
+        {
+            return model.Select(GameObjectToSaveObject).ToList();
         }
 
-        [Serializable]
-        public class ListObjectPositionSave
+        private static SaveObject GameObjectToSaveObject(GameObject model)
         {
-            public List<ObjectPositionSave> ObjectPositionSave;
-        }
-
-        private static void SaveDataToFile(IEnumerable<ObjectPosition> dominos, List<ObjectPosition> objects)
-        {
-            var data = new ListObjectPositionSave
+            return new SaveObject
             {
-                ObjectPositionSave = dominos.Select(d => new ObjectPositionSave(d.Position, d.Rotation)).ToList()
+                Name = model.name,
+                Position = model.transform.position,
+                Rotation = model.transform.rotation
             };
-            if (!Directory.Exists("Saves")) Directory.CreateDirectory("Saves");
-            var formatter = new BinaryFormatter();
-            var dominosFile = File.Create("Saves/dominos.domino");
-            //var objectsFile = File.Create("saves/objects.binary");
-            formatter.Serialize(dominosFile, data);
-            //formatter.Serialize(objectsFile, objects);
-            dominosFile.Close();
-            //objectsFile.Close();
-        }
-
-        private void LoadData()
-        {
-            if (!Directory.Exists("Saves")) return;
-            var formatter = new BinaryFormatter();
-            if (!File.Exists("Saves/dominos.binary")) return;
-            var dominosFile = File.Open("Saves/dominos.domino", FileMode.Open);
-            //var objectsFile = File.Open("Saves/objects.binary", FileMode.Open);
-            var dom = (ListObjectPositionSave)formatter.Deserialize(dominosFile);
-            //_placedObjects = (List<ObjectPosition>)formatter.Deserialize(objectsFile);
-            dominosFile.Close();
-            //objectsFile.Close();
-
-            _placedDominos = dom.ObjectPositionSave.Select(d => new ObjectPosition
-            {
-                GameObject = null,
-                Position = new Vector3(d.PosX, d.PosY, d.PosZ),
-                Rotation = Quaternion.Euler(new Vector3(d.RotX, d.RotY, d.RotZ))
-            }).ToList();
         }
 
         private readonly PlacedDominoManager _placedDominoManager;
+        private readonly LocalFilePersistance _localFilePersistance;
         private readonly PlacedDominoPropManager _placedObjectManager;
 
-        [Serializable]
-        public class Settings
+        public class SaveModel
         {
-            public Button SaveBtn;
-            public Button ResetBtn;
+            public string Name;
+            public List<SaveObject> Dominos;
+            public List<SaveObject> DominoProps;
+        }
+
+        public class SaveObject
+        {
+            public string Name;
+            public Vector3 Position;
+            public Quaternion Rotation;
         }
     }
 }

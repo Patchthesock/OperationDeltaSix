@@ -25,7 +25,7 @@ namespace Assets.Scripts.Managers
             else PlaceExistingDomino(position, rotation);
         }
 
-        public void PlaceDomino(IEnumerable<SaveManager.ObjectPosition> dominos)
+        public void PlaceDomino(IEnumerable<SaveManager.SaveObject> dominos)
         {
             RemoveDomino();
             foreach (var o in dominos) PlaceDomino(o.Position, o.Rotation);
