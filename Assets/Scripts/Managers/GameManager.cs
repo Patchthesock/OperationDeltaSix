@@ -11,12 +11,14 @@ namespace Assets.Scripts.Managers
             Settings settings,
             SaveManager saveManager,
             PlacementManager placementMangaer,
-            PlacedDominoManager placedDominoManager)
+            PlacedDominoManager placedDominoManager,
+            DominoInteractionManager dominoInteractionManager)
         {
             _settings = settings;
             _saveManager = saveManager;
             _placementManager = placementMangaer;
             _placedDominoManager = placedDominoManager;
+            _dominoInteractionManager = dominoInteractionManager;
             _settings.PlayBtn.onClick.AddListener(() => { PlayControl(!_isPlaying); });
         }
 
@@ -31,9 +33,8 @@ namespace Assets.Scripts.Managers
             _isPlaying = state;
             if (state) _saveManager.Save("auto"); // Autosave when in play
             _placementManager.DestroyGhost();
-            //_settings.HandObject.SetActive(state);
-            _placedDominoManager.SetDominoPhysics(state);
-            if (state) Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
+            _placedDominoManager.SetPhysics(state);
+            _dominoInteractionManager.SetActive(state);
             Physics.gravity = state ? new Vector3(0, _settings.Gravity, 0) : new Vector3(0, 0, 0);
         }
 
@@ -42,13 +43,13 @@ namespace Assets.Scripts.Managers
         private readonly SaveManager _saveManager;
         private readonly PlacementManager _placementManager;
         private readonly PlacedDominoManager _placedDominoManager;
+        private readonly DominoInteractionManager _dominoInteractionManager;
 
         [Serializable]
         public class Settings
         {
             public Button PlayBtn;
             public float Gravity = -50;
-            public GameObject HandObject;
         }
     }
 }

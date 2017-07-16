@@ -31,7 +31,7 @@ namespace Assets.Scripts.Managers
             RaycastHit hit;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
-            if (hit.collider == null) return new Vector3();
+            if (hit.collider == null) return Vector3.zero;
             return hit.collider.gameObject.tag != "Ground" ? Vector3.zero : hit.point;
         }
 

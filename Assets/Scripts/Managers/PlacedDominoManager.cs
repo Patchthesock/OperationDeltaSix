@@ -31,7 +31,7 @@ namespace Assets.Scripts.Managers
             foreach (var o in dominos) PlaceDomino(o.Position, o.Rotation);
         }
 
-        public void SetDominoPhysics(bool usePhysics)
+        public void SetPhysics(bool usePhysics)
         {
             foreach (var o in _placedDominos)
             {
