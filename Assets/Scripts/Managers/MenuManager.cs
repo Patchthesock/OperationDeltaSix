@@ -1,6 +1,7 @@
 ﻿using System;
 using Assets.Scripts.Components.GameModels;
 using Assets.Scripts.Interfaces;
+using Assets.Scripts.Managers.Gui;
 using UnityEngine.UI;
 using Zenject;
 
@@ -12,12 +13,15 @@ namespace Assets.Scripts.Managers
             Settings settings,
             RemovalManager removalManager,
             SaveGuiManager saveGuiManager,
+            LoadGuiManager loadGuiManager,
             PlacementManager placementManager,
             PlacedDominoManager placedDominoManager)
         {
             _settings = settings;
             _removalManager = removalManager;
             _saveGuiManager = saveGuiManager;
+            _loadGuiManager = loadGuiManager;
+            _loadGuiManager = loadGuiManager;
             _placementManager = placementManager;
             _placedDominoManager = placedDominoManager;
         }
@@ -26,6 +30,7 @@ namespace Assets.Scripts.Managers
         {
             SetupButtons();
             _saveGuiManager.Initialize(_settings.SaveSettings);
+            _loadGuiManager.Initialize(_settings.LoadSettings);
         }
 
         private void SetupButtons()
@@ -68,6 +73,7 @@ namespace Assets.Scripts.Managers
         private readonly Settings _settings;
         private readonly RemovalManager _removalManager;
         private readonly SaveGuiManager _saveGuiManager;
+        private readonly LoadGuiManager _loadGuiManager;
         private readonly PlacementManager _placementManager;
         private readonly PlacedDominoManager _placedDominoManager;
 
@@ -115,7 +121,9 @@ namespace Assets.Scripts.Managers
             public SelectableDominosProp LowBridge;
             public SelectableDominosProp HighBridge;
 
+            // Gui Settings
             public SaveGuiManager.Settings SaveSettings;
+            public LoadGuiManager.Settings LoadSettings;
         }
     }
 }

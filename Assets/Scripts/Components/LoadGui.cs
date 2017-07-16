@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Components
@@ -12,6 +13,11 @@ namespace Assets.Scripts.Components
         public void SetActive(bool state)
         {
             gameObject.SetActive(state);
+        }
+
+        public void SetSaveList(IEnumerable<string> saveList)
+        {
+            foreach (var s in saveList) Debug.Log(s);
         }
     }
 }

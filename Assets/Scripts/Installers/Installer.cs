@@ -1,6 +1,7 @@
 ﻿using System;
 using Assets.Scripts.Components;
 using Assets.Scripts.Managers;
+using Assets.Scripts.Managers.Gui;
 using Assets.Scripts.Service;
 using Zenject;
 
@@ -15,7 +16,8 @@ namespace Assets.Scripts.Installers
             InstallPlacedManagers(Container, GameSettings.PlacedDominoManagerSettings);
             InstallLocalFilePersistance(Container);
             InstallSaveManager(Container);
-            InstallSaveGuiManager(Container, GameSettings.SaveGui, GameSettings.LoadGui);
+            InstallSaveGuiManager(Container, GameSettings.SaveGui);
+            InstallLoadGuiManager(Container, GameSettings.LoadGui);
             InstallRemovalManager(Container);
             InstallPlacementManager(Container, GameSettings.PlacementManagerSettings);
             InstallMenuManager(Container, GameSettings.MenuManagerSettings);
@@ -41,11 +43,16 @@ namespace Assets.Scripts.Installers
             container.Bind<SaveManager>().AsSingle();
         }
 
-        private static void InstallSaveGuiManager(DiContainer container, SaveGui saveGui, LoadGui loadGui)
+        private static void InstallSaveGuiManager(DiContainer container, SaveGui saveGui)
         {
             container.Bind<SaveGui>().FromInstance(saveGui).AsSingle();
-            container.Bind<LoadGui>().FromInstance(loadGui).AsSingle();
             container.Bind<SaveGuiManager>().AsSingle();
+        }
+
+        private static void InstallLoadGuiManager(DiContainer container, LoadGui loadGui)
+        {
+            container.Bind<LoadGui>().FromInstance(loadGui).AsSingle();
+            container.Bind<LoadGuiManager>().AsSingle();
         }
 
         private static void InstallRemovalManager(DiContainer container)
