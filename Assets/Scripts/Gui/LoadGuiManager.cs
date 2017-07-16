@@ -1,22 +1,27 @@
 ﻿using System;
-using Assets.Scripts.Components.Gui;
+using Assets.Scripts.Gui.Components;
+using Assets.Scripts.Gui.Services;
+using Assets.Scripts.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.Managers.Gui
+namespace Assets.Scripts.Gui
 {
     public class LoadGuiManager
     {
         public LoadGuiManager(
             LoadGui loadGui,
-            SaveManager saveManager)
+            SaveManager saveManager,
+            BtnOptionFactory btnOptionFactory)
         {
             _loadGui = loadGui;
             _saveManager = saveManager;
+            _btnOptionFactory = btnOptionFactory;
         }
 
         public void Initialize(Settings settings)
         {
+            _loadGui.Initialize(_btnOptionFactory);
             _loadGui.SetActive(false);
             _loadGuiActiveState = false;
             _loadGui.LoadBtn.onClick.AddListener(Load);
@@ -51,6 +56,7 @@ namespace Assets.Scripts.Managers.Gui
         private bool _loadGuiActiveState;
         private readonly LoadGui _loadGui;
         private readonly SaveManager _saveManager;
+        private readonly BtnOptionFactory _btnOptionFactory;
 
         [Serializable]
         public class Settings

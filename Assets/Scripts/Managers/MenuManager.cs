@@ -1,7 +1,7 @@
 ﻿using System;
 using Assets.Scripts.Components.GameModels;
+using Assets.Scripts.Gui;
 using Assets.Scripts.Interfaces;
-using Assets.Scripts.Managers.Gui;
 using UnityEngine.UI;
 using Zenject;
 

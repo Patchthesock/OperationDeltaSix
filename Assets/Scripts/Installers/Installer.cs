@@ -1,8 +1,9 @@
 ﻿using System;
 using Assets.Scripts.Components;
-using Assets.Scripts.Components.Gui;
+using Assets.Scripts.Gui;
+using Assets.Scripts.Gui.Components;
+using Assets.Scripts.Gui.Services;
 using Assets.Scripts.Managers;
-using Assets.Scripts.Managers.Gui;
 using Assets.Scripts.Service;
 using Zenject;
 
@@ -17,6 +18,7 @@ namespace Assets.Scripts.Installers
             InstallPlacedManagers(Container, GameSettings.PlacedDominoManagerSettings);
             InstallLocalFilePersistance(Container);
             InstallSaveManager(Container);
+            InstallBtnOptionFactory(Container, GameSettings.BtnOptionSettings);
             InstallSaveGuiManager(Container, GameSettings.SaveGui);
             InstallLoadGuiManager(Container, GameSettings.LoadGui);
             InstallRemovalManager(Container);
@@ -42,6 +44,12 @@ namespace Assets.Scripts.Installers
         private static void InstallSaveManager(DiContainer container)
         {
             container.Bind<SaveManager>().AsSingle();
+        }
+
+        private static void InstallBtnOptionFactory(DiContainer container, BtnOptionFactory.Settings settings)
+        {
+            container.Bind<BtnOptionFactory.Settings>().FromInstance(settings).AsSingle();
+            container.Bind<BtnOptionFactory>().AsSingle();
         }
 
         private static void InstallSaveGuiManager(DiContainer container, SaveGui saveGui)
@@ -97,6 +105,7 @@ namespace Assets.Scripts.Installers
             public MenuManager.Settings MenuManagerSettings;
             public GameManager.Settings GameManagerSettings;
             public AudioManager.Settings AudioManagerSettings;
+            public BtnOptionFactory.Settings BtnOptionSettings;
             public PlacementManager.Settings PlacementManagerSettings;
             public PlacedDominoManager.Settings PlacedDominoManagerSettings;
         }

@@ -1,22 +1,27 @@
 ﻿using System;
-using Assets.Scripts.Components.Gui;
+using Assets.Scripts.Gui.Components;
+using Assets.Scripts.Gui.Services;
+using Assets.Scripts.Managers;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.Managers.Gui
+namespace Assets.Scripts.Gui
 {
     public class SaveGuiManager
     {
         public SaveGuiManager(
             SaveGui saveGui,
-            SaveManager saveManager)
+            SaveManager saveManager,
+            BtnOptionFactory btnOptionFactory)
         {
             _saveGui = saveGui;
             _saveManager = saveManager;
+            _btnOptionFactory = btnOptionFactory;
         }
 
         public void Initialize(Settings settings)
         {
+            _saveGui.Initialize(_btnOptionFactory);
             _saveGui.SetActive(false);
             _saveGuiActiveState = false;
             _saveGui.SaveBtn.onClick.AddListener(Save);
@@ -39,8 +44,8 @@ namespace Assets.Scripts.Managers.Gui
                 Debug.Log("Please give a save name.");
                 return;
             }
-            ToggleSaveGui();
             _saveManager.Save(_saveGui.SaveTxt.text);
+            ToggleSaveGui();
         }
 
         private void Close()
@@ -49,9 +54,9 @@ namespace Assets.Scripts.Managers.Gui
         }
 
         private bool _saveGuiActiveState;
-
         private readonly SaveGui _saveGui;
         private readonly SaveManager _saveManager;
+        private readonly BtnOptionFactory _btnOptionFactory;
 
         [Serializable]
         public class Settings
