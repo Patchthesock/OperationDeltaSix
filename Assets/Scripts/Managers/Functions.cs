@@ -26,11 +26,17 @@ namespace Assets.Scripts.Managers
             return objects.All(o => !(Vector3.Distance(o.transform.position, position) < minDistance));
         }
 
-        public static Vector3 GetPlacementPosition()
+        public static RaycastHit GetHit()
         {
             RaycastHit hit;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
+            return hit;
+        }
+
+        public static Vector3 GetPlacementPosition()
+        {
+            var hit = GetHit();
             if (hit.collider == null) return Vector3.zero;
             return hit.collider.gameObject.tag != "Ground" ? Vector3.zero : hit.point;
         }

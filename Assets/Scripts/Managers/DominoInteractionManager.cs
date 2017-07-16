@@ -13,7 +13,10 @@ namespace Assets.Scripts.Managers
         public void Tick()
         {
             if (!_isActive) return;
-            Debug.Log("I'm active");
+            if (!Functions.GetMouseButtonInput(0)) return;
+            var hit = Functions.GetHit();
+            if (hit.collider.gameObject.tag != "Domino") return;
+            hit.collider.gameObject.GetComponent<Rigidbody>().AddForceAtPosition(-hit.normal*100, hit.point, ForceMode.Impulse);
         }
 
         private bool _isActive;
