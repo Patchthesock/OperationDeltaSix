@@ -6,12 +6,13 @@ namespace Assets.Scripts.Components
 {
     public class LoadGui : MonoBehaviour
     {
-        public Text LoadTxt;
         public Button LoadBtn;
         public Button CloseBtn;
+        public InputField LoadTxt;
 
         public void SetActive(bool state)
         {
+            LoadTxt.text = "";
             gameObject.SetActive(state);
         }
 

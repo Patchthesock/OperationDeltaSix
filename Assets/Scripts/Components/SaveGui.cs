@@ -6,12 +6,13 @@ namespace Assets.Scripts.Components
 {
     public class SaveGui : MonoBehaviour
     {
-        public Text SaveTxt;
         public Button SaveBtn;
         public Button CloseBtn;
+        public InputField SaveTxt;
 
         public void SetActive(bool state)
         {
+            SaveTxt.text = "";
             gameObject.SetActive(state);
         }
 

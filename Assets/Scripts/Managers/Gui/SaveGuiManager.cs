@@ -40,7 +40,6 @@ namespace Assets.Scripts.Managers.Gui
             }
             ToggleSaveGui();
             _saveManager.Save(_saveGui.SaveTxt.text);
-            _saveGui.SaveTxt.text = "I worked";
         }
 
         private void Close()

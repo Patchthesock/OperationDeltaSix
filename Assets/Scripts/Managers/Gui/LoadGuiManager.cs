@@ -38,9 +38,7 @@ namespace Assets.Scripts.Managers.Gui
                 Debug.Log("Please give a load name.");
                 return;
             }
-
             _saveManager.Load(_loadGui.LoadTxt.text);
-            _loadGui.LoadTxt.text = "";
             ToggleLoadGui();
         }
 
