@@ -17,6 +17,7 @@ namespace Assets.Scripts.Managers.Gui
 
         public void Initialize(Settings settings)
         {
+            _loadGui.SetActive(false);
             _loadGuiActiveState = false;
             _loadGui.LoadBtn.onClick.AddListener(Load);
             _loadGui.CloseBtn.onClick.AddListener(Close);

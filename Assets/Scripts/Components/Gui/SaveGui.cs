@@ -36,13 +36,16 @@ namespace Assets.Scripts.Components.Gui
         private SaveOption GetNewSaveOption()
         {
             var o = Instantiate(SaveOption);
-            o.transform.parent = Container;
+            o.transform.SetParent(Container);
+            o.transform.localScale = new Vector3(1,1,1);
             return o.GetComponent<SaveOption>();
         }
 
         private SaveOption GetExistingSaveOption()
         {
-            return _nonActiveSaveOptions.First();
+            var i = _nonActiveSaveOptions.First();
+            _nonActiveSaveOptions.Remove(i);
+            return i;
         }
 
         private void OnSaveOptionClick(string saveName)

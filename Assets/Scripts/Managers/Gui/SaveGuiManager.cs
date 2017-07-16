@@ -17,6 +17,7 @@ namespace Assets.Scripts.Managers.Gui
 
         public void Initialize(Settings settings)
         {
+            _saveGui.SetActive(false);
             _saveGuiActiveState = false;
             _saveGui.SaveBtn.onClick.AddListener(Save);
             _saveGui.CloseBtn.onClick.AddListener(Close);
