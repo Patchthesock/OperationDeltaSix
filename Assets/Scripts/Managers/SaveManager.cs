@@ -40,7 +40,7 @@ namespace Assets.Scripts.Managers
             if (model.DominoProps.Count > 0) _placedObjectManager.AddObject(model.DominoProps);
         }
 
-        public string[] GetSaveList()
+        public IEnumerable<string> GetSaveList()
         {
             return _localFilePersistance.GetSaveList();
         }

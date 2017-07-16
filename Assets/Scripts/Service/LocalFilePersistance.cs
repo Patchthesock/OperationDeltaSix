@@ -27,9 +27,9 @@ namespace Assets.Scripts.Service
             };
         }
 
-        public string[] GetSaveList()
+        public IEnumerable<string> GetSaveList()
         {
-            return Directory.GetDirectories("Saves");
+            return ProcessSaveList(Directory.GetDirectories("Saves/"));
         }
 
         private static IEnumerable<SaveManager.SaveObject> LoadDataFromFile(string saveName, string objectListName)
@@ -60,6 +60,12 @@ namespace Assets.Scripts.Service
             var formatter = new BinaryFormatter();
             formatter.Serialize(file, new ListObjectPositionSave(objects.Select(d => new ObjectPositionSave(d.Name, d.Position, d.Rotation)).ToList()));
             file.Close();
+        }
+
+        private static IEnumerable<string> ProcessSaveList(IList<string> saveList)
+        {
+            for (var i = 0; i < saveList.Count; i++) saveList[i] = saveList[i].Split('/')[1];
+            return saveList;
         }
 
         [Serializable]

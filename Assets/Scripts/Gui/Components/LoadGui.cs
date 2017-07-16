@@ -22,11 +22,13 @@ namespace Assets.Scripts.Gui.Components
         {
             LoadTxt.text = "";
             gameObject.SetActive(state);
+            if (state) return;
+            ClearBtnOptionList();
         }
 
         public void SetSaveList(IEnumerable<string> saveList)
         {
-            foreach (var s in saveList) _btnOptionFactory.Create("save").Initialize(s, OnBtnOptionClick, Container);
+            foreach (var s in saveList) _btnOptionFactory.Create("load").Initialize(s, OnBtnOptionClick, Container);
         }
 
         private void OnBtnOptionClick(string saveName)
@@ -36,7 +38,7 @@ namespace Assets.Scripts.Gui.Components
 
         private void ClearBtnOptionList()
         {
-            _btnOptionFactory.Clear("save");
+            _btnOptionFactory.Clear("load");
         }
 
         private BtnOptionFactory _btnOptionFactory;
