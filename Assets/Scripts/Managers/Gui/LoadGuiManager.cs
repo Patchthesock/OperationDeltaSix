@@ -1,5 +1,5 @@
 ﻿using System;
-using Assets.Scripts.Components;
+using Assets.Scripts.Components.Gui;
 using UnityEngine;
 using UnityEngine.UI;
 

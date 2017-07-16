@@ -1,5 +1,6 @@
 ﻿using System;
 using Assets.Scripts.Components;
+using Assets.Scripts.Components.Gui;
 using Assets.Scripts.Managers;
 using Assets.Scripts.Managers.Gui;
 using Assets.Scripts.Service;
