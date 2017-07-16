@@ -11,7 +11,6 @@ namespace Assets.Scripts.Gui.Components
         public Button CloseBtn;
         public InputField LoadTxt;
         public Transform Container;
-        public GameObject SaveOption;
 
         public void Initialize(BtnOptionFactory btnOptionFactory)
         {

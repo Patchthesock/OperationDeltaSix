@@ -31,7 +31,7 @@ namespace Assets.Scripts.Managers
             _isPlaying = state;
             if (state) _saveManager.Save("auto"); // Autosave when in play
             _placementManager.DestroyGhost();
-            _settings.HandObject.SetActive(state);
+            //_settings.HandObject.SetActive(state);
             _placedDominoManager.SetDominoPhysics(state);
             if (state) Cursor.SetCursor(null, Vector2.zero, CursorMode.Auto);
             Physics.gravity = state ? new Vector3(0, _settings.Gravity, 0) : new Vector3(0, 0, 0);
