@@ -25,7 +25,7 @@ namespace Assets.Scripts.Installers
             InstallPlacementManager(Container, GameSettings.PlacementManagerSettings);
             InstallMenuManager(Container, GameSettings.MenuManagerSettings);
             InstallAudioManager(Container, GameSettings.AudioManagerSettings);
-            InstallDominoInteractionManager(Container);
+            InstallDominoInteractionManager(Container, GameSettings.InteractionSettings);
             InstallGameManager(Container, GameSettings.GameManagerSettings);
         }
 
@@ -91,8 +91,9 @@ namespace Assets.Scripts.Installers
             container.Bind<AudioManager>().AsSingle();
         }
 
-        private static void InstallDominoInteractionManager(DiContainer container)
+        private static void InstallDominoInteractionManager(DiContainer container, DominoInteractionManager.Settings settings)
         {
+            container.Bind<DominoInteractionManager.Settings>().FromInstance(settings);
             container.Bind<DominoInteractionManager>().AsSingle();
             container.Bind<ITickable>().To<DominoInteractionManager>().AsSingle();
         }
@@ -114,6 +115,7 @@ namespace Assets.Scripts.Installers
             public AudioManager.Settings AudioManagerSettings;
             public BtnOptionFactory.Settings BtnOptionSettings;
             public PlacementManager.Settings PlacementManagerSettings;
+            public DominoInteractionManager.Settings InteractionSettings;
             public PlacedDominoManager.Settings PlacedDominoManagerSettings;
         }
     }
