@@ -9,22 +9,13 @@ namespace Assets.UIElements.RadialUI
         public GameObject PropsInventory;
         public GameObject MainUI;
         public bool InventoryOpen;
-	
-        public GameObject ActiveInventory;
-        public Transform GrandChild;
+	    public GameObject ActiveInventory;
 	
         public void DominoesButton()
         {
             DominoesInventory.SetActive(true);
             PropsInventory.SetActive(false);
             ActiveInventory = DominoesInventory;
-            /* Controls the MainUI elements and turns them off on selection
-		foreach(Transform child in MainUI.transform)
-		{
-			GrandChild = child.transform.GetChild(0);
-			GrandChild.GetComponent<Button>().interactable = false;
-		}
-		*/
             InventoryOpen = true;
         }
 	
@@ -33,11 +24,6 @@ namespace Assets.UIElements.RadialUI
             PropsInventory.SetActive(true);
             DominoesInventory.SetActive(false);
             ActiveInventory = PropsInventory;
-            /* foreach(Transform child in MainUI.transform)
-		{
-			child.GetComponent<Button>().interactable = false;
-		}
-		*/
             InventoryOpen = true;
         }
 
@@ -45,8 +31,6 @@ namespace Assets.UIElements.RadialUI
         {
             foreach(Transform child in MainUI.transform)
             {
-                //GrandChild = child.transform.GetChild(0);
-                //GrandChild.GetComponent<Button>().interactable = true;
                 InventoryOpen = false;
                 ActiveInventory.SetActive(false);
                 MainUI.SetActive(false);
@@ -66,7 +50,6 @@ namespace Assets.UIElements.RadialUI
                 {
                     foreach(Transform child in MainUI.transform)
                     {
-                        child.GetComponent<Button>().interactable = true;
                         InventoryOpen = false;
                         ActiveInventory.SetActive(false);
                     }
