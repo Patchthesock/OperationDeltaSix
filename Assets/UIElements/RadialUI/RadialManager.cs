@@ -52,6 +52,7 @@ namespace Assets.UIElements.RadialUI
                     {
                         InventoryOpen = false;
                         ActiveInventory.SetActive(false);
+                        MainUI.SetActive(false);
                     }
                 }
             }
