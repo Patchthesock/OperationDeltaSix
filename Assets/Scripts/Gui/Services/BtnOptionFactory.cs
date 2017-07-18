@@ -20,10 +20,7 @@ namespace Assets.Scripts.Gui.Services
         public void Clear(string selectId)
         {
             if (!_activeSaveOptions.ContainsKey(selectId)) return;
-            foreach (var i in _activeSaveOptions[selectId])
-            {
-                _nonActiveSaveOptions.Add(i);
-            }
+            foreach (var i in _activeSaveOptions[selectId]) _nonActiveSaveOptions.Add(i);
             _activeSaveOptions.Remove(selectId);
         }
 
@@ -31,10 +28,7 @@ namespace Assets.Scripts.Gui.Services
         {
             var option = _nonActiveSaveOptions.Count > 0 ? GetExistingSaveOption() : GetNewSaveOption();
             if (_activeSaveOptions.ContainsKey(selectId)) _activeSaveOptions[selectId].Add(option);
-            else _activeSaveOptions.Add(selectId, new List<BtnOption>
-            {
-                option
-            });
+            else _activeSaveOptions.Add(selectId, new List<BtnOption> { option });
             return option;
         }
 

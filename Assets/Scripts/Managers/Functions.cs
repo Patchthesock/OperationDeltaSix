@@ -17,8 +17,7 @@ namespace Assets.Scripts.Managers
 
         public static GameObject PickRandomObject(IList<GameObject> objects)
         {
-            var rand = Random.Range(0, objects.Count);
-            return objects[rand];
+            return objects[Random.Range(0, objects.Count)];
         }
 
         public static bool CanPlaceObject(IEnumerable<GameObject> objects, Vector3 position, float minDistance)

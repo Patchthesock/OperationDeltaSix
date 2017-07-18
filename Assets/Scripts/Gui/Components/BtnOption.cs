@@ -15,10 +15,7 @@ namespace Assets.Scripts.Gui.Components
             Text.text = optionName;
             transform.SetParent(container);
             transform.localScale = new Vector3(1, 1, 1);
-            Btn.onClick.AddListener(() =>
-            {
-                onClick(optionName);
-            });
+            Btn.onClick.AddListener(() => { onClick(optionName); });
         }
 
         public void SetActive(bool state)
