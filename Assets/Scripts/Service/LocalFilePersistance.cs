@@ -29,6 +29,7 @@ namespace Assets.Scripts.Service
 
         public IEnumerable<string> GetSaveList()
         {
+            if (!Directory.Exists("Saves/")) return new List<string>();
             return ProcessSaveList(Directory.GetDirectories("Saves/"));
         }
 
