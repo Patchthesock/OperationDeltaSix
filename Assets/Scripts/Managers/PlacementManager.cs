@@ -13,11 +13,13 @@ namespace Assets.Scripts.Managers
         public PlacementManager(
             Settings settings,
             PrefabFactory prefabFactory,
+            CameraManager cameraManager,
             PlacedDominoManager placedDominoManager,
             PlacedDominoPropManager placedDominoPropManager)
         {
             _settings = settings;
             _prefabFactory = prefabFactory;
+            _cameraManager = cameraManager;
             _placedDominoManager = placedDominoManager;
             _placedDominoPropManager = placedDominoPropManager;
             _typeDict = new Dictionary<Type, int>
@@ -112,7 +114,7 @@ namespace Assets.Scripts.Managers
                 return rot;
             }
             _positionLastPlaced = pos;
-            return GetDefaultRotation();
+            return GetDefaultRotation(_cameraManager.GetCameraRotation());
         }
 
         private GameObject GetPlacementGameObject(IPlacementable model)
@@ -141,15 +143,15 @@ namespace Assets.Scripts.Managers
             return ghostObject;
         }
 
-        private static void UpdateGhostPosition(Vector3 ghostPos, GameObject ghostObject)
+        private void UpdateGhostPosition(Vector3 ghostPos, GameObject ghostObject)
         {
             ghostObject.transform.position = ghostPos;
-            ghostObject.transform.rotation = GetDefaultRotation();
+            ghostObject.transform.rotation = GetDefaultRotation(_cameraManager.GetCameraRotation());
         }
 
-        private static Quaternion GetDefaultRotation()
+        private static Quaternion GetDefaultRotation(Quaternion cameraRotation)
         {
-            var rotation = CameraManager.Instance.TheCamera.transform.rotation.eulerAngles;
+            var rotation = cameraRotation.eulerAngles;
             rotation = new Vector3(0, rotation.y, rotation.z);
             return Quaternion.Euler(rotation);
         }
@@ -169,6 +171,7 @@ namespace Assets.Scripts.Managers
         
         private readonly Settings _settings;
         private readonly PrefabFactory _prefabFactory;
+        private readonly CameraManager _cameraManager;
         private readonly Dictionary<Type, int> _typeDict;
         private readonly PlacedDominoManager _placedDominoManager;
         private readonly PlacedDominoPropManager _placedDominoPropManager;

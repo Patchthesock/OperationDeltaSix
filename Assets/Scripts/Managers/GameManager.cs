@@ -10,12 +10,14 @@ namespace Assets.Scripts.Managers
         public GameManager(
             Settings settings,
             SaveManager saveManager,
+            CameraManager cameraManager,
             PlacementManager placementMangaer,
             PlacedDominoManager placedDominoManager,
             DominoInteractionManager dominoInteractionManager)
         {
             _settings = settings;
             _saveManager = saveManager;
+            _cameraManager = cameraManager;
             _placementManager = placementMangaer;
             _placedDominoManager = placedDominoManager;
             _dominoInteractionManager = dominoInteractionManager;
@@ -26,6 +28,7 @@ namespace Assets.Scripts.Managers
         {
             Application.targetFrameRate = -1; // Set to target default framerate
             PlayControl(false);
+            _cameraManager.SetActive(true);
         }
 
         private void PlayControl(bool state)
@@ -41,6 +44,7 @@ namespace Assets.Scripts.Managers
         private bool _isPlaying;
         private readonly Settings _settings;
         private readonly SaveManager _saveManager;
+        private readonly CameraManager _cameraManager;
         private readonly PlacementManager _placementManager;
         private readonly PlacedDominoManager _placedDominoManager;
         private readonly DominoInteractionManager _dominoInteractionManager;

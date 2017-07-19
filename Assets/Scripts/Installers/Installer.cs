@@ -22,6 +22,7 @@ namespace Assets.Scripts.Installers
             InstallSaveGuiManager(Container, GameSettings.SaveGui);
             InstallLoadGuiManager(Container, GameSettings.LoadGui);
             InstallRemovalManager(Container);
+            InstallCameraManager(Container, GameSettings.CameraManagerSettings);
             InstallPlacementManager(Container, GameSettings.PlacementManagerSettings);
             InstallMenuManager(Container, GameSettings.MenuManagerSettings);
             InstallAudioManager(Container, GameSettings.AudioManagerSettings);
@@ -71,6 +72,13 @@ namespace Assets.Scripts.Installers
             container.Bind<RemovalManager>().AsSingle();
         }
 
+        private static void InstallCameraManager(DiContainer container, CameraManager.Settings settings)
+        {
+            container.Bind<CameraManager.Settings>().FromInstance(settings).AsSingle();
+            container.Bind<CameraManager>().AsSingle();
+            container.Bind<ITickable>().To<CameraManager>().AsSingle();
+        }
+
         private static void InstallPlacementManager(DiContainer container, PlacementManager.Settings settings)
         {
             container.Bind<PlacementManager.Settings>().FromInstance(settings).AsSingle();
@@ -113,6 +121,7 @@ namespace Assets.Scripts.Installers
             public MenuManager.Settings MenuManagerSettings;
             public GameManager.Settings GameManagerSettings;
             public AudioManager.Settings AudioManagerSettings;
+            public CameraManager.Settings CameraManagerSettings;
             public BtnOptionFactory.Settings BtnOptionSettings;
             public PlacementManager.Settings PlacementManagerSettings;
             public DominoInteractionManager.Settings InteractionSettings;
