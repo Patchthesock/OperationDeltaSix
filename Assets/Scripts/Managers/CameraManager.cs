@@ -67,22 +67,12 @@ namespace Assets.Scripts.Managers
         private void MiddleMouseMovement(Transform camera, float flySpeed)
         {
             if (!Input.GetMouseButton(2)) return;
-			if (Input.GetMouseButtonDown(2))
-			{
-				_height = camera.transform.position.y;
-				_dragOrigin = Input.mousePosition;
-			}
-
+			_height = camera.transform.position.y;
+			_dragOrigin = Input.mousePosition;
 			var pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - _dragOrigin); // TODO: Remove / Do better 
 			camera.Translate(new Vector3(pos.x, 0, pos.y) * -1 * flySpeed, Space.Self);
 			camera.position = new Vector3(camera.position.x, _height, camera.position.z);
         }
-
-
-
-
-
-
 
         private static void Move(Transform camera, Vector3 movement, float flySpeed)
         {
