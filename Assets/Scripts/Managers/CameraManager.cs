@@ -19,17 +19,17 @@ namespace Assets.Scripts.Managers
         public void Tick()
         {
             if (!_isActive) return;
-            ClampMovement(_settings.Camera);
-            ArrowKeyMovement(_settings.Camera);
-            MiddleMouseMovement(_settings.Camera);
-            ScrollWheelMovement(_settings.Camera);
-            MouseLook(_settings.Camera, _settings.MouseLook);
+			MouseLook(_settings.Camera.transform, _settings.MouseLook);
+			ClampMovement(_settings.Camera.transform, _settings.Clamp);
+            ArrowKeyMovement(_settings.Camera.transform, _settings.FlySpeed);
+            MiddleMouseMovement(_settings.Camera.transform, _settings.FlySpeed);
+            ScrollWheelMovement(_settings.Camera.transform, _settings.FlySpeed);
         }
 
-        private void MouseLook(GameObject camera, Settings.MouseLookSettings mouseLookSettings)
+        private void MouseLook(Transform camera, Settings.MouseLookSettings mouseLookSettings)
         {
             if (!Input.GetMouseButton(1)) return;
-            var originalRotation = _settings.Camera.transform.localRotation;
+            var originalRotation = camera.localRotation;
 			switch (mouseLookSettings.Axes)
 			{
 				case RotationAxes.MouseXAndY:
@@ -40,7 +40,7 @@ namespace Assets.Scripts.Managers
 						rotationY = ClampAngle(rotationY, mouseLookSettings.MinY, mouseLookSettings.MaxY);
 						var xQuaternion = Quaternion.AngleAxis(rotationX, Vector3.up);
 						var yQuaternion = Quaternion.AngleAxis(rotationY, -Vector3.right);
-	                    camera.transform.rotation = originalRotation * xQuaternion * yQuaternion;
+	                    camera.rotation = originalRotation * xQuaternion * yQuaternion;
 					}
 					break; 
 				case RotationAxes.MouseX:
@@ -48,7 +48,7 @@ namespace Assets.Scripts.Managers
 						rotationX += Input.GetAxis("Mouse X") * mouseLookSettings.SensitivityX;
 						rotationX = ClampAngle(rotationX, mouseLookSettings.MinX, mouseLookSettings.MaxX);
 						Quaternion xQuaternion = Quaternion.AngleAxis(rotationX, Vector3.up);
-						camera.transform.rotation = originalRotation * xQuaternion;
+						camera.rotation = originalRotation * xQuaternion;
 					}
 					break;
 				case RotationAxes.MouseY:
@@ -58,13 +58,13 @@ namespace Assets.Scripts.Managers
 						rotationY += Input.GetAxis("Mouse Y") * mouseLookSettings.SensitivityY;
 						rotationY = ClampAngle(rotationY, mouseLookSettings.MinY, mouseLookSettings.MaxY);
 						var yQuaternion = Quaternion.AngleAxis(-rotationY, Vector3.right);
-						camera.transform.rotation = originalRotation * yQuaternion;
+						camera.rotation = originalRotation * yQuaternion;
 					}
 					break;
 			}
         }
 
-        private void MiddleMouseMovement(GameObject camera)
+        private void MiddleMouseMovement(Transform camera, float flySpeed)
         {
             if (!Input.GetMouseButton(2)) return;
 			if (Input.GetMouseButtonDown(2))
@@ -73,38 +73,51 @@ namespace Assets.Scripts.Managers
 				_dragOrigin = Input.mousePosition;
 			}
 
-			var pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - _dragOrigin);
-			camera.transform.Translate(new Vector3(pos.x, 0, pos.y) * -1 * FlySpeed, Space.Self);
-			camera.transform.position = new Vector3(camera.transform.position.x, _height, camera.transform.position.z);
+			var pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - _dragOrigin); // TODO: Remove / Do better 
+			camera.Translate(new Vector3(pos.x, 0, pos.y) * -1 * flySpeed, Space.Self);
+			camera.position = new Vector3(camera.position.x, _height, camera.position.z);
         }
 
-        private void ArrowKeyMovement(GameObject camera)
+
+
+
+
+
+
+        private static void Move(Transform camera, Vector3 movement, float flySpeed)
         {
-			if (Math.Abs(Input.GetAxis("Vertical")) > 0.01) camera.transform.Translate(new Vector3(camera.transform.forward.x, 0, camera.transform.forward.z) * Input.GetAxis("Vertical") * FlySpeed, Space.World);
-			if (Math.Abs(Input.GetAxis("Horizontal")) > 0.01) camera.transform.Translate(new Vector3(camera.transform.right.x, 0, camera.transform.right.z) * Input.GetAxis("Horizontal") * FlySpeed, Space.World);
+            if (Math.Abs(movement.x) > 0.01) camera.Translate(new Vector3(camera.right.x, 0, camera.right.z) * movement.x * flySpeed, Space.World);
+            if (Math.Abs(movement.y) > 0.01) camera.Translate(new Vector3(camera.forward.x, 0, camera.forward.z) * movement.y * flySpeed, Space.World);
         }
 
-        private void ScrollWheelMovement(GameObject camera)
-        {
-			if (Input.GetKey(KeyCode.E) || Input.GetAxis("Mouse ScrollWheel") < 0f) camera.transform.position = camera.transform.position + Vector3.up * FlySpeed;
-			if (Input.GetKey(KeyCode.Q) || Input.GetAxis("Mouse ScrollWheel") > 0f) camera.transform.position = camera.transform.position + Vector3.down * FlySpeed;
-        }
+		private static Vector3 GetArrowKeyMovement()
+		{
+			return new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+		}
 
-        private void ClampMovement(GameObject camera)
-        {
-            if (camera.transform.position.x > MaxMinX) camera.transform.position = new Vector3(MaxMinX, camera.transform.position.y, camera.transform.position.z);
-            if (camera.transform.position.z > MaxMinZ) camera.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y, MaxMinZ);
-            if (camera.transform.position.x < -MaxMinX) camera.transform.position = new Vector3(-MaxMinX, camera.transform.position.y, camera.transform.position.z);
-            if (camera.transform.position.z < -MaxMinZ) camera.transform.position = new Vector3(camera.transform.position.x, camera.transform.position.y, -MaxMinZ);
-            if (camera.transform.position.y < MinHeight) camera.transform.position = new Vector3(camera.transform.position.x, MinHeight, camera.transform.position.z);
-            if (camera.transform.position.y > MaxHeight) camera.transform.position = new Vector3(camera.transform.position.x, MaxHeight, camera.transform.position.z);
-        }
+		private static Vector3 GetScrollWheelMovement(Transform camera, float flySpeed)
+		{
+			if (Input.GetKey(KeyCode.E) || Input.GetAxis("Mouse ScrollWheel") < 0f) return Vector3.up * flySpeed;
+			if (Input.GetKey(KeyCode.Q) || Input.GetAxis("Mouse ScrollWheel") > 0f) return Vector3.down * flySpeed;
+			return Vector3.zero;
+		}
 
 		private static float ClampAngle(float angle, float min, float max)
 		{
             if (angle > 360F) angle -= 360F;
 			if (angle < -360F) angle += 360F;
 			return Mathf.Clamp(angle, min, max);
+		}
+
+		private static Vector3 ClampVector(Vector3 movement, Settings.ClampSettings clampSettings)
+		{
+            if (movement.x > clampSettings.MaxMinX) movement.x = clampSettings.MaxMinX;
+            if (movement.z > clampSettings.MaxMinZ) movement.z = clampSettings.MaxMinZ;
+            if (movement.x < -clampSettings.MaxMinX) movement.x = -clampSettings.MaxMinX;
+            if (movement.z < -clampSettings.MaxMinZ) movement.z = -clampSettings.MaxMinZ;
+            if (movement.y < clampSettings.MinHeight) movement.y = clampSettings.MinHeight;
+            if (movement.y > clampSettings.MaxHeight) movement.y = clampSettings.MaxHeight;
+			return movement;
 		}
 
 		private float _height;
