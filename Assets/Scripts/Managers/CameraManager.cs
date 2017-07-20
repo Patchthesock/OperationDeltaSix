@@ -26,7 +26,7 @@ namespace Assets.Scripts.Managers
             if (!_isActive) return;
             GetMiddleMouseVector(_settings.Camera.transform, _settings.FlySpeed);
             Rotate(_settings.Camera.transform, GetMouseLookVector(_settings.MouseLook));
-            Move(_settings.Camera.transform, GetArrowKeyVector() + GetScrollWheelVector(), _settings.FlySpeed, _settings.Clamp);         
+            Move(_settings.Camera.transform, GetArrowKeyVector() + GetScrollWheelVector(), _settings.FlySpeed, _settings.Clamp);
         }
 
         private void GetMiddleMouseVector(Transform camera, float flySpeed)
@@ -64,36 +64,36 @@ namespace Assets.Scripts.Managers
         }
 
         private static Vector3 GetArrowKeyVector()
-		{
-			return new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-		}
+        {
+            return new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        }
 
-		private static Vector3 GetScrollWheelVector()
-		{
-			if (Input.GetKey(KeyCode.E) || Input.GetAxis("Mouse ScrollWheel") < 0f) return Vector3.up;
-			if (Input.GetKey(KeyCode.Q) || Input.GetAxis("Mouse ScrollWheel") > 0f) return Vector3.down;
-			return Vector3.zero;
-		}
+        private static Vector3 GetScrollWheelVector()
+        {
+            if (Input.GetKey(KeyCode.E) || Input.GetAxis("Mouse ScrollWheel") < 0f) return Vector3.up;
+            if (Input.GetKey(KeyCode.Q) || Input.GetAxis("Mouse ScrollWheel") > 0f) return Vector3.down;
+            return Vector3.zero;
+        }
 
-		private static float ClampAngle(float angle, float min, float max)
-		{
+        private static float ClampAngle(float angle, float min, float max)
+        {
             if (angle > 360F) angle -= 360F;
-			if (angle < -360F) angle += 360F;
-			return Mathf.Clamp(angle, min, max);
-		}
+            if (angle < -360F) angle += 360F;
+            return Mathf.Clamp(angle, min, max);
+        }
 
-		private static Vector3 ClampVector(Vector3 movement, Settings.ClampSettings clampSettings)
-		{
+        private static Vector3 ClampVector(Vector3 movement, Settings.ClampSettings clampSettings)
+        {
             if (movement.x > clampSettings.MaxMinX) movement.x = clampSettings.MaxMinX;
             if (movement.z > clampSettings.MaxMinZ) movement.z = clampSettings.MaxMinZ;
             if (movement.x < -clampSettings.MaxMinX) movement.x = -clampSettings.MaxMinX;
             if (movement.z < -clampSettings.MaxMinZ) movement.z = -clampSettings.MaxMinZ;
             if (movement.y < clampSettings.MinHeight) movement.y = clampSettings.MinHeight;
             if (movement.y > clampSettings.MaxHeight) movement.y = clampSettings.MaxHeight;
-			return movement;
-		}
+            return movement;
+        }
 
-		private float _height;
+        private float _height;
         private bool _isActive;
         private float _rotationX;
         private float _rotationY;
@@ -103,7 +103,7 @@ namespace Assets.Scripts.Managers
         [Serializable]
         public class Settings
         {
-			public float FlySpeed;
+            public float FlySpeed;
             public GameObject Camera;
             public ClampSettings Clamp;
             public MouseLookSettings MouseLook;
@@ -111,21 +111,21 @@ namespace Assets.Scripts.Managers
             [Serializable]
             public class ClampSettings
             {
-				public float MinHeight;
-				public float MaxHeight;
-				public float MaxMinX;
-				public float MaxMinZ;
+                public float MinHeight;
+                public float MaxHeight;
+                public float MaxMinX;
+                public float MaxMinZ;
             }
 
             [Serializable]
             public class MouseLookSettings
             {
-				public float MinX = -360F;
-				public float MaxX = 360F;
-				public float MinY = -60F;
-				public float MaxY = 60F;
-				public float SensitivityX = 15F;
-				public float SensitivityY = 15F;
+                public float MinX = -360F;
+                public float MaxX = 360F;
+                public float MinY = -60F;
+                public float MaxY = 60F;
+                public float SensitivityX = 15F;
+                public float SensitivityY = 15F;
             }
         }
     }
