@@ -15,6 +15,7 @@ namespace Assets.Scripts.Managers
         public void AddObject(GameObject model, Vector3 position, Quaternion rotation)
         {
             var objectToPlace = _prefabFactory.Instantiate(model);
+            objectToPlace.name = model.name;
             objectToPlace.transform.position = position;
             objectToPlace.transform.rotation = rotation;
             if (_placedObjects.Contains(objectToPlace)) return;

@@ -12,5 +12,10 @@ namespace Assets.Scripts.Components.GameModels
         {
             return gameObject;
         }
+
+        private void Start()
+        {
+            gameObject.name = Prop.name;
+        }
     }
 }

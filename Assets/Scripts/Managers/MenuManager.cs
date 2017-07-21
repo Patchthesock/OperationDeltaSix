@@ -45,8 +45,8 @@ namespace Assets.Scripts.Managers
 
             //_settings.LowStep.SelectButton.onClick.AddListener(() => { Create(_settings.LowStep.DominosProp); });
             //_settings.HighStep.SelectButton.onClick.AddListener(() => { Create(_settings.HighStep.DominosProp); });
-            //_settings.LowBridge.SelectButton.onClick.AddListener(() => { Create(_settings.LowBridge.DominosProp); });
-            //_settings.HighBridge.SelectButton.onClick.AddListener(() => { Create(_settings.HighBridge.DominosProp); });
+            _settings.LowBridge.SelectButton.onClick.AddListener(() => { Create(_settings.LowBridge.DominosProp); });
+            _settings.HighBridge.SelectButton.onClick.AddListener(() => { Create(_settings.HighBridge.DominosProp); });
             //_settings.DownSlide.SelectButton.onClick.AddListener(() => { Create(_settings.DownSlide.DominosProp); });
             _settings.ClearDominos.onClick.AddListener(() =>
             {
