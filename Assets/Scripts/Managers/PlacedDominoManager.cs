@@ -110,14 +110,13 @@ namespace Assets.Scripts.Managers
         {
             public LocalDomino(GameObject domino)
             {
+                Domino = domino;
                 Save = new SaveObject
                 {
                     Name = domino.name,
                     Position = domino.transform.position,
                     Rotation = domino.transform.rotation
                 };
-
-                Domino = domino;
             }
 
             public readonly SaveObject Save;
