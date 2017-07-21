@@ -59,6 +59,10 @@ namespace Assets.Scripts.Managers
 
         private void AddItem(GameObject ghost, int typeDict)
         {
+            if (_settings.AudioSource == null) return;
+            _settings.AudioSource.clip = _settings.PlacementClips[UnityEngine.Random.Range(0, _settings.PlacementClips.Count - 1)];
+            if (!_settings.AudioSource.isPlaying) _settings.AudioSource.Play();
+
             switch (typeDict)
             {
                 case 0:
@@ -181,6 +185,8 @@ namespace Assets.Scripts.Managers
         public class Settings
         {
             public float TimeToLine;
+            public AudioSource AudioSource;
+            public List<AudioClip> PlacementClips;
         }
     }
 }
