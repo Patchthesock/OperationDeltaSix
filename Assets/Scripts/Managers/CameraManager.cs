@@ -26,7 +26,7 @@ namespace Assets.Scripts.Managers
             if (!_isActive) return;
             GetMiddleMouseVector(_settings.Camera.transform, _settings.FlySpeed);
             Rotate(_settings.Camera.transform, GetMouseLookVector(_settings.MouseLook));
-            Move(_settings.Camera.transform, GetArrowKeyVector() + GetScrollWheelVector(), _settings.FlySpeed, _settings.Clamp);
+            Move(_settings.Camera.transform, GetArrowKeyVector() + GetHeightVector(), _settings.FlySpeed, _settings.Clamp);
         }
 
         private void GetMiddleMouseVector(Transform camera, float flySpeed)
@@ -39,10 +39,33 @@ namespace Assets.Scripts.Managers
             camera.position = new Vector3(camera.position.x, _height, camera.position.z);
         }
 
+        private Vector3 GetMouseLookVector(Settings.MouseLookSettings mouseLookSettings)
+        {
+            if (!Input.GetMouseButton(1)) return Vector3.zero;
+            _rotationX += Input.GetAxis("Mouse X") * mouseLookSettings.SensitivityX;
+            _rotationY += Input.GetAxis("Mouse Y") * mouseLookSettings.SensitivityY;
+            return (Quaternion.AngleAxis(_rotationX, Vector3.up) * Quaternion.AngleAxis(_rotationY, -Vector3.right)).eulerAngles;
+        }
+
+        private static Vector3 GetArrowKeyVector()
+        {
+            return new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        }
+
+        private static Vector3 GetHeightVector()
+        {
+            if (Input.GetKey(KeyCode.E) || Input.GetAxis("Mouse ScrollWheel") < 0f) return Vector3.up;
+            if (Input.GetKey(KeyCode.Q) || Input.GetAxis("Mouse ScrollWheel") > 0f) return Vector3.down;
+            return Vector3.zero;
+        }
+
         private static void Move(Transform camera, Vector3 movement, float flySpeed, Settings.ClampSettings settings)
         {
-            if (Math.Abs(movement.x) > 0.01) camera.Translate(new Vector3(camera.right.x, 0, camera.right.z) * movement.x * flySpeed, Space.World);
-            if (Math.Abs(movement.z) > 0.01) camera.Translate(new Vector3(camera.forward.x, 0, camera.forward.z) * movement.z * flySpeed, Space.World);
+            if (movement.sqrMagnitude < 0.01) return;
+            movement = movement * flySpeed;
+            if (Math.Abs(movement.y) > 0.01) camera.Translate(new Vector3(0, movement.y, 0), Space.World);
+            if (Math.Abs(movement.x) > 0.01) camera.Translate(new Vector3(camera.right.x, 0, camera.right.z) * movement.x, Space.World);
+            if (Math.Abs(movement.z) > 0.01) camera.Translate(new Vector3(camera.forward.x, 0, camera.forward.z) * movement.z, Space.World);
             camera.position = ClampVector(camera.position, settings);
         }
 
@@ -51,28 +74,6 @@ namespace Assets.Scripts.Managers
             if (rotation == Vector3.zero) return;
             rotation.z = 0;
             camera.eulerAngles = rotation;
-        }
-
-        private Vector3 GetMouseLookVector(Settings.MouseLookSettings mouseLookSettings)
-        {
-            if (!Input.GetMouseButton(1)) return Vector3.zero;
-            _rotationX += Input.GetAxis("Mouse X") * mouseLookSettings.SensitivityX;
-            _rotationY += Input.GetAxis("Mouse Y") * mouseLookSettings.SensitivityY;
-            var xQuaternion = Quaternion.AngleAxis(_rotationX, Vector3.up);
-            var yQuaternion = Quaternion.AngleAxis(_rotationY, -Vector3.right);
-            return (xQuaternion * yQuaternion).eulerAngles;
-        }
-
-        private static Vector3 GetArrowKeyVector()
-        {
-            return new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        }
-
-        private static Vector3 GetScrollWheelVector()
-        {
-            if (Input.GetKey(KeyCode.E) || Input.GetAxis("Mouse ScrollWheel") < 0f) return Vector3.up;
-            if (Input.GetKey(KeyCode.Q) || Input.GetAxis("Mouse ScrollWheel") > 0f) return Vector3.down;
-            return Vector3.zero;
         }
 
         private static float ClampAngle(float angle, float min, float max)
