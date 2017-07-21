@@ -34,11 +34,7 @@ namespace Assets.Scripts.Managers
 
         public void SetPhysics(bool usePhysics)
         {
-            foreach (var o in _placedDominos)
-            {
-                o.Domino.GetComponentInChildren<Rigidbody>().useGravity = usePhysics;
-                o.Domino.GetComponentInChildren<Rigidbody>().isKinematic = !usePhysics;
-            }
+            foreach (var o in _placedDominos) SetPhysics(o.Domino.GetComponentInChildren<Rigidbody>(), usePhysics);
         }
 
         public IEnumerable<GameObject> GetPlacedDominos()
@@ -58,7 +54,8 @@ namespace Assets.Scripts.Managers
 
         public void RemoveDomino(GameObject o)
         {
-            // TODO
+            var d = _placedDominos.Single(i => i.Domino == o);
+            if (d != null) RemoveDomino(d);
         }
 
         private void RemoveDomino(LocalDomino o)
@@ -86,11 +83,16 @@ namespace Assets.Scripts.Managers
         
         private void PlaceObject(GameObject model, Vector3 position, Quaternion rotation)
         {
-            model.GetComponentInChildren<Rigidbody>().isKinematic = true;
-            model.GetComponentInChildren<Rigidbody>().useGravity = false;
+            SetPhysics(model.GetComponentInChildren<Rigidbody>(), false);
             model.transform.position = position;
             model.transform.rotation = rotation;
             _placedDominos.Add(new LocalDomino(model));
+        }
+
+        private static void SetPhysics(Rigidbody r, bool state)
+        {
+            r.useGravity = state;
+            r.isKinematic = !state;
         }
 
         private readonly Settings _settings;
