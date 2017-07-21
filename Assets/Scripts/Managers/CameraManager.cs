@@ -1,4 +1,5 @@
 ﻿using System;
+using Assets.Scripts.Service;
 using UnityEngine;
 using Zenject;
 
@@ -9,6 +10,7 @@ namespace Assets.Scripts.Managers
         public CameraManager(Settings settings)
         {
             _settings = settings;
+            _mouseRotation = new MouseRotation(_settings.Camera.transform, _settings.Rotation);
         }
 
         public void SetActive(bool state)
@@ -25,7 +27,8 @@ namespace Assets.Scripts.Managers
         {
             if (!_isActive) return;
             GetMiddleMouseVector(_settings.Camera.transform, _settings.FlySpeed);
-            Rotate(_settings.Camera.transform, GetMouseLookVector(_settings.MouseLook));
+            _mouseRotation.SetActive(Input.GetMouseButton(1));
+            _mouseRotation.Tick();
             Move(_settings.Camera.transform, GetArrowKeyVector() + GetHeightVector(), _settings.FlySpeed, _settings.Clamp);
         }
 
@@ -37,14 +40,6 @@ namespace Assets.Scripts.Managers
             var pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - _dragOrigin); // TODO: Remove / Do better 
             camera.Translate(new Vector3(pos.x, 0, pos.y) * -1 * flySpeed, Space.Self);
             camera.position = new Vector3(camera.position.x, _height, camera.position.z);
-        }
-
-        private Vector3 GetMouseLookVector(Settings.MouseLookSettings mouseLookSettings)
-        {
-            if (!Input.GetMouseButton(1)) return Vector3.zero;
-            _rotationX += Input.GetAxis("Mouse X") * mouseLookSettings.SensitivityX;
-            _rotationY += Input.GetAxis("Mouse Y") * mouseLookSettings.SensitivityY;
-            return (Quaternion.AngleAxis(_rotationX, Vector3.up) * Quaternion.AngleAxis(_rotationY, -Vector3.right)).eulerAngles;
         }
 
         private static Vector3 GetArrowKeyVector()
@@ -69,20 +64,6 @@ namespace Assets.Scripts.Managers
             camera.position = ClampVector(camera.position, settings);
         }
 
-        private static void Rotate(Transform camera, Vector3 rotation)
-        {
-            if (rotation == Vector3.zero) return;
-            rotation.z = 0;
-            camera.eulerAngles = rotation;
-        }
-
-        private static float ClampAngle(float angle, float min, float max)
-        {
-            if (angle > 360F) angle -= 360F;
-            if (angle < -360F) angle += 360F;
-            return Mathf.Clamp(angle, min, max);
-        }
-
         private static Vector3 ClampVector(Vector3 movement, Settings.ClampSettings clampSettings)
         {
             if (movement.x > clampSettings.MaxMinX) movement.x = clampSettings.MaxMinX;
@@ -96,10 +77,10 @@ namespace Assets.Scripts.Managers
 
         private float _height;
         private bool _isActive;
-        private float _rotationX;
-        private float _rotationY;
+        
         private Vector3 _dragOrigin;
         private readonly Settings _settings;
+        private readonly MouseRotation _mouseRotation;
 
         [Serializable]
         public class Settings
@@ -107,26 +88,15 @@ namespace Assets.Scripts.Managers
             public float FlySpeed;
             public GameObject Camera;
             public ClampSettings Clamp;
-            public MouseLookSettings MouseLook;
+            public MouseRotation.Settings Rotation;
 
             [Serializable]
             public class ClampSettings
             {
-                public float MinHeight;
-                public float MaxHeight;
                 public float MaxMinX;
                 public float MaxMinZ;
-            }
-
-            [Serializable]
-            public class MouseLookSettings
-            {
-                public float MinX = -360F;
-                public float MaxX = 360F;
-                public float MinY = -60F;
-                public float MaxY = 60F;
-                public float SensitivityX = 15F;
-                public float SensitivityY = 15F;
+                public float MinHeight;
+                public float MaxHeight;
             }
         }
     }
