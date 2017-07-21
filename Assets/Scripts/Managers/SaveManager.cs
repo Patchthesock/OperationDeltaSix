@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Managers.Models;
 using Assets.Scripts.Service;
 using UnityEngine;
 
@@ -22,7 +23,7 @@ namespace Assets.Scripts.Managers
             _localFilePersistance.Save(new SaveModel
             {
                 Name = saveName,
-                Dominos = GameObjectToSaveObject(_placedDominoManager.GetPlacedDominos()),
+                Dominos = _placedDominoManager.GetPlacedDominosSave().ToList(),
                 DominoProps = GameObjectToSaveObject(_placedObjectManager.GetPlacedObjects())
             });
         }
@@ -69,13 +70,6 @@ namespace Assets.Scripts.Managers
             public string Name;
             public List<SaveObject> Dominos;
             public List<SaveObject> DominoProps;
-        }
-
-        public class SaveObject
-        {
-            public string Name;
-            public Vector3 Position;
-            public Quaternion Rotation;
         }
     }
 }

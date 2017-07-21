@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Assets.Scripts.Components;
+using Assets.Scripts.Managers.Models;
 using UnityEngine;
 
 namespace Assets.Scripts.Managers
@@ -20,7 +21,7 @@ namespace Assets.Scripts.Managers
             _placedObjects.Add(objectToPlace);
         }
 
-        public void AddObject(IEnumerable<SaveManager.SaveObject> model)
+        public void AddObject(IEnumerable<SaveObject> model)
         {
             foreach (var o in model) AddObject(o.Name, o.Position, o.Rotation);
         }

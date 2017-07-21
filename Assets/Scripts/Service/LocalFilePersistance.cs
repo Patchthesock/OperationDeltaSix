@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using Assets.Scripts.Managers;
+using Assets.Scripts.Managers.Models;
 using UnityEngine;
 
 namespace Assets.Scripts.Service
@@ -33,18 +34,18 @@ namespace Assets.Scripts.Service
             return ProcessSaveList(Directory.GetDirectories("Saves/"));
         }
 
-        private static IEnumerable<SaveManager.SaveObject> LoadDataFromFile(string saveName, string objectListName)
+        private static IEnumerable<SaveObject> LoadDataFromFile(string saveName, string objectListName)
         {
-            if (!Directory.Exists("Saves")) return new List<SaveManager.SaveObject>();
-            if (!Directory.Exists("Saves/" + saveName)) return new List<SaveManager.SaveObject>();
-            if (!File.Exists("Saves/" + saveName + "/" + objectListName + ".domino")) return new List<SaveManager.SaveObject>();
+            if (!Directory.Exists("Saves")) return new List<SaveObject>();
+            if (!Directory.Exists("Saves/" + saveName)) return new List<SaveObject>();
+            if (!File.Exists("Saves/" + saveName + "/" + objectListName + ".domino")) return new List<SaveObject>();
 
             var file = File.Open("Saves/" + saveName + "/" + objectListName + ".domino", FileMode.Open);
             var formatter = new BinaryFormatter();
             var objs = (ListObjectPositionSave) formatter.Deserialize(file);
             file.Close();
 
-            return objs.ObjectPositionSave.Select(d => new SaveManager.SaveObject
+            return objs.ObjectPositionSave.Select(d => new SaveObject
             {
                 Name = d.Name,
                 Position = new Vector3(d.PosX, d.PosY, d.PosZ),
@@ -52,7 +53,7 @@ namespace Assets.Scripts.Service
             }).ToList();
         }
 
-        private static void SaveDataToFile(string saveName, string objectListName, IEnumerable<SaveManager.SaveObject> objects)
+        private static void SaveDataToFile(string saveName, string objectListName, IEnumerable<SaveObject> objects)
         {
             if (!Directory.Exists("Saves")) Directory.CreateDirectory("Saves");
             if (!Directory.Exists("Saves/" + saveName)) Directory.CreateDirectory("Saves/" + saveName);

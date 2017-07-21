@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Components;
 using Assets.Scripts.Components.GameModels;
+using Assets.Scripts.Managers.Models;
 using UnityEngine;
 
 namespace Assets.Scripts.Managers
@@ -25,7 +26,7 @@ namespace Assets.Scripts.Managers
             else PlaceExistingDomino(position, rotation);
         }
 
-        public void PlaceDomino(IEnumerable<SaveManager.SaveObject> dominos)
+        public void PlaceDomino(IEnumerable<SaveObject> dominos)
         {
             RemoveDomino();
             foreach (var o in dominos) PlaceDomino(o.Position, o.Rotation);
@@ -35,14 +36,19 @@ namespace Assets.Scripts.Managers
         {
             foreach (var o in _placedDominos)
             {
-                o.GetComponentInChildren<Rigidbody>().useGravity = usePhysics;
-                o.GetComponentInChildren<Rigidbody>().isKinematic = !usePhysics;
+                o.Domino.GetComponentInChildren<Rigidbody>().useGravity = usePhysics;
+                o.Domino.GetComponentInChildren<Rigidbody>().isKinematic = !usePhysics;
             }
         }
 
         public IEnumerable<GameObject> GetPlacedDominos()
         {
-            return _placedDominos;
+            return _placedDominos.Select(i => i.Domino);
+        }
+
+        public IEnumerable<SaveObject> GetPlacedDominosSave()
+        {
+            return _placedDominos.Select(i => i.Save);
         }
 
         public void RemoveDomino()
@@ -52,9 +58,14 @@ namespace Assets.Scripts.Managers
 
         public void RemoveDomino(GameObject o)
         {
+            // TODO
+        }
+
+        private void RemoveDomino(LocalDomino o)
+        {
             _placedDominos.Remove(o);
-            _nonActiveDominos.Add(o);
-            o.SetActive(false);
+            _nonActiveDominos.Add(o.Domino);
+            o.Domino.SetActive(false);
         }
 
         private void PlaceNewDomino(Vector3 position, Quaternion rotation)
@@ -67,10 +78,10 @@ namespace Assets.Scripts.Managers
 
         private void PlaceExistingDomino(Vector3 position, Quaternion rotation)
         {
-            var objectToPlace = _nonActiveDominos.First();
-            _nonActiveDominos.Remove(objectToPlace);
-            objectToPlace.SetActive(true);
-            PlaceObject(objectToPlace, position, rotation);
+            var o = _nonActiveDominos.First();
+            _nonActiveDominos.Remove(o);
+            o.SetActive(true);
+            PlaceObject(o, position, rotation);
         }
         
         private void PlaceObject(GameObject model, Vector3 position, Quaternion rotation)
@@ -79,14 +90,13 @@ namespace Assets.Scripts.Managers
             model.GetComponentInChildren<Rigidbody>().useGravity = false;
             model.transform.position = position;
             model.transform.rotation = rotation;
-            if (_placedDominos.Contains(model)) return;
-            _placedDominos.Add(model);
+            _placedDominos.Add(new LocalDomino(model));
         }
 
         private readonly Settings _settings;
         private readonly AudioManager _audioManager;
         private readonly PrefabFactory _prefabFactory;
-        private readonly List<GameObject> _placedDominos = new List<GameObject>();
+        private readonly List<LocalDomino> _placedDominos = new List<LocalDomino>();
         private readonly List<GameObject> _nonActiveDominos = new List<GameObject>();
 
         [Serializable]
@@ -94,6 +104,24 @@ namespace Assets.Scripts.Managers
         {
             public GameObject ParentContainer;
             public List<GameObject> Dominos;
+        }
+
+        private class LocalDomino
+        {
+            public LocalDomino(GameObject domino)
+            {
+                Save = new SaveObject
+                {
+                    Name = domino.name,
+                    Position = domino.transform.position,
+                    Rotation = domino.transform.rotation
+                };
+
+                Domino = domino;
+            }
+
+            public readonly SaveObject Save;
+            public readonly GameObject Domino;
         }
     }
 }
