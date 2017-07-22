@@ -22,12 +22,7 @@ namespace Assets.Scripts.Managers
             _cameraManager = cameraManager;
             _placedDominoManager = placedDominoManager;
             _placedDominoPropManager = placedDominoPropManager;
-            _typeDict = new Dictionary<Type, int>
-            {
-                { typeof(Domino), 0 },
-                { typeof(Dominos), 1 },
-                { typeof(DominosProp), 2}
-            };
+            _typeDict = Functions.GetPlaceableTypeDictionary();
         }
 
         public void OnCreate(IPlacementable model)

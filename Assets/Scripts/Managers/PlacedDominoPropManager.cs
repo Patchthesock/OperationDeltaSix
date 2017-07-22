@@ -15,7 +15,7 @@ namespace Assets.Scripts.Managers
 
         public void AddObject(GameObject model, Vector3 position, Quaternion rotation)
         {
-            var objectToPlace = GetNewObject(model);
+            var objectToPlace = TryGetExistingObject(model.name) ?? GetNewObject(model);
             objectToPlace.transform.position = position;
             objectToPlace.transform.rotation = rotation;
             _activeObjects.Add(objectToPlace);
@@ -23,6 +23,7 @@ namespace Assets.Scripts.Managers
 
         public void AddObject(IEnumerable<SaveObject> model)
         {
+            RemoveObject();
             foreach (var o in model) AddObject(o.Name, o.Position, o.Rotation);
         }
 
@@ -40,9 +41,15 @@ namespace Assets.Scripts.Managers
 
         public void RemoveObject(GameObject o)
         {
+            Debug.Log(o);
             _activeObjects.Remove(o);
             _nonActiveObjects.Add(o);
             o.SetActive(false);
+        }
+
+        private void RemoveObject()
+        {
+            foreach (var m in _activeObjects.ToList()) RemoveObject(m);
         }
 
         private GameObject GetNewObject(GameObject model)

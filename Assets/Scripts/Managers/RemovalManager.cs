@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using Assets.Scripts.Interfaces;
 using UnityEngine;
 using Zenject;
 
@@ -16,6 +18,7 @@ namespace Assets.Scripts.Managers
             _placedDominoManager = placedDominoManager;
             _placedObjectManager = placedObjectManager;
             _settings.AudioSource.clip = _settings.RemovalClip;
+            _typeDict = Functions.GetPlaceableTypeDictionary();
         }
 
         public void SetActive(bool isActive)
@@ -30,31 +33,33 @@ namespace Assets.Scripts.Managers
 
         private void RemoveItem()
         {
-            if (!Input.GetMouseButtonDown(0)) return;
+            if (!Functions.GetMouseButtonInput(0)) return;
             RaycastHit hit;
             var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out hit, Mathf.Infinity);
             if (hit.collider == null) return;
+            var m = hit.collider.gameObject.GetComponent<IPlacementable>();
+            if (m == null) return;
             if (!_settings.AudioSource.isPlaying) _settings.AudioSource.Play();
 
-            switch (hit.collider.gameObject.tag)
+            switch (_typeDict[m.GetType()])
             {
-                case "Ground":
+                case 0:
+                    _placedDominoManager.RemoveDomino(m.GetGameObject());
                     return;
-                case "Domino":
-                    _placedDominoManager.RemoveDomino(hit.collider.gameObject);
+                case 1:
                     return;
-                case "Object":
-                    _placedObjectManager.RemoveObject(hit.collider.gameObject);
+                case 2:
+                    _placedObjectManager.RemoveObject(m.GetGameObject());
                     return;
                 default:
-                    Debug.Log("RemovalManager.RemoveItem() unknown gameObject tag");
                     return;
             }
         }
 
         private bool _isActive;
         private readonly Settings _settings;
+        private readonly Dictionary<Type, int> _typeDict;
         private readonly PlacedDominoManager _placedDominoManager;
         private readonly PlacedDominoPropManager _placedObjectManager;
 

@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using Assets.Scripts.Components.GameModels;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Assets.Scripts.Managers
 {
@@ -43,6 +46,16 @@ namespace Assets.Scripts.Managers
         public static bool GetMouseButtonInput(int mouseButtonNumber)
         {
             return !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(mouseButtonNumber);
+        }
+
+        public static Dictionary<Type, int> GetPlaceableTypeDictionary()
+        {
+            return new Dictionary<Type, int>
+            {
+                { typeof(Domino), 0 },
+                { typeof(Dominos), 1 },
+                { typeof(DominosProp), 2}
+            };
         }
     }
 }
