@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Assets.Scripts.Components;
 using Assets.Scripts.Managers.Models;
 using UnityEngine;
@@ -14,12 +15,10 @@ namespace Assets.Scripts.Managers
 
         public void AddObject(GameObject model, Vector3 position, Quaternion rotation)
         {
-            var objectToPlace = _prefabFactory.Instantiate(model);
-            objectToPlace.name = model.name;
+            var objectToPlace = GetNewObject(model);
             objectToPlace.transform.position = position;
             objectToPlace.transform.rotation = rotation;
-            if (_placedObjects.Contains(objectToPlace)) return;
-            _placedObjects.Add(objectToPlace);
+            _activeObjects.Add(objectToPlace);
         }
 
         public void AddObject(IEnumerable<SaveObject> model)
@@ -29,23 +28,40 @@ namespace Assets.Scripts.Managers
 
         private void AddObject(string name, Vector3 position, Quaternion rotation)
         {
-            var r = Resources.Load(name, typeof(GameObject)) as GameObject;
+            var r = Resources.Load("Props/"+name, typeof(GameObject)) as GameObject;
             if (r == null) return;
             AddObject(r, position, rotation);
         }
 
         public IEnumerable<GameObject> GetPlacedObjects()
         {
-            return _placedObjects;
+            return _activeObjects;
         } 
 
         public void RemoveObject(GameObject o)
         {
-            _placedObjects.Remove(o);
-            //Destroy(o);
+            _activeObjects.Remove(o);
+            _nonActiveObjects.Add(o);
+            o.SetActive(false);
+        }
+
+        private GameObject GetNewObject(GameObject model)
+        {
+            var m = _prefabFactory.Instantiate(model);
+            m.name = model.name;
+            return m;
+        }
+
+        private GameObject TryGetExistingObject(string name)
+        {
+            if (_nonActiveObjects.Count <= 0) return null;
+            var m = _nonActiveObjects.First(i => i.name == name).gameObject;
+            if (m != null) m.SetActive(true);
+            return m;
         }
 
         private readonly PrefabFactory _prefabFactory;
-        private readonly List<GameObject> _placedObjects = new List<GameObject>();
+        private readonly List<GameObject> _activeObjects = new List<GameObject>();
+        private readonly List<GameObject> _nonActiveObjects = new List<GameObject>();
     }
 }
