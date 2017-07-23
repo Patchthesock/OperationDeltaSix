@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Assets.Scripts.Components.GameModels;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Interfaces;
 using UnityEngine;
@@ -55,20 +54,7 @@ namespace Assets.Scripts.Managers
 
         private void SetupButtons()
         {
-            _settings.NintyLeft.SelectButton.onClick.AddListener(() => { Create(_settings.NintyLeft.Dominos); });
-            _settings.NintyRight.SelectButton.onClick.AddListener(() => { Create(_settings.NintyRight.Dominos); });
-            _settings.TenDominos.SelectButton.onClick.AddListener(() => { Create(_settings.TenDominos.Dominos); });
-            _settings.FiveDominos.SelectButton.onClick.AddListener(() => { Create(_settings.FiveDominos.Dominos); });
-            _settings.SingleDomino.SelectButton.onClick.AddListener(() => { Create(_settings.SingleDomino.Domino); });
-            _settings.TwentyDominos.SelectButton.onClick.AddListener(() => { Create(_settings.TwentyDominos.Dominos); });
-            _settings.OneEightyTurn.SelectButton.onClick.AddListener(() => { Create(_settings.OneEightyTurn.Dominos); });
-
-            //_settings.LowStep.SelectButton.onClick.AddListener(() => { Create(_settings.LowStep.DominosProp); });
-            //_settings.HighStep.SelectButton.onClick.AddListener(() => { Create(_settings.HighStep.DominosProp); });
-            _settings.LowBridge.SelectButton.onClick.AddListener(() => { Create(_settings.LowBridge.DominosProp); });
-            _settings.HighBridge.SelectButton.onClick.AddListener(() => { Create(_settings.HighBridge.DominosProp); });
-            //_settings.DownSlide.SelectButton.onClick.AddListener(() => { Create(_settings.DownSlide.DominosProp); });
-            _settings.ClearDominos.onClick.AddListener(() =>
+            _settings.ClearDominosBtn.onClick.AddListener(() =>
             {
                 _placementManager.DestroyGhost();
                 _placedDominoManager.RemoveDomino();
@@ -78,6 +64,8 @@ namespace Assets.Scripts.Managers
                 _removalManager.SetActive(true);
                 _placementManager.DestroyGhost();
             });
+
+            foreach (var btn in _settings.Domino) SetupButton(btn);
         }
 
         private void Create(IPlacementable model)
@@ -88,6 +76,13 @@ namespace Assets.Scripts.Managers
                 _removalManager.SetActive(false);
                 _placementManager.OnCreate(model);
             }
+        }
+
+        private void SetupButton(SelectableDomino domino)
+        {
+            var btn = domino;
+            if (domino.SelectButton == null || domino.Placeable == null) return;
+            domino.SelectButton.onClick.AddListener(() => { Create(btn.Placeable); });
         }
 
         private bool _menuState;
@@ -102,48 +97,24 @@ namespace Assets.Scripts.Managers
         [Serializable]
         public class SelectableDomino
         {
-            public Domino Domino;
             public Button SelectButton;
-        }
-
-        [Serializable]
-        public class SelectableDominos
-        {
-            public Dominos Dominos;
-            public Button SelectButton;
-        }
-
-        [Serializable]
-        public class SelectableDominosProp
-        {
-            public Button SelectButton;
-            public DominosProp DominosProp;
+            public IPlacementable Placeable;
         }
 
         [Serializable]
         public class Settings
         {
             public KeyCode MenuToggleKey;
+            public GameObject MainUI;
+            public GameObject PropsInventory;
+            public GameObject DominoesInventory;
 
             // Clear
             public Button RemoveBtn;
-            public Button ClearDominos;
+            public Button ClearDominosBtn;
 
             // Dominos
-            public SelectableDomino SingleDomino;
-            public SelectableDominos FiveDominos;
-            public SelectableDominos TenDominos;
-            public SelectableDominos TwentyDominos;
-            public SelectableDominos NintyLeft;
-            public SelectableDominos NintyRight;
-            public SelectableDominos OneEightyTurn;
-
-            // Props
-            public SelectableDominosProp LowStep;
-            public SelectableDominosProp HighStep;
-            public SelectableDominosProp DownSlide;
-            public SelectableDominosProp LowBridge;
-            public SelectableDominosProp HighBridge;
+            public List<SelectableDomino> Domino;
 
             // Gui Settings
             public SaveGuiManager.Settings SaveSettings;
