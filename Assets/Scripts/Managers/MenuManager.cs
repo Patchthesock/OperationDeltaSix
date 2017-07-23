@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Assets.Scripts.Gui;
+using Assets.Scripts.Gui.Components;
 using Assets.Scripts.Interfaces;
 using UnityEngine;
 using UnityEngine.UI;
@@ -31,6 +32,7 @@ namespace Assets.Scripts.Managers
         {
             SetupButtons();
             _menuState = false;
+            
             _saveGuiManager.Initialize(_settings.SaveSettings);
             _loadGuiManager.Initialize(_settings.LoadSettings);
         }
@@ -82,7 +84,7 @@ namespace Assets.Scripts.Managers
         {
             var btn = domino;
             if (domino.SelectButton == null || domino.Placeable == null) return;
-            domino.SelectButton.onClick.AddListener(() => { Create(btn.Placeable); });
+            domino.SelectButton.onClick.AddListener(() => { Create(btn.Placeable.GetComponent<IPlacementable>()); });
         }
 
         private bool _menuState;
@@ -98,14 +100,14 @@ namespace Assets.Scripts.Managers
         public class SelectableDomino
         {
             public Button SelectButton;
-            public IPlacementable Placeable;
+            public GameObject Placeable;
         }
 
         [Serializable]
         public class Settings
         {
             public KeyCode MenuToggleKey;
-            public GameObject MainUI;
+            public MainUI MainUI;
             public GameObject PropsInventory;
             public GameObject DominoesInventory;
 
