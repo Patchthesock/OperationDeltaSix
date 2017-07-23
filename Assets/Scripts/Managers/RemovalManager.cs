@@ -33,10 +33,7 @@ namespace Assets.Scripts.Managers
 
         private void RemoveItem()
         {
-            if (!Functions.GetMouseButtonInput(0)) return;
-            RaycastHit hit;
-            var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Physics.Raycast(ray, out hit, Mathf.Infinity);
+            var hit = Functions.GetHit();
             if (hit.collider == null) return;
             var m = hit.collider.gameObject.GetComponent<IPlacementable>();
             if (m == null) return;
