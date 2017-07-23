@@ -62,6 +62,7 @@ namespace Assets.Scripts.Gui
         private void SaveConfirmed()
         {
             _saveManager.Save(_saveGui.SaveTxt.text);
+            ToggleSaveConfirmGui();
         }
 
         private void Close()
