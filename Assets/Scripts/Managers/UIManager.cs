@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
@@ -46,17 +44,13 @@ public class UIManager : MonoBehaviour
 	
 	void Update()
 	{
-		if (InventoryOpen == true)
-		{
-			if(Input.GetKeyUp(KeyCode.Escape))
-			{
-				foreach(Transform child in MainUI.transform)
-				{
-					child.GetComponent<Button>().interactable = true;
-					InventoryOpen = false;
-					ActiveInventory.SetActive(false);
-				}
-			}
-		}
+	    if (!InventoryOpen) return;
+	    if (!Input.GetKeyUp(KeyCode.Escape)) return;
+	    foreach(Transform child in MainUI.transform)
+	    {
+	        child.GetComponent<Button>().interactable = true;
+	        InventoryOpen = false;
+	        ActiveInventory.SetActive(false);
+	    }
 	}	
 }

@@ -1,13 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using Assets.Scripts.Components.GameModels;
 using Assets.Scripts.Gui;
 using Assets.Scripts.Interfaces;
+using UnityEngine;
 using UnityEngine.UI;
 using Zenject;
 
 namespace Assets.Scripts.Managers
 {
-    public class MenuManager : IInitializable
+    public class MenuManager : ITickable 
     {
         public MenuManager(
             Settings settings,
@@ -29,8 +31,26 @@ namespace Assets.Scripts.Managers
         public void Initialize()
         {
             SetupButtons();
+            _menuState = false;
             _saveGuiManager.Initialize(_settings.SaveSettings);
             _loadGuiManager.Initialize(_settings.LoadSettings);
+        }
+
+        public void Tick()
+        {
+            if (Input.GetKeyDown(_settings.MenuToggleKey)) ToggleMenu();
+        }
+
+        public void SubToOnMenuToggle(Action<bool> onMenuToggle)
+        {
+            if (_onMenuToggleListeners.Contains(onMenuToggle)) return;
+            _onMenuToggleListeners.Add(onMenuToggle);
+        }
+
+        private void ToggleMenu()
+        {
+            _menuState = !_menuState;
+            foreach (var l in _onMenuToggleListeners) l(_menuState);
         }
 
         private void SetupButtons()
@@ -62,7 +82,7 @@ namespace Assets.Scripts.Managers
 
         private void Create(IPlacementable model)
         {
-            if (model == null) UnityEngine.Debug.Log("Missing Prefab");
+            if (model == null) Debug.Log("Missing Prefab");
             else
             {
                 _removalManager.SetActive(false);
@@ -70,13 +90,15 @@ namespace Assets.Scripts.Managers
             }
         }
 
+        private bool _menuState;
         private readonly Settings _settings;
         private readonly RemovalManager _removalManager;
         private readonly SaveGuiManager _saveGuiManager;
         private readonly LoadGuiManager _loadGuiManager;
         private readonly PlacementManager _placementManager;
         private readonly PlacedDominoManager _placedDominoManager;
-
+        private readonly List<Action<bool>> _onMenuToggleListeners = new List<Action<bool>>();
+            
         [Serializable]
         public class SelectableDomino
         {
@@ -101,6 +123,8 @@ namespace Assets.Scripts.Managers
         [Serializable]
         public class Settings
         {
+            public KeyCode MenuToggleKey;
+
             // Clear
             public Button RemoveBtn;
             public Button ClearDominos;

@@ -9,6 +9,7 @@ namespace Assets.Scripts.Managers
     {
         public GameManager(
             Settings settings,
+            MenuManager menuManager,
             SaveManager saveManager,
             CameraManager cameraManager,
             PlacementManager placementMangaer,
@@ -16,6 +17,7 @@ namespace Assets.Scripts.Managers
             DominoInteractionManager dominoInteractionManager)
         {
             _settings = settings;
+            _menuManager = menuManager;
             _saveManager = saveManager;
             _cameraManager = cameraManager;
             _placementManager = placementMangaer;
@@ -28,7 +30,9 @@ namespace Assets.Scripts.Managers
         {
             Application.targetFrameRate = -1; // Set to target default framerate
             PlayControl(false);
+            _menuManager.Initialize();
             _cameraManager.SetActive(true);
+            _menuManager.SubToOnMenuToggle(OnMenuToggled);
         }
 
         private void PlayControl(bool state)
@@ -41,8 +45,14 @@ namespace Assets.Scripts.Managers
             Physics.gravity = state ? new Vector3(0, _settings.Gravity, 0) : new Vector3(0, 0, 0);
         }
 
+        private void OnMenuToggled(bool state)
+        {
+            _cameraManager.SetActive(!state); // Turn off camera movement on menu active
+        }
+
         private bool _isPlaying;
         private readonly Settings _settings;
+        private readonly MenuManager _menuManager;
         private readonly SaveManager _saveManager;
         private readonly CameraManager _cameraManager;
         private readonly PlacementManager _placementManager;

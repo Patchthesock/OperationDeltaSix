@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.UIElements.RadialUI
+namespace Assets.Scripts.Gui.Components
 {
     [RequireComponent(typeof(RectTransform))]
     [RequireComponent(typeof(Image))]

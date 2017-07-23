@@ -92,7 +92,7 @@ namespace Assets.Scripts.Installers
         {
             container.Bind<MenuManager.Settings>().FromInstance(settings).AsSingle();
             container.Bind<MenuManager>().AsSingle();
-            container.Bind<IInitializable>().To<MenuManager>().AsSingle();
+            container.Bind<ITickable>().To<MenuManager>().AsSingle();
         }
 
         private static void InstallAudioManager(DiContainer container, AudioManager.Settings settings)
