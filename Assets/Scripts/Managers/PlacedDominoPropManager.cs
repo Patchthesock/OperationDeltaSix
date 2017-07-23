@@ -41,7 +41,6 @@ namespace Assets.Scripts.Managers
 
         public void RemoveObject(GameObject o)
         {
-            Debug.Log(o);
             _activeObjects.Remove(o);
             _nonActiveObjects.Add(o);
             o.SetActive(false);

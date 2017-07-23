@@ -21,6 +21,7 @@ namespace Assets.Scripts.Gui.Components
         public void SetActive(bool state)
         {
             gameObject.SetActive(state);
+            if (!state) Btn.onClick.RemoveAllListeners();
         }
     }
 }

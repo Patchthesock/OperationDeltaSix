@@ -20,7 +20,11 @@ namespace Assets.Scripts.Gui.Services
         public void Clear(string selectId)
         {
             if (!_activeSaveOptions.ContainsKey(selectId)) return;
-            foreach (var i in _activeSaveOptions[selectId]) _nonActiveSaveOptions.Add(i);
+            foreach (var i in _activeSaveOptions[selectId])
+            {
+                i.SetActive(false);
+                _nonActiveSaveOptions.Add(i);
+            }
             _activeSaveOptions.Remove(selectId);
         }
 

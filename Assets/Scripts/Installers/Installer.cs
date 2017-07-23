@@ -19,8 +19,8 @@ namespace Assets.Scripts.Installers
             InstallLocalFilePersistance(Container);
             InstallSaveManager(Container);
             InstallBtnOptionFactory(Container, GameSettings.BtnOptionSettings);
-            InstallSaveGuiManager(Container, GameSettings.SaveGui);
-            InstallLoadGuiManager(Container, GameSettings.LoadGui);
+            InstallSaveGuiManager(Container, GameSettings.GuiComponentPrefabs.SaveGui, GameSettings.GuiComponentPrefabs.SaveConfirmGui);
+            InstallLoadGuiManager(Container, GameSettings.GuiComponentPrefabs.LoadGui);
             InstallRemovalManager(Container, GameSettings.RemovalManagerSettings);
             InstallCameraManager(Container, GameSettings.CameraManagerSettings);
             InstallPlacementManager(Container, GameSettings.PlacementManagerSettings);
@@ -54,9 +54,10 @@ namespace Assets.Scripts.Installers
             container.Bind<BtnOptionFactory>().AsSingle();
         }
 
-        private static void InstallSaveGuiManager(DiContainer container, SaveGui saveGui)
+        private static void InstallSaveGuiManager(DiContainer container, SaveGui saveGui, SaveConfirmGui saveConfirmGui)
         {
             container.Bind<SaveGui>().FromInstance(saveGui).AsSingle();
+            container.Bind<SaveConfirmGui>().FromInstance(saveConfirmGui).AsSingle();
             container.Bind<SaveGuiManager>().AsSingle();
         }
 
@@ -117,8 +118,7 @@ namespace Assets.Scripts.Installers
         [Serializable]
         public class Settings
         {
-            public SaveGui SaveGui;
-            public LoadGui LoadGui;
+            public GuiComponents GuiComponentPrefabs;
             public MenuManager.Settings MenuManagerSettings;
             public GameManager.Settings GameManagerSettings;
             public AudioManager.Settings AudioManagerSettings;
@@ -128,6 +128,14 @@ namespace Assets.Scripts.Installers
             public PlacementManager.Settings PlacementManagerSettings;
             public DominoInteractionManager.Settings InteractionSettings;
             public PlacedDominoManager.Settings PlacedDominoManagerSettings;
+
+            [Serializable]
+            public class GuiComponents
+            {
+                public SaveGui SaveGui;
+                public LoadGui LoadGui;
+                public SaveConfirmGui SaveConfirmGui;
+            }
         }
     }
 }
