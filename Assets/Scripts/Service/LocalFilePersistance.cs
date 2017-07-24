@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
 using Assets.Scripts.Managers;
-using Assets.Scripts.Managers.Models;
+using Assets.Scripts.Models;
 using UnityEngine;
 
 namespace Assets.Scripts.Service

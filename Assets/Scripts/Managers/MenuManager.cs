@@ -50,6 +50,7 @@ namespace Assets.Scripts.Managers
         private void ToggleMenu()
         {
             _menuState = !_menuState;
+            _settings.MainUI.SetActive(_menuState);
             foreach (var l in _onMenuToggleListeners) l(_menuState);
         }
 
@@ -57,18 +58,28 @@ namespace Assets.Scripts.Managers
         {
             _settings.ClearDominosBtn.onClick.AddListener(() =>
             {
+                ToggleMenu();
                 _placementManager.DestroyGhost();
                 _placedDominoManager.RemoveDomino();
             });
             _settings.RemoveBtn.onClick.AddListener(() =>
             {
+                ToggleMenu();
                 _removalManager.SetActive(true);
                 _placementManager.DestroyGhost();
             });
+            _settings.PropBtn.onClick.AddListener(() =>
+            {
+                _settings.MainUI.SetPropMenuActive(true);
+                _settings.MainUI.SetPatternMenuActive(false);
+            });
+            _settings.PatternBtn.onClick.AddListener(() =>
+            {
+                _settings.MainUI.SetPropMenuActive(false);
+                _settings.MainUI.SetPatternMenuActive(true);
+            });
 
-            SetupButton(_settings.Domino);
-            foreach (var btn in _settings.DominoPropBtns) SetupButton(btn);
-            foreach (var btn in _settings.DominoPatternBtns) SetupButton(btn);
+            foreach (var btn in _settings.MainUI.PatternBtns) SetupButton(btn);
         }
 
         private void Create(IPlacementable model)
@@ -81,11 +92,15 @@ namespace Assets.Scripts.Managers
             }
         }
 
-        private void SetupButton(SelectableDomino domino)
+        private void SetupButton(Pl domino)
         {
             var btn = domino;
             if (domino.SelectButton == null || domino.Placeable == null) return;
-            domino.SelectButton.onClick.AddListener(() => { Create(btn.Placeable.GetComponent<IPlacementable>()); });
+            domino.SelectButton.onClick.AddListener(() =>
+            {
+                ToggleMenu();
+                Create(btn.Placeable.GetComponent<IPlacementable>());
+            });
         }
 
         private bool _menuState;
@@ -100,19 +115,16 @@ namespace Assets.Scripts.Managers
         [Serializable]
         public class Settings
         {
-            public KeyCode MenuToggleKey;
             public MainUI MainUI;
-            public List<RadialBtn> DominoPropBtns;
-            public List<RadialBtn> DominoPatternBtns;
+            public KeyCode MenuToggleKey;
+
+            // Sub Menu
+            public Button PropBtn;
+            public Button PatternBtn;
 
             // Clear
             public Button RemoveBtn;
             public Button ClearDominosBtn;
-
-            // Dominos
-            public SelectableDomino Domino;
-            public List<SelectableDomino> DominoProps;
-            public List<SelectableDomino> DominoPatterns;
 
             // Gui Settings
             public SaveGuiManager.Settings SaveSettings;

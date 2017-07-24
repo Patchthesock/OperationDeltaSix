@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Components;
 using Assets.Scripts.Components.GameModels;
-using Assets.Scripts.Managers.Models;
+using Assets.Scripts.Models;
 using UnityEngine;
 
 namespace Assets.Scripts.Managers

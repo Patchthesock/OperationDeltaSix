@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Assets.Scripts.Managers.Models
+namespace Assets.Scripts.Models
 {
     public class SaveObject
     {

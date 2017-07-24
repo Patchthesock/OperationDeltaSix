@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Assets.Scripts.Managers.Models;
 
 namespace Assets.Scripts.Gui.Components
 {
     [RequireComponent(typeof(Button))]
-    public class RadialPlaceableBtn : MonoBehaviour
+    public class RadialBtn : MonoBehaviour
     {
         public GameObject Placeable;
 

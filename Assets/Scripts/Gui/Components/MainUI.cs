@@ -12,8 +12,18 @@ namespace Assets.Scripts.Gui.Components
         {
             gameObject.SetActive(state);
             if (state) return;
-            foreach (var b in PropBtns) b.SetActive(false);
-            foreach (var b in PatternBtns) b.SetActive(false);
+            SetPropMenuActive(false);
+            SetPatternMenuActive(false);
+        }
+
+        public void SetPropMenuActive(bool state)
+        {
+            foreach (var b in PropBtns) b.SetActive(state);
+        }
+
+        public void SetPatternMenuActive(bool state)
+        {
+            foreach (var b in PatternBtns) b.SetActive(state);
         }
     }
 }
