@@ -9,7 +9,7 @@ using Zenject;
 
 namespace Assets.Scripts.Managers
 {
-    public class MenuManager : ITickable 
+    public class MenuManager : ITickable
     {
         public MenuManager(
             Settings settings,
@@ -32,7 +32,6 @@ namespace Assets.Scripts.Managers
         {
             SetupButtons();
             _menuState = false;
-            
             _saveGuiManager.Initialize(_settings.SaveSettings);
             _loadGuiManager.Initialize(_settings.LoadSettings);
         }
@@ -67,7 +66,9 @@ namespace Assets.Scripts.Managers
                 _placementManager.DestroyGhost();
             });
 
-            foreach (var btn in _settings.Domino) SetupButton(btn);
+            SetupButton(_settings.Domino);
+            foreach (var btn in _settings.DominoPropBtns) SetupButton(btn);
+            foreach (var btn in _settings.DominoPatternBtns) SetupButton(btn);
         }
 
         private void Create(IPlacementable model)
@@ -95,28 +96,23 @@ namespace Assets.Scripts.Managers
         private readonly PlacementManager _placementManager;
         private readonly PlacedDominoManager _placedDominoManager;
         private readonly List<Action<bool>> _onMenuToggleListeners = new List<Action<bool>>();
-            
-        [Serializable]
-        public class SelectableDomino
-        {
-            public Button SelectButton;
-            public GameObject Placeable;
-        }
 
         [Serializable]
         public class Settings
         {
             public KeyCode MenuToggleKey;
             public MainUI MainUI;
-            public GameObject PropsInventory;
-            public GameObject DominoesInventory;
+            public List<RadialBtn> DominoPropBtns;
+            public List<RadialBtn> DominoPatternBtns;
 
             // Clear
             public Button RemoveBtn;
             public Button ClearDominosBtn;
 
             // Dominos
-            public List<SelectableDomino> Domino;
+            public SelectableDomino Domino;
+            public List<SelectableDomino> DominoProps;
+            public List<SelectableDomino> DominoPatterns;
 
             // Gui Settings
             public SaveGuiManager.Settings SaveSettings;
