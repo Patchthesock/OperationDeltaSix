@@ -3,8 +3,8 @@ using UnityEngine.UI;
 
 namespace Assets.Scripts.Gui.Components
 {
-    [RequireComponent(typeof(RectTransform))]
     [RequireComponent(typeof(Image))]
+    [RequireComponent(typeof(RectTransform))]
     public class RaycastMask : MonoBehaviour, ICanvasRaycastFilter
     {
         private Sprite _sprite;

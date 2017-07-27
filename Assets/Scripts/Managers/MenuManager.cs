@@ -32,8 +32,8 @@ namespace Assets.Scripts.Managers
 
         public void Initialize(Action onPlayBtnPress)
         {
-            SetupButtons(onPlayBtnPress);
             _menuState = false;
+            SetupButtons(onPlayBtnPress);
             _mainMenuGui.SetActive(false);
             _saveGuiManager.Initialize(() => { SetActive(false); });
             _loadGuiManager.Initialize(() => { SetActive(false); });
@@ -53,6 +53,8 @@ namespace Assets.Scripts.Managers
         private void SetActive(bool state)
         {
             _menuState = state;
+            _placementManager.DestroyGhost();
+            _removalManager.SetActive(false);
             _saveGuiManager.SetActive(false);
             _loadGuiManager.SetActive(false);
             _mainMenuGui.SetActive(_menuState);
@@ -106,20 +108,20 @@ namespace Assets.Scripts.Managers
             _mainMenuGui.ClearDominosBtn.onClick.AddListener(() =>
             {
                 SetActive(false);
-                _placementManager.DestroyGhost();
                 _placedDominoManager.RemoveDomino();
             });
             _mainMenuGui.RemoveBtn.onClick.AddListener(() =>
             {
                 SetActive(false);
                 _removalManager.SetActive(true);
-                _placementManager.DestroyGhost();
             });
             _mainMenuGui.PlayBtn.onClick.AddListener(() =>
             {
                 SetActive(false);
                 onPlayBtnPress();
             });
+
+            foreach (var btn in _mainMenuGui.PropBtns) SetupButton(btn.GetPlaceableBtn());
             foreach (var btn in _mainMenuGui.PatternBtns) SetupButton(btn.GetPlaceableBtn());
         }
 

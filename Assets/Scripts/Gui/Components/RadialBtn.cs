@@ -14,24 +14,15 @@ namespace Assets.Scripts.Gui.Components
         {
             Container.SetActive(state);
             gameObject.SetActive(state);
-            if (_placeableBtn == null) return;
-            _placeableBtn.Btn.interactable = state;
         }
 
         public PlaceableBtn GetPlaceableBtn()
         {
-            return _placeableBtn;
-        }
-
-        private void Start()
-        {
-            _placeableBtn = new PlaceableBtn
+            return new PlaceableBtn
             {
                 Model = Placeable,
                 Btn = gameObject.GetComponent<Button>()
             };
         }
-
-        private PlaceableBtn _placeableBtn;
     }
 }
