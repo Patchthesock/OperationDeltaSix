@@ -7,11 +7,15 @@ namespace Assets.Scripts.Gui.Components
     [RequireComponent(typeof(Button))]
     public class RadialBtn : MonoBehaviour
     {
+        public GameObject Container;
         public GameObject Placeable;
 
         public void SetActive(bool state)
         {
+            Container.SetActive(state);
             gameObject.SetActive(state);
+            if (_placeableBtn == null) return;
+            _placeableBtn.Btn.interactable = state;
         }
 
         public PlaceableBtn GetPlaceableBtn()
