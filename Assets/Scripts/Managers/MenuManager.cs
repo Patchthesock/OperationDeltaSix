@@ -54,6 +54,7 @@ namespace Assets.Scripts.Managers
         {
             _menuState = state;
             _saveGuiManager.SetActive(false);
+            _loadGuiManager.SetActive(false);
             _mainMenuGui.SetActive(_menuState);
             foreach (var l in _onMenuToggleListeners) l(_menuState);
         }
@@ -114,7 +115,6 @@ namespace Assets.Scripts.Managers
                 _removalManager.SetActive(true);
                 _placementManager.DestroyGhost();
             });
-
             _mainMenuGui.PlayBtn.onClick.AddListener(() =>
             {
                 SetActive(false);

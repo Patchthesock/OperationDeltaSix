@@ -33,7 +33,11 @@ namespace Assets.Scripts.Gui.Components
             SaveGuiBtn.interactable = state;
             LoadGuiBtn.interactable = state;
             ClearDominosBtn.interactable = state;
-            if (state) return;
+            if (state)
+            {
+                transform.position = GetPosition(Input.mousePosition);
+                return;
+            }
             SetPropMenuActive(false);
             SetPatternMenuActive(false);
         }
@@ -47,5 +51,28 @@ namespace Assets.Scripts.Gui.Components
         {
             foreach (var b in PatternBtns) b.SetActive(state);
         }
+
+        private void Awake()
+        {
+            var rect = gameObject.GetComponent<RectTransform>();
+            _minX = rect.sizeDelta.x;
+            _minY = rect.sizeDelta.y;
+            _maxX = Screen.width - _minX;
+            _maxY = Screen.height - _minY;
+        }
+
+        private Vector3 GetPosition(Vector3 mousePosition)
+        {
+            if (mousePosition.x > _maxX) mousePosition.x = _maxX;
+            if (mousePosition.x < _minX) mousePosition.x = _minX;
+            if (mousePosition.y > _maxY) mousePosition.y = _maxY;
+            if (mousePosition.y < _minY) mousePosition.y = _minY;
+            return mousePosition;
+        }
+
+        private float _minX;
+        private float _minY;
+        private float _maxX;
+        private float _maxY;
     }
 }
