@@ -30,13 +30,12 @@ namespace Assets.Scripts.Managers
             Application.targetFrameRate = -1; // Set to target default framerate
             PlayControl(false);
             _cameraManager.SetActive(true);
+            _menuManager.Initialize(PlayControl);
             _menuManager.SubToOnMenuToggle(OnMenuToggled);
-            _menuManager.Initialize(() => { PlayControl(!_isPlaying); });
         }
 
         private void PlayControl(bool state)
         {
-            _isPlaying = state;
             if (state) _saveManager.Save("auto"); // Autosave when in play
             _placementManager.DestroyGhost();
             _placedDominoManager.SetPhysics(state);
@@ -49,7 +48,6 @@ namespace Assets.Scripts.Managers
             _cameraManager.SetActive(!state); // Turn off camera movement on menu active
         }
 
-        private bool _isPlaying;
         private readonly Settings _settings;
         private readonly MenuManager _menuManager;
         private readonly SaveManager _saveManager;
@@ -61,7 +59,6 @@ namespace Assets.Scripts.Managers
         [Serializable]
         public class Settings
         {
-            public Button PlayBtn;
             public float Gravity = -50;
         }
     }

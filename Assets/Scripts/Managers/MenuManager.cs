@@ -30,10 +30,11 @@ namespace Assets.Scripts.Managers
             _placedDominoManager = placedDominoManager;
         }
 
-        public void Initialize(Action onPlayBtnPress)
+        public void Initialize(Action<bool> setPlayState)
         {
             _menuState = false;
-            SetupButtons(onPlayBtnPress);
+            SetupButtons(setPlayState);
+            _setplayState = setPlayState;
             _mainMenuGui.SetActive(false);
             _saveGuiManager.Initialize(() => { SetActive(false); });
             _loadGuiManager.Initialize(() => { SetActive(false); });
@@ -53,6 +54,7 @@ namespace Assets.Scripts.Managers
         private void SetActive(bool state)
         {
             _menuState = state;
+            _setplayState(false);
             _placementManager.DestroyGhost();
             _removalManager.SetActive(false);
             _saveGuiManager.SetActive(false);
@@ -83,7 +85,7 @@ namespace Assets.Scripts.Managers
             });
         }
 
-        private void SetupButtons(Action onPlayBtnPress)
+        private void SetupButtons(Action<bool> setPlayState)
         {
             _mainMenuGui.SaveGuiBtn.onClick.AddListener(() =>
             {
@@ -118,7 +120,7 @@ namespace Assets.Scripts.Managers
             _mainMenuGui.PlayBtn.onClick.AddListener(() =>
             {
                 SetActive(false);
-                onPlayBtnPress();
+                setPlayState(true);
             });
 
             foreach (var btn in _mainMenuGui.PropBtns) SetupButton(btn.GetPlaceableBtn());
@@ -126,6 +128,7 @@ namespace Assets.Scripts.Managers
         }
 
         private bool _menuState;
+        private Action<bool> _setplayState;
         private readonly Settings _settings;
         private readonly MainMenuGui _mainMenuGui;
         private readonly RemovalManager _removalManager;
