@@ -24,7 +24,7 @@ namespace Assets.Scripts.Installers
             InstallRemovalManager(Container, GameSettings.RemovalManagerSettings);
             InstallCameraManager(Container, GameSettings.CameraManagerSettings);
             InstallPlacementManager(Container, GameSettings.PlacementManagerSettings);
-            InstallMenuManager(Container, GameSettings.MenuManagerSettings);
+            InstallMenuManager(Container, GameSettings.MenuManagerSettings, GameSettings.GuiComponentPrefabs.MainMenuGui);
             InstallAudioManager(Container, GameSettings.AudioManagerSettings);
             InstallDominoInteractionManager(Container, GameSettings.InteractionSettings);
             InstallGameManager(Container, GameSettings.GameManagerSettings);
@@ -88,8 +88,9 @@ namespace Assets.Scripts.Installers
             container.Bind<ITickable>().To<PlacementManager>().AsSingle();
         }
 
-        private static void InstallMenuManager(DiContainer container, MenuManager.Settings settings)
+        private static void InstallMenuManager(DiContainer container, MenuManager.Settings settings, MainMenuGui mainGui)
         {
+            container.Bind<MainMenuGui>().FromInstance(mainGui).AsSingle();
             container.Bind<MenuManager.Settings>().FromInstance(settings).AsSingle();
             container.Bind<MenuManager>().AsSingle();
             container.Bind<ITickable>().To<MenuManager>().AsSingle();
@@ -134,6 +135,7 @@ namespace Assets.Scripts.Installers
             {
                 public SaveGui SaveGui;
                 public LoadGui LoadGui;
+                public MainMenuGui MainMenuGui;
                 public SaveConfirmGui SaveConfirmGui;
             }
         }

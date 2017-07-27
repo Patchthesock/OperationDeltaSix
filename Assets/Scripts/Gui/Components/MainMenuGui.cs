@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Gui.Components
 {
-    public class MainUI : MonoBehaviour
+    public class MainMenuGui : MonoBehaviour
     {
         public List<RadialBtn> PropBtns;
         public List<RadialBtn> PatternBtns;

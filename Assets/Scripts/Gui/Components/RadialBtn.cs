@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Assets.Scripts.Models;
+using UnityEngine;
 using UnityEngine.UI;
 
 namespace Assets.Scripts.Gui.Components
@@ -22,11 +23,11 @@ namespace Assets.Scripts.Gui.Components
         {
             _placeableBtn = new PlaceableBtn
             {
-                Placeable = Placeable,
-                Button = gameObject.GetComponent<Button>()
+                Model = Placeable,
+                Btn = gameObject.GetComponent<Button>()
             };
         }
-    }
 
-    private PlaceableBtn _placeableBtn;
+        private PlaceableBtn _placeableBtn;
+    }
 }

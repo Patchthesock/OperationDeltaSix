@@ -1,9 +1,7 @@
-﻿using System;
-using Assets.Scripts.Gui.Components;
+﻿using Assets.Scripts.Gui.Components;
 using Assets.Scripts.Gui.Services;
 using Assets.Scripts.Managers;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Assets.Scripts.Gui
 {
@@ -21,7 +19,7 @@ namespace Assets.Scripts.Gui
             _btnOptionFactory = btnOptionFactory;
         }
 
-        public void Initialize(Settings settings)
+        public void Initialize()
         {
             _saveGuiState = false;
             _saveGui.SetActive(false);
@@ -30,11 +28,10 @@ namespace Assets.Scripts.Gui
             _saveGui.Initialize(_btnOptionFactory);
             _saveGui.SaveBtn.onClick.AddListener(Save);
             _saveGui.CloseBtn.onClick.AddListener(Close);
-            settings.SaveGuiBtn.onClick.AddListener(ToggleSaveGui);
             _saveConfirmGui.Initialize(SaveConfirmed, ToggleSaveConfirmGui);
         }
 
-        private void ToggleSaveGui()
+        public void ToggleSaveGui()
         {
             _saveGuiState = !_saveGuiState;
             _saveGui.SetActive(_saveGuiState);
@@ -76,11 +73,5 @@ namespace Assets.Scripts.Gui
         private readonly SaveManager _saveManager;
         private readonly SaveConfirmGui _saveConfirmGui;
         private readonly BtnOptionFactory _btnOptionFactory;
-
-        [Serializable]
-        public class Settings
-        {
-            public Button SaveGuiBtn;
-        }
     }
 }

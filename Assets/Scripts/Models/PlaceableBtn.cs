@@ -1,11 +1,11 @@
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.Managers.Models
+namespace Assets.Scripts.Models
 {
     public class PlaceableBtn
     {
-        public Button Button;
-        public GameObject Placeable;
+        public Button Btn;
+        public GameObject Model;
     }
 }
