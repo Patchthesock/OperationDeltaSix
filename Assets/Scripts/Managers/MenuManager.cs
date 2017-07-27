@@ -5,7 +5,6 @@ using Assets.Scripts.Gui.Components;
 using Assets.Scripts.Interfaces;
 using Assets.Scripts.Models;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 namespace Assets.Scripts.Managers
@@ -31,18 +30,18 @@ namespace Assets.Scripts.Managers
             _placedDominoManager = placedDominoManager;
         }
 
-        public void Initialize()
+        public void Initialize(Action onPlayBtnPress)
         {
-            SetupButtons();
+            SetupButtons(onPlayBtnPress);
             _menuState = false;
-            _saveGuiManager.Initialize();
             _mainMenuGui.SetActive(false);
-            _loadGuiManager.Initialize(_settings.LoadSettings);
+            _saveGuiManager.Initialize(() => { SetActive(false); });
+            _loadGuiManager.Initialize(() => { SetActive(false); });
         }
 
         public void Tick()
         {
-            if (Input.GetKeyDown(_settings.MenuToggleKey)) ToggleMenu();
+            if (Input.GetKeyDown(_settings.MenuToggleKey)) SetActive(!_menuState);
         }
 
         public void SubToOnMenuToggle(Action<bool> onMenuToggle)
@@ -51,14 +50,13 @@ namespace Assets.Scripts.Managers
             _onMenuToggleListeners.Add(onMenuToggle);
         }
 
-        private void ToggleMenu()
+        private void SetActive(bool state)
         {
-            _menuState = !_menuState;
+            _menuState = state;
+            _saveGuiManager.SetActive(false);
             _mainMenuGui.SetActive(_menuState);
             foreach (var l in _onMenuToggleListeners) l(_menuState);
         }
-
-
 
         private void Create(IPlacementable model)
         {
@@ -77,46 +75,51 @@ namespace Assets.Scripts.Managers
             if (domino.Btn == null || domino.Model == null) return;
             domino.Btn.onClick.AddListener(() =>
             {
-                ToggleMenu();
+                SetActive(false);
                 Create(btn.Model.GetComponent<IPlacementable>());
             });
         }
 
-        private void SetupButtons()
+        private void SetupButtons(Action onPlayBtnPress)
         {
-            _settings.SaveGuiBtn.onClick.AddListener(() =>
+            _mainMenuGui.SaveGuiBtn.onClick.AddListener(() =>
             {
-                ToggleMenu();
-                _saveGuiManager.ToggleSaveGui();
+                _mainMenuGui.SetActive(false);
+                _saveGuiManager.SetActive(true);
             });
-            _settings.LoadGuiBtn.onClick.AddListener(() =>
+            _mainMenuGui.LoadGuiBtn.onClick.AddListener(() =>
             {
-                ToggleMenu();
-                //_loadGuiManager
+                _mainMenuGui.SetActive(false);
+                _loadGuiManager.SetActive(true);
             });
-            _settings.PropBtn.onClick.AddListener(() =>
+            _mainMenuGui.PropBtn.onClick.AddListener(() =>
             {
                 _mainMenuGui.SetPropMenuActive(true);
                 _mainMenuGui.SetPatternMenuActive(false);
             });
-            _settings.PatternBtn.onClick.AddListener(() =>
+            _mainMenuGui.PatternBtn.onClick.AddListener(() =>
             {
                 _mainMenuGui.SetPropMenuActive(false);
                 _mainMenuGui.SetPatternMenuActive(true);
             });
-            _settings.ClearDominosBtn.onClick.AddListener(() =>
+            _mainMenuGui.ClearDominosBtn.onClick.AddListener(() =>
             {
-                ToggleMenu();
+                SetActive(false);
                 _placementManager.DestroyGhost();
                 _placedDominoManager.RemoveDomino();
             });
-            _settings.RemoveBtn.onClick.AddListener(() =>
+            _mainMenuGui.RemoveBtn.onClick.AddListener(() =>
             {
-                ToggleMenu();
+                SetActive(false);
                 _removalManager.SetActive(true);
                 _placementManager.DestroyGhost();
             });
 
+            _mainMenuGui.PlayBtn.onClick.AddListener(() =>
+            {
+                SetActive(false);
+                onPlayBtnPress();
+            });
             foreach (var btn in _mainMenuGui.PatternBtns) SetupButton(btn.GetPlaceableBtn());
         }
 
@@ -134,22 +137,6 @@ namespace Assets.Scripts.Managers
         public class Settings
         {
             public KeyCode MenuToggleKey;
-
-            // Sub Menu
-            public Button PropBtn;
-            public Button PatternBtn;
-
-            // Clear
-            public Button RemoveBtn;
-            public Button ClearDominosBtn;
-
-            // Save & Load
-            public Button SaveGuiBtn;
-            public Button LoadGuiBtn;
-
-            // Gui Settings
-            //public SaveGuiManager.Settings SaveSettings;
-            public LoadGuiManager.Settings LoadSettings;
         }
     }
 }

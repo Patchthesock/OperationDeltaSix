@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Assets.Scripts.Gui
+namespace Assets.Scripts.Gui.Components
 {
     public class SaveConfirmGui : MonoBehaviour
     {

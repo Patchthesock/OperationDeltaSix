@@ -3,7 +3,6 @@ using Assets.Scripts.Gui.Components;
 using Assets.Scripts.Gui.Services;
 using Assets.Scripts.Managers;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Assets.Scripts.Gui
 {
@@ -19,25 +18,29 @@ namespace Assets.Scripts.Gui
             _btnOptionFactory = btnOptionFactory;
         }
 
-        public void Initialize(Settings settings)
+        public void Initialize(Action onComplete)
         {
-            _loadGui.Initialize(_btnOptionFactory);
             _loadGui.SetActive(false);
-            _loadGuiActiveState = false;
-            _loadGui.LoadBtn.onClick.AddListener(Load);
-            _loadGui.CloseBtn.onClick.AddListener(Close);
-            settings.LoadGuiBtn.onClick.AddListener(ToggleLoadGui);
+            _loadGui.Initialize(_btnOptionFactory);
+            _loadGui.LoadBtn.onClick.AddListener(() =>
+            {
+                Load(onComplete);
+            });
+            _loadGui.CloseBtn.onClick.AddListener(() =>
+            {
+                SetActive(false);
+                onComplete();
+            });
         }
 
-        private void ToggleLoadGui()
+        public void SetActive(bool state)
         {
-            _loadGuiActiveState = !_loadGuiActiveState;
-            _loadGui.SetActive(_loadGuiActiveState);
-            if (!_loadGuiActiveState) return;
+            _loadGui.SetActive(state);
+            if (!state) return;
             _loadGui.SetSaveList(_saveManager.GetSaveList());
         }
 
-        private void Load()
+        private void Load(Action onComplete)
         {
             if (string.IsNullOrEmpty(_loadGui.LoadTxt.text))
             {
@@ -45,23 +48,12 @@ namespace Assets.Scripts.Gui
                 return;
             }
             _saveManager.Load(_loadGui.LoadTxt.text);
-            ToggleLoadGui();
+            SetActive(false);
+            onComplete();
         }
 
-        private void Close()
-        {
-            if (_loadGuiActiveState) ToggleLoadGui();
-        }
-
-        private bool _loadGuiActiveState;
         private readonly LoadGui _loadGui;
         private readonly SaveManager _saveManager;
         private readonly BtnOptionFactory _btnOptionFactory;
-
-        [Serializable]
-        public class Settings
-        {
-            public Button LoadGuiBtn;
-        }
     }
 }

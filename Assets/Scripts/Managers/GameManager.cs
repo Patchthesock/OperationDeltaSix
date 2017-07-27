@@ -23,16 +23,15 @@ namespace Assets.Scripts.Managers
             _placementManager = placementMangaer;
             _placedDominoManager = placedDominoManager;
             _dominoInteractionManager = dominoInteractionManager;
-            _settings.PlayBtn.onClick.AddListener(() => { PlayControl(!_isPlaying); });
         }
 
         public void Initialize()
         {
             Application.targetFrameRate = -1; // Set to target default framerate
             PlayControl(false);
-            _menuManager.Initialize();
             _cameraManager.SetActive(true);
             _menuManager.SubToOnMenuToggle(OnMenuToggled);
+            _menuManager.Initialize(() => { PlayControl(!_isPlaying); });
         }
 
         private void PlayControl(bool state)

@@ -1,4 +1,5 @@
-﻿using Assets.Scripts.Gui.Components;
+﻿using System;
+using Assets.Scripts.Gui.Components;
 using Assets.Scripts.Gui.Services;
 using Assets.Scripts.Managers;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace Assets.Scripts.Gui
             _btnOptionFactory = btnOptionFactory;
         }
 
-        public void Initialize()
+        public void Initialize(Action onComplete)
         {
             _saveGuiState = false;
             _saveGui.SetActive(false);
@@ -27,14 +28,24 @@ namespace Assets.Scripts.Gui
             _saveConfirmGui.SetActive(false);
             _saveGui.Initialize(_btnOptionFactory);
             _saveGui.SaveBtn.onClick.AddListener(Save);
-            _saveGui.CloseBtn.onClick.AddListener(Close);
-            _saveConfirmGui.Initialize(SaveConfirmed, ToggleSaveConfirmGui);
+            
+            _saveConfirmGui.Initialize(() =>
+            {
+                SaveConfirmed(onComplete);
+            }, () =>
+            {
+                SaveCancelled(onComplete);
+            });
+            _saveGui.CloseBtn.onClick.AddListener(() => {
+                SetActive(false);
+                onComplete();
+            });
         }
 
-        public void ToggleSaveGui()
+        public void SetActive(bool state)
         {
-            _saveGuiState = !_saveGuiState;
-            _saveGui.SetActive(_saveGuiState);
+            _saveGuiState = state;
+            _saveGui.SetActive(state);
             if (!_saveGuiState) return;
             _saveGui.SetSaveList(_saveManager.GetSaveList());
         }
@@ -52,19 +63,21 @@ namespace Assets.Scripts.Gui
                 Debug.Log("Please give a save name.");
                 return;
             }
-            ToggleSaveGui();
+            SetActive(false);
             ToggleSaveConfirmGui();
         }
 
-        private void SaveConfirmed()
+        private void SaveConfirmed(Action onComplete)
         {
             _saveManager.Save(_saveGui.SaveTxt.text);
             ToggleSaveConfirmGui();
+            onComplete();
         }
 
-        private void Close()
+        private void SaveCancelled(Action onComplete)
         {
-            if (_saveGuiState) ToggleSaveGui();
+            ToggleSaveConfirmGui();
+            onComplete();
         }
 
         private bool _saveGuiState;

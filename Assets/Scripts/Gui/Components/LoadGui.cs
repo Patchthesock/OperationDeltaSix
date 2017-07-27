@@ -37,6 +37,7 @@ namespace Assets.Scripts.Gui.Components
 
         private void ClearBtnOptionList()
         {
+            if (_btnOptionFactory == null) return;
             _btnOptionFactory.Clear("load");
         }
 
