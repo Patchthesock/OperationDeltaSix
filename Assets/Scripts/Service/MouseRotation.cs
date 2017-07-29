@@ -7,8 +7,7 @@ namespace Assets.Scripts.Service
     {
         public MouseRotation(
             Transform model,
-            Settings settings
-            )
+            Settings settings)
         {
             _model = model;
             _settings = settings;
@@ -16,34 +15,34 @@ namespace Assets.Scripts.Service
 
         public void SetActive(bool state)
         {
-            if (!state)
-            {
-                _rotationX = 0;
-                _rotationY = 0;
-                _isActive = false;
-            }
-            else
-            {
-                _isActive = true;
-                _initial = _model.transform.rotation;
-            }
+            if (state) Activate();
+            else Reset();
         }
 
         public void Tick()
         {
             if (!_isActive) return;
-            var rot = GetMouseLookRotation(_settings).eulerAngles;
-            rot.z = 0;
-            _model.eulerAngles = rot;
+            _model.eulerAngles = GetMouseLookRotation(_settings);
         }
 
-        private Quaternion GetMouseLookRotation(Settings settings)
+        private void Activate()
+        {
+            _isActive = true;
+            _initial = _model.transform.rotation.eulerAngles;
+        }
+
+        private void Reset()
+        {
+            _rotationX = 0;
+            _rotationY = 0;
+            _isActive = false;
+        }
+
+        private Vector3 GetMouseLookRotation(Settings settings)
         {
             _rotationX += Input.GetAxis("Mouse X") * settings.Sensitivity;
             _rotationY += Input.GetAxis("Mouse Y") * settings.Sensitivity;
-            _rotationX = ClampAngle(_rotationX, -settings.Speed, settings.Speed);
-            _rotationY = ClampAngle(_rotationY, -settings.Speed, settings.Speed);
-            return _initial * Quaternion.AngleAxis(_rotationX, Vector3.up) * Quaternion.AngleAxis(_rotationY, -Vector3.right);
+            return _initial + new Vector3(-_rotationY, _rotationX, 0);
         }
 
         private static float ClampAngle(float angle, float min, float max)
@@ -54,7 +53,7 @@ namespace Assets.Scripts.Service
         private bool _isActive;
         private float _rotationX;
         private float _rotationY;
-        private Quaternion _initial;
+        private Vector3 _initial;
         private readonly Transform _model;
         private readonly Settings _settings;
 
