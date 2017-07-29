@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Assets.Scripts.Components.GameModels
 {
+    [RequireComponent(typeof(Rigidbody))]
     [RequireComponent(typeof(AudioSource))]
     public class Domino : MonoBehaviour, IPlacementable
     {
@@ -12,6 +13,11 @@ namespace Assets.Scripts.Components.GameModels
         public GameObject GetGameObject()
         {
             return gameObject;
+        }
+
+        public void SetMass(float mass)
+        {
+            gameObject.GetComponent<Rigidbody>().mass = mass;
         }
 
         public void SetAudioManager(AudioManager audioManager)

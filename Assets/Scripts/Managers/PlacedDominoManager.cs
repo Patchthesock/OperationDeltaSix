@@ -67,10 +67,12 @@ namespace Assets.Scripts.Managers
 
         private void PlaceNewDomino(Vector3 position, Quaternion rotation)
         {
-            var d = _prefabFactory.Instantiate(Functions.PickRandomObject(_settings.Dominos));
-            if (_settings.ParentContainer != null) d.transform.SetParent(_settings.ParentContainer.transform);
-            d.GetComponent<Domino>().SetAudioManager(_audioManager);
-            PlaceObject(d, position, rotation);
+            var m = _prefabFactory.Instantiate(Functions.PickRandomObject(_settings.Dominos));
+            if (_settings.ParentContainer != null) m.transform.SetParent(_settings.ParentContainer.transform);
+            var d = m.GetComponent<Domino>();
+            d.SetMass(_settings.DominoMass);
+            d.SetAudioManager(_audioManager);
+            PlaceObject(m, position, rotation);
         }
 
         private void PlaceExistingDomino(Vector3 position, Quaternion rotation)
@@ -121,6 +123,7 @@ namespace Assets.Scripts.Managers
         [Serializable]
         public class Settings
         {
+            public float DominoMass = 800;
             public GameObject ParentContainer;
             public List<GameObject> Dominos;
         }

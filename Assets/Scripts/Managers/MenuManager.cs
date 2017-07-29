@@ -5,6 +5,7 @@ using Assets.Scripts.Gui.Components;
 using Assets.Scripts.Interfaces;
 using Assets.Scripts.Models;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace Assets.Scripts.Managers
@@ -129,7 +130,7 @@ namespace Assets.Scripts.Managers
                 setPlayState(true);
             });
 
-            _mainMenuGui.ExitBtn.onClick.AddListener(Application.Quit);
+            _mainMenuGui.ExitBtn.onClick.AddListener(() => { SceneManager.LoadScene(0); });
             foreach (var btn in _mainMenuGui.PropBtns) SetupButton(btn.GetPlaceableBtn());
             foreach (var btn in _mainMenuGui.PatternBtns) SetupButton(btn.GetPlaceableBtn());
         }
