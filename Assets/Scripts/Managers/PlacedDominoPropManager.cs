@@ -33,7 +33,7 @@ namespace Assets.Scripts.Managers
 
         private void AddObject(string name, Vector3 position, Quaternion rotation)
         {
-            var r = Resources.Load("Props/"+name, typeof(GameObject)) as GameObject;
+            var r = Resources.Load("Props/" + name, typeof(GameObject)) as GameObject;
             if (r == null) return;
             AddObject(r, position, rotation);
         }
