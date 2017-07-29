@@ -66,8 +66,10 @@ namespace Assets.Scripts.Managers
         private GameObject TryGetExistingObject(string name)
         {
             if (_nonActiveObjects.Count <= 0) return null;
-            var m = _nonActiveObjects.First(i => i.name == name).gameObject;
-            if (m != null) m.SetActive(true);
+            var m = _nonActiveObjects.First(i => i.name == name);
+            if (m == null) return null;
+            _nonActiveObjects.Remove(m);
+            m.SetActive(true);
             return m;
         }
 
