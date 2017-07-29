@@ -45,7 +45,12 @@ namespace Assets.Scripts.Managers
 
         public static bool GetMouseButtonInput(int mouseButtonNumber)
         {
-            return !UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject() && Input.GetMouseButton(mouseButtonNumber);
+            return !IsPointerOverGameObject() && Input.GetMouseButton(mouseButtonNumber);
+        }
+
+        public static bool GetMouseButtonDownInput(int mouseButtonNumber)
+        {
+            return !IsPointerOverGameObject() && Input.GetMouseButtonDown(mouseButtonNumber);
         }
 
         public static Dictionary<Type, int> GetPlaceableTypeDictionary()
@@ -56,6 +61,11 @@ namespace Assets.Scripts.Managers
                 { typeof(Dominos), 1 },
                 { typeof(DominosProp), 2}
             };
+        }
+
+        private static bool IsPointerOverGameObject()
+        {
+            return UnityEngine.EventSystems.EventSystem.current.IsPointerOverGameObject();
         }
     }
 }

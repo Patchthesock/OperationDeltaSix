@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using UnityEngine.UI;
 using Zenject;
 
 namespace Assets.Scripts.Managers
@@ -40,7 +39,7 @@ namespace Assets.Scripts.Managers
             _placementManager.DestroyGhost();
             _placedDominoManager.SetPhysics(state);
             _dominoInteractionManager.SetActive(state);
-            Physics.gravity = state ? new Vector3(0, _settings.Gravity, 0) : new Vector3(0, 0, 0);
+            Physics.gravity = state ? new Vector3(0, _settings.Gravity, 0) : Vector3.zero;
         }
 
         private void OnMenuToggled(bool state)

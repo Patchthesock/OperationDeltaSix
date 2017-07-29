@@ -28,7 +28,8 @@ namespace Assets.Scripts.Managers
 
         public void Tick()
         {
-            if (_isActive) RemoveItem();
+            if (!_isActive) return;
+            if (Functions.GetMouseButtonDownInput(0)) RemoveItem();
         }
 
         private void RemoveItem()
