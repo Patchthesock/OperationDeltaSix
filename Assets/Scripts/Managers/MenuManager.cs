@@ -130,7 +130,6 @@ namespace Assets.Scripts.Managers
             });
 
             _mainMenuGui.ExitBtn.onClick.AddListener(Application.Quit);
-
             foreach (var btn in _mainMenuGui.PropBtns) SetupButton(btn.GetPlaceableBtn());
             foreach (var btn in _mainMenuGui.PatternBtns) SetupButton(btn.GetPlaceableBtn());
         }
