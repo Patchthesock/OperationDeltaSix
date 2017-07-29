@@ -64,13 +64,14 @@ namespace Assets.Scripts.Gui
                 Debug.Log("Please give a save name.");
                 return;
             }
+            _saveName = _saveGui.SaveTxt.text;
             SetActive(false);
             ToggleSaveConfirmGui();
         }
 
         private void SaveConfirmed(Action onComplete)
         {
-            _saveManager.Save(_saveGui.SaveTxt.text);
+            _saveManager.Save(_saveName);
             ToggleSaveConfirmGui();
             onComplete();
         }
@@ -81,6 +82,7 @@ namespace Assets.Scripts.Gui
             onComplete();
         }
 
+        private string _saveName;
         private readonly SaveGui _saveGui;
         private readonly SaveManager _saveManager;
         private readonly SaveConfirmGui _saveConfirmGui;

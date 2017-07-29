@@ -13,6 +13,7 @@ namespace Assets.Scripts.Gui.Components
         public Button PatternBtn;
 
         // Clear
+        public Button ExitBtn;
         public Button RemoveBtn;
         public Button ClearDominosBtn;
 

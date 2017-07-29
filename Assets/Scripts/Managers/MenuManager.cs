@@ -54,7 +54,6 @@ namespace Assets.Scripts.Managers
         private void TryToggleMenu(bool state)
         {
             if (_saveGuiManager.CurrentState) return;
-            Debug.Log(_saveGuiManager.CurrentState);
             SetActive(state);
         }
 
@@ -129,6 +128,8 @@ namespace Assets.Scripts.Managers
                 SetActive(false);
                 setPlayState(true);
             });
+
+            _mainMenuGui.ExitBtn.onClick.AddListener(Application.Quit);
 
             foreach (var btn in _mainMenuGui.PropBtns) SetupButton(btn.GetPlaceableBtn());
             foreach (var btn in _mainMenuGui.PatternBtns) SetupButton(btn.GetPlaceableBtn());
