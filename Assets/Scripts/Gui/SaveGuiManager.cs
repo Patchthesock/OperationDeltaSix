@@ -20,11 +20,12 @@ namespace Assets.Scripts.Gui
             _btnOptionFactory = btnOptionFactory;
         }
 
+        public bool CurrentState { get; private set; }
+
         public void Initialize(Action onComplete)
         {
-            _saveGuiState = false;
+            CurrentState = false;
             _saveGui.SetActive(false);
-            _saveConfirmGuiState = false;
             _saveConfirmGui.SetActive(false);
             _saveGui.Initialize(_btnOptionFactory);
             _saveGui.SaveBtn.onClick.AddListener(Save);
@@ -44,16 +45,16 @@ namespace Assets.Scripts.Gui
 
         public void SetActive(bool state)
         {
-            _saveGuiState = state;
+            CurrentState = state;
             _saveGui.SetActive(state);
-            if (!_saveGuiState) return;
+            if (!CurrentState) return;
             _saveGui.SetSaveList(_saveManager.GetSaveList());
         }
 
         private void ToggleSaveConfirmGui()
         {
-            _saveConfirmGuiState = !_saveConfirmGuiState;
-            _saveConfirmGui.SetActive(_saveConfirmGuiState);
+            CurrentState = !CurrentState;
+            _saveConfirmGui.SetActive(CurrentState);
         }
 
         private void Save()
@@ -80,8 +81,6 @@ namespace Assets.Scripts.Gui
             onComplete();
         }
 
-        private bool _saveGuiState;
-        private bool _saveConfirmGuiState;
         private readonly SaveGui _saveGui;
         private readonly SaveManager _saveManager;
         private readonly SaveConfirmGui _saveConfirmGui;

@@ -42,13 +42,20 @@ namespace Assets.Scripts.Managers
 
         public void Tick()
         {
-            if (Input.GetKeyDown(_settings.MenuToggleKey)) SetActive(!_menuState);
+            if (Input.GetKeyDown(_settings.MenuToggleKey)) TryToggleMenu(!_menuState);
         }
 
         public void SubToOnMenuToggle(Action<bool> onMenuToggle)
         {
             if (_onMenuToggleListeners.Contains(onMenuToggle)) return;
             _onMenuToggleListeners.Add(onMenuToggle);
+        }
+
+        private void TryToggleMenu(bool state)
+        {
+            if (_saveGuiManager.CurrentState) return;
+            Debug.Log(_saveGuiManager.CurrentState);
+            SetActive(state);
         }
 
         private void SetActive(bool state)
