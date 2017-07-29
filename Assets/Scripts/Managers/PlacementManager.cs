@@ -45,7 +45,7 @@ namespace Assets.Scripts.Managers
             if (Input.GetKey(KeyCode.Escape)) DestroyGhost();
             if (Input.GetMouseButtonUp(0) && _mouseLock) _mouseLock = false;
             if (_ghostObject == null) return;
-            var ghostPos = Functions.GetPlacementPosition() == Vector3.zero ? Vector3.zero : Functions.GetPlacementPosition() + new Vector3(0, 0.6f, 0);
+            var ghostPos = Functions.GetPlacementPosition() == Vector3.zero ? Vector3.zero : Functions.GetPlacementPosition() + new Vector3(0, 0.01f, 0);
             if (ghostPos == Vector3.zero) return;
             if (!IsValidPosition(ghostPos, _ghostObject, _placedDominoManager)) return;
             UpdateGhostPosition(ghostPos, _ghostObject);
@@ -133,7 +133,6 @@ namespace Assets.Scripts.Managers
                     break;
                 case 2:
                     var e = (DominosProp) model;
-                    //Functions.TurnOffGameObjectPhysics(e.GetGameObject());
                     Functions.TurnOffGameObjectPhysics(e.GhostProp);
                     foreach (var o in e.Dominos.Domino) Functions.TurnOffGameObjectPhysics(o.gameObject);
                     break;

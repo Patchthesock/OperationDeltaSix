@@ -101,13 +101,6 @@ namespace Assets.Scripts.Managers
         private readonly List<LocalDomino> _placedDominos = new List<LocalDomino>();
         private readonly List<GameObject> _nonActiveDominos = new List<GameObject>();
 
-        [Serializable]
-        public class Settings
-        {
-            public GameObject ParentContainer;
-            public List<GameObject> Dominos;
-        }
-
         private class LocalDomino
         {
             public LocalDomino(GameObject domino)
@@ -123,6 +116,13 @@ namespace Assets.Scripts.Managers
 
             public readonly SaveObject Save;
             public readonly GameObject Domino;
+        }
+
+        [Serializable]
+        public class Settings
+        {
+            public GameObject ParentContainer;
+            public List<GameObject> Dominos;
         }
     }
 }

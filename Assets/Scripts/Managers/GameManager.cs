@@ -26,7 +26,7 @@ namespace Assets.Scripts.Managers
 
         public void Initialize()
         {
-            Application.targetFrameRate = -1; // Set to target default framerate
+            Application.targetFrameRate = _settings.TargetFrameRate;
             PlayControl(false);
             _cameraManager.SetActive(true);
             _menuManager.Initialize(PlayControl);
@@ -59,6 +59,7 @@ namespace Assets.Scripts.Managers
         public class Settings
         {
             public float Gravity = -50;
+            public int TargetFrameRate = -1; // -1 = Set to target default framerate
         }
     }
 }

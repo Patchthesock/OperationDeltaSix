@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Assets.Scripts.Components;
 using Assets.Scripts.Models;
@@ -8,8 +9,11 @@ namespace Assets.Scripts.Managers
 {
     public class PlacedDominoPropManager
     {
-        public PlacedDominoPropManager(PrefabFactory prefabFactory)
+        public PlacedDominoPropManager(
+            Settings settings,
+            PrefabFactory prefabFactory)
         {
+            _settings = settings;
             _prefabFactory = prefabFactory;
         }
 
@@ -55,6 +59,7 @@ namespace Assets.Scripts.Managers
         {
             var m = _prefabFactory.Instantiate(model);
             m.name = model.name;
+            if (_settings.ParentContainer != null)  m.transform.SetParent(_settings.ParentContainer.transform);
             return m;
         }
 
@@ -66,8 +71,15 @@ namespace Assets.Scripts.Managers
             return m;
         }
 
+        private readonly Settings _settings;
         private readonly PrefabFactory _prefabFactory;
         private readonly List<GameObject> _activeObjects = new List<GameObject>();
         private readonly List<GameObject> _nonActiveObjects = new List<GameObject>();
+
+        [Serializable]
+        public class Settings
+        {
+            public GameObject ParentContainer;
+        }
     }
 }

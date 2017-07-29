@@ -15,7 +15,7 @@ namespace Assets.Scripts.Installers
 
         public override void InstallBindings()
         {
-            InstallPlacedManagers(Container, GameSettings.PlacedDominoManagerSettings);
+            InstallPlacedManagers(Container, GameSettings.PlacedDominoManagerSettings, GameSettings.PlacedDominoPropManagerSettings);
             InstallLocalFilePersistance(Container);
             InstallSaveManager(Container);
             InstallBtnOptionFactory(Container, GameSettings.BtnOptionSettings);
@@ -30,11 +30,12 @@ namespace Assets.Scripts.Installers
             InstallGameManager(Container, GameSettings.GameManagerSettings);
         }
 
-        private static void InstallPlacedManagers(DiContainer container, PlacedDominoManager.Settings settings)
+        private static void InstallPlacedManagers(DiContainer container, PlacedDominoManager.Settings settings, PlacedDominoPropManager.Settings propSettings)
         {
             container.Bind<PrefabFactory>().AsSingle();
             container.Bind<PlacedDominoManager.Settings>().FromInstance(settings).AsSingle();
             container.Bind<PlacedDominoManager>().AsSingle();
+            container.Bind<PlacedDominoPropManager.Settings>().FromInstance(propSettings).AsSingle();
             container.Bind<PlacedDominoPropManager>().AsSingle();
         }
 
@@ -129,6 +130,7 @@ namespace Assets.Scripts.Installers
             public PlacementManager.Settings PlacementManagerSettings;
             public DominoInteractionManager.Settings InteractionSettings;
             public PlacedDominoManager.Settings PlacedDominoManagerSettings;
+            public PlacedDominoPropManager.Settings PlacedDominoPropManagerSettings;
 
             [Serializable]
             public class GuiComponents
