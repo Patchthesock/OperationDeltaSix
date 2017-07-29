@@ -12,7 +12,7 @@ namespace Assets.Scripts.Managers
         public static void TurnOffGameObjectPhysics(GameObject o)
         {
             o.gameObject.layer = 2;
-            if (o.GetComponent<Collider>() != null) o.GetComponent<Collider>().isTrigger = true;
+            if (o.GetComponent<Collider>() != null && o.GetComponent<MeshCollider>() == null) o.GetComponent<Collider>().isTrigger = true;
             if (o.GetComponent<Rigidbody>() == null) return;
             o.GetComponent<Rigidbody>().isKinematic = true;
             o.GetComponent<Rigidbody>().useGravity = false;

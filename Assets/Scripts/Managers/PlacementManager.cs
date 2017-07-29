@@ -133,6 +133,8 @@ namespace Assets.Scripts.Managers
                     break;
                 case 2:
                     var e = (DominosProp) model;
+                    //Functions.TurnOffGameObjectPhysics(e.GetGameObject());
+                    Functions.TurnOffGameObjectPhysics(e.GhostProp);
                     foreach (var o in e.Dominos.Domino) Functions.TurnOffGameObjectPhysics(o.gameObject);
                     break;
                 default:

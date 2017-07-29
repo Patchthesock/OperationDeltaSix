@@ -7,6 +7,7 @@ namespace Assets.Scripts.Components.GameModels
     {
         public Dominos Dominos;
         public GameObject Prop;
+        public GameObject GhostProp;
 
         public GameObject GetGameObject()
         {
