@@ -138,7 +138,7 @@ namespace Assets.Scripts.Managers
                     foreach (var o in e.Dominos.Domino) Functions.TurnOffGameObjectPhysics(o.gameObject);
                     break;
                 default:
-                    Debug.Log("PlacementManager.GetPlacementGameObject(IPlacementable): Unknown type");
+                    Debug.LogError("PlacementManager.GetPlacementGameObject(IPlacementable): Unknown type");
                     break;
             }
             return ghostObject;

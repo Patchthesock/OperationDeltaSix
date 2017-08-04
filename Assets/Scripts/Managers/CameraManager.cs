@@ -35,11 +35,9 @@ namespace Assets.Scripts.Managers
         private void GetMiddleMouseVector(Transform camera, float flySpeed)
         {
             if (!Input.GetMouseButton(2)) return;
-            _height = camera.transform.position.y;
             _dragOrigin = Input.mousePosition;
             var pos = Camera.main.ScreenToViewportPoint(Input.mousePosition - _dragOrigin); // TODO: Remove / Do better 
             camera.Translate(new Vector3(pos.x, 0, pos.y) * -1 * flySpeed, Space.Self);
-            camera.position = new Vector3(camera.position.x, _height, camera.position.z);
         }
 
         private static Vector3 GetArrowKeyVector()
@@ -75,9 +73,7 @@ namespace Assets.Scripts.Managers
             return movement;
         }
 
-        private float _height;
-        private bool _isActive;
-        
+        private bool _isActive;        
         private Vector3 _dragOrigin;
         private readonly Settings _settings;
         private readonly MouseRotation _mouseRotation;
