@@ -43,7 +43,7 @@ namespace Assets.Scripts.Service
             _rotationX += Input.GetAxis("Mouse X") * settings.Sensitivity;
             _rotationY += Input.GetAxis("Mouse Y") * settings.Sensitivity;
             var x = _initial + new Vector3(-_rotationY, _rotationX, 0);
-            x.x = ClampAngle(x.x, -50, 50);
+            x.x = ClampAngle(x.x, -settings.MaxCameraAngle, settings.MaxCameraAngle);
             return x;
         }
 
@@ -64,8 +64,8 @@ namespace Assets.Scripts.Service
         [Serializable]
         public class Settings
         {
-            public float Speed = 0.5f;
             public float Sensitivity = 0.1f;
+            public float MaxCameraAngle = 50;
         }
     }
 }
