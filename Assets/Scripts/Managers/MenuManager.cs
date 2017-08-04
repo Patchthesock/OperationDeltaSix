@@ -96,6 +96,21 @@ namespace Assets.Scripts.Managers
 
         private void SetupButtons(Action<bool> setPlayState)
         {
+            _mainMenuGui.PropBtn.onClick.AddListener(() =>
+            {
+                _mainMenuGui.SetPropMenuActive(true);
+                _mainMenuGui.SetPatternMenuActive(false);
+            });
+            _mainMenuGui.PlayBtn.onClick.AddListener(() =>
+            {
+                SetActive(false);
+                setPlayState(true);
+            });
+            _mainMenuGui.RemoveBtn.onClick.AddListener(() =>
+            {
+                SetActive(false);
+                _removalManager.SetActive(true);
+            });
             _mainMenuGui.SaveGuiBtn.onClick.AddListener(() =>
             {
                 _mainMenuGui.SetActive(false);
@@ -105,11 +120,6 @@ namespace Assets.Scripts.Managers
             {
                 _mainMenuGui.SetActive(false);
                 _loadGuiManager.SetActive(true);
-            });
-            _mainMenuGui.PropBtn.onClick.AddListener(() =>
-            {
-                _mainMenuGui.SetPropMenuActive(true);
-                _mainMenuGui.SetPatternMenuActive(false);
             });
             _mainMenuGui.PatternBtn.onClick.AddListener(() =>
             {
@@ -122,19 +132,8 @@ namespace Assets.Scripts.Managers
                 _placedDominoManager.RemoveDomino();
                 _placedDominoPropManager.RemoveObjects();
             });
-            _mainMenuGui.RemoveBtn.onClick.AddListener(() =>
-            {
-                SetActive(false);
-                _removalManager.SetActive(true);
-            });
-            _mainMenuGui.PlayBtn.onClick.AddListener(() =>
-            {
-                SetActive(false);
-                setPlayState(true);
-            });
-
-            _mainMenuGui.ExitBtn.onClick.AddListener(() => { SceneManager.LoadScene(0); });
             foreach (var btn in _mainMenuGui.PropBtns) SetupButton(btn.GetPlaceableBtn());
+            _mainMenuGui.ExitBtn.onClick.AddListener(() => { SceneManager.LoadScene(0); });
             foreach (var btn in _mainMenuGui.PatternBtns) SetupButton(btn.GetPlaceableBtn());
         }
 

@@ -42,11 +42,15 @@ namespace Assets.Scripts.Service
         {
             _rotationX += Input.GetAxis("Mouse X") * settings.Sensitivity;
             _rotationY += Input.GetAxis("Mouse Y") * settings.Sensitivity;
-            return _initial + new Vector3(-_rotationY, _rotationX, 0);
+            var x = _initial + new Vector3(-_rotationY, _rotationX, 0);
+            x.x = ClampAngle(x.x, -50, 50);
+            return x;
         }
 
         private static float ClampAngle(float angle, float min, float max)
         {
+            if (angle > 100) angle -= 360;
+            if (angle < -360) angle += 360;
             return Mathf.Clamp(angle, min, max);
         }
 
