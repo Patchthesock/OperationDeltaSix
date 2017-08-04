@@ -19,7 +19,8 @@ namespace Assets.Scripts.Managers
             SaveGuiManager saveGuiManager,
             LoadGuiManager loadGuiManager,
             PlacementManager placementManager,
-            PlacedDominoManager placedDominoManager)
+            PlacedDominoManager placedDominoManager,
+            PlacedDominoPropManager placedDominoPropManager)
         {
             _settings = settings;
             _mainMenuGui = mainMenuGui;
@@ -29,6 +30,7 @@ namespace Assets.Scripts.Managers
             _loadGuiManager = loadGuiManager;
             _placementManager = placementManager;
             _placedDominoManager = placedDominoManager;
+            _placedDominoPropManager = placedDominoPropManager;
         }
 
         public void Initialize(Action<bool> setPlayState)
@@ -118,6 +120,7 @@ namespace Assets.Scripts.Managers
             {
                 SetActive(false);
                 _placedDominoManager.RemoveDomino();
+                _placedDominoPropManager.RemoveObjects();
             });
             _mainMenuGui.RemoveBtn.onClick.AddListener(() =>
             {
@@ -144,6 +147,7 @@ namespace Assets.Scripts.Managers
         private readonly LoadGuiManager _loadGuiManager;
         private readonly PlacementManager _placementManager;
         private readonly PlacedDominoManager _placedDominoManager;
+        private readonly PlacedDominoPropManager _placedDominoPropManager;
         private readonly List<Action<bool>> _onMenuToggleListeners = new List<Action<bool>>();
 
         [Serializable]

@@ -27,7 +27,7 @@ namespace Assets.Scripts.Managers
 
         public void AddObject(IEnumerable<SaveObject> model)
         {
-            RemoveObject();
+            RemoveObjects();
             foreach (var o in model) AddObject(o.Name, o.Position, o.Rotation);
         }
 
@@ -50,7 +50,7 @@ namespace Assets.Scripts.Managers
             o.SetActive(false);
         }
 
-        private void RemoveObject()
+        public void RemoveObjects()
         {
             foreach (var m in _activeObjects.ToList()) RemoveObject(m);
         }
