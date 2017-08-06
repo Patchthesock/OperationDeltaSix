@@ -15,6 +15,7 @@ namespace Assets.Scripts.Installers
 
         public override void InstallBindings()
         {
+            InstallStateDisplayManager(Container, GameSettings.GuiComponentPrefabs.StateDisplayGui);
             InstallPlacedManagers(Container, GameSettings.PlacedDominoManagerSettings, GameSettings.PlacedDominoPropManagerSettings);
             InstallLocalFilePersistance(Container);
             InstallSaveManager(Container);
@@ -28,6 +29,12 @@ namespace Assets.Scripts.Installers
             InstallAudioManager(Container, GameSettings.AudioManagerSettings);
             InstallDominoInteractionManager(Container, GameSettings.InteractionSettings);
             InstallGameManager(Container, GameSettings.GameManagerSettings);
+        }
+
+        private static void InstallStateDisplayManager(DiContainer container, StateDisplayGuiManager.Settings settings)
+        {
+            container.Bind<StateDisplayGuiManager.Settings>().FromInstance(settings).AsSingle();
+            container.Bind<StateDisplayGuiManager>().AsSingle();
         }
 
         private static void InstallPlacedManagers(DiContainer container, PlacedDominoManager.Settings settings, PlacedDominoPropManager.Settings propSettings)
@@ -139,6 +146,7 @@ namespace Assets.Scripts.Installers
                 public LoadGui LoadGui;
                 public MainMenuGui MainMenuGui;
                 public SaveConfirmGui SaveConfirmGui;
+                public StateDisplayGuiManager.Settings StateDisplayGui;
             }
         }
     }

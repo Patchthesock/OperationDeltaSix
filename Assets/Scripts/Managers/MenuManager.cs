@@ -20,6 +20,7 @@ namespace Assets.Scripts.Managers
             LoadGuiManager loadGuiManager,
             PlacementManager placementManager,
             PlacedDominoManager placedDominoManager,
+            StateDisplayGuiManager stateDisplayGuiManager,
             PlacedDominoPropManager placedDominoPropManager)
         {
             _settings = settings;
@@ -30,6 +31,7 @@ namespace Assets.Scripts.Managers
             _loadGuiManager = loadGuiManager;
             _placementManager = placementManager;
             _placedDominoManager = placedDominoManager;
+            _stateDisplayManager = stateDisplayGuiManager;
             _placedDominoPropManager = placedDominoPropManager;
         }
 
@@ -41,6 +43,7 @@ namespace Assets.Scripts.Managers
             _mainMenuGui.SetActive(false);
             _saveGuiManager.Initialize(() => { SetActive(false); });
             _loadGuiManager.Initialize(() => { SetActive(false); });
+            _stateDisplayManager.SetState(StateDisplayGuiManager.State.Introduction);
         }
 
         public void Tick()
@@ -70,6 +73,7 @@ namespace Assets.Scripts.Managers
             _loadGuiManager.SetActive(false);
             _mainMenuGui.SetActive(_menuState);
             foreach (var l in _onMenuToggleListeners) l(_menuState);
+            _stateDisplayManager.SetState(StateDisplayGuiManager.State.Edit);
         }
 
         private void Create(IPlacementable model)
@@ -105,11 +109,13 @@ namespace Assets.Scripts.Managers
             {
                 SetActive(false);
                 setPlayState(true);
+                _stateDisplayManager.SetState(StateDisplayGuiManager.State.Play);
             });
             _mainMenuGui.RemoveBtn.onClick.AddListener(() =>
             {
                 SetActive(false);
                 _removalManager.SetActive(true);
+                _stateDisplayManager.SetState(StateDisplayGuiManager.State.Remove);
             });
             _mainMenuGui.SaveGuiBtn.onClick.AddListener(() =>
             {
@@ -146,6 +152,7 @@ namespace Assets.Scripts.Managers
         private readonly LoadGuiManager _loadGuiManager;
         private readonly PlacementManager _placementManager;
         private readonly PlacedDominoManager _placedDominoManager;
+        private readonly StateDisplayGuiManager _stateDisplayManager;
         private readonly PlacedDominoPropManager _placedDominoPropManager;
         private readonly List<Action<bool>> _onMenuToggleListeners = new List<Action<bool>>();
 
