@@ -19,7 +19,7 @@ namespace Assets.Scripts.Managers
 
         public void AddObject(GameObject model, Vector3 position, Quaternion rotation)
         {
-            var objectToPlace = TryGetExistingObject(model.name) ?? GetNewObject(model);
+            var objectToPlace = GetNewObject(model);
             objectToPlace.transform.position = position;
             objectToPlace.transform.rotation = rotation;
             _activeObjects.Add(objectToPlace);

@@ -36,7 +36,8 @@ namespace Assets.Scripts.Managers
         {
             var hit = Functions.GetHit();
             if (hit.collider == null) return;
-            var m = hit.collider.gameObject.GetComponent<IPlacementable>();
+            var m = hit.collider.gameObject.GetComponent<IPlacementable>() ??
+                    hit.collider.gameObject.transform.parent.gameObject.GetComponent<IPlacementable>();
             if (m == null) return;
             if (!_settings.AudioSource.isPlaying) _settings.AudioSource.Play();
 
