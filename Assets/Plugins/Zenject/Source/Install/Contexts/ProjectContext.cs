@@ -133,20 +133,23 @@ namespace Zenject
             // Do nothing - Initialize occurs in Instance property
         }
 
+        public void Awake()
+        {
+            if (Application.isPlaying)
+                // DontDestroyOnLoad can only be called when in play mode and otherwise produces errors
+                // ProjectContext is created during design time (in an empty scene) when running validation
+                // and also when running unit tests
+                // In these cases we don't need DontDestroyOnLoad so just skip it
+            {
+                DontDestroyOnLoad(gameObject);
+            }
+        }
+
         void Initialize()
         {
             Log.Debug("Initializing ProjectContext");
 
             Assert.IsNull(_container);
-
-            if (Application.isPlaying)
-            // DontDestroyOnLoad can only be called when in play mode and otherwise produces errors
-            // ProjectContext is created during design time (in an empty scene) when running validation
-            // and also when running unit tests
-            // In these cases we don't need DontDestroyOnLoad so just skip it
-            {
-                DontDestroyOnLoad(gameObject);
-            }
 
             bool isValidating = false;
 
@@ -176,11 +179,10 @@ namespace Zenject
                 _container.IsInstalling = false;
             }
 
-            _container.FlushInjectQueue();
-
             Assert.That(_dependencyRoots.IsEmpty());
-
             _dependencyRoots.AddRange(_container.ResolveDependencyRoots());
+
+            _container.FlushInjectQueue();
         }
 
         protected override IEnumerable<MonoBehaviour> GetInjectableMonoBehaviours()

@@ -27,7 +27,7 @@ namespace Zenject
 #endif
 
 #if ZEN_SIGNALS_ADD_UNIRX
-        public IObservable<Unit> AsObservable
+        public UniRx.IObservable<Unit> AsObservable
         {
             get
             {

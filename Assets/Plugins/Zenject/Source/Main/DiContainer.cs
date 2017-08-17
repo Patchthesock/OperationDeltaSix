@@ -577,14 +577,8 @@ namespace Zenject
 
         public object Resolve(InjectContext context)
         {
-            if (context.Container != this)
-            // Sometimes it's useful to forward context directly from one container to another
-            // So make sure the container is correct in this case
-            {
-                context = context.Clone();
-                context.Container = this;
-            }
-
+            // Note: context.Container is not necessarily equal to this, since
+            // you can have some lookups recurse to parent containers
             Assert.IsNotNull(context);
 
             ProviderPair providerPair;
@@ -592,7 +586,22 @@ namespace Zenject
             FlushBindings();
             CheckForInstallWarning(context);
 
-            var result = TryGetUniqueProvider(context, out providerPair);
+            var lookupContext = context;
+
+            // The context used for lookups is always the same as the given context EXCEPT for Lazy<>
+            // In CreateLazyBinding above, we forward the context to a new instance of Lazy<>
+            // The problem is, we want the binding for Bind(typeof(Lazy<>)) to always match even
+            // for members that are marked for a specific ID, so we need to discard the identifier
+            // for this one particular case
+            if (context.MemberType.IsGenericType() && context.MemberType.GetGenericTypeDefinition() == typeof(Lazy<>))
+            {
+                lookupContext = context.Clone();
+                lookupContext.Identifier = null;
+                lookupContext.SourceType = InjectSources.Local;
+                lookupContext.Optional = false;
+            }
+
+            var result = TryGetUniqueProvider(lookupContext, out providerPair);
 
             if (result == ProviderLookupResult.Multiple)
             {
@@ -1909,17 +1918,6 @@ namespace Zenject
         //
         public IdScopeConditionCopyNonLazyBinder BindInstance<TContract>(TContract instance)
         {
-            return BindInstance<TContract>(instance, false);
-        }
-
-        public IdScopeConditionCopyNonLazyBinder BindInstance<TContract>(TContract instance, bool allowNull)
-        {
-            if (!allowNull)
-            {
-                Assert.That(!ZenUtilInternal.IsNull(instance),
-                    "Found null instance with type '{0}' in BindInstance method", typeof(TContract));
-            }
-
             var bindInfo = new BindInfo(typeof(TContract));
             var binding = StartBinding();
 

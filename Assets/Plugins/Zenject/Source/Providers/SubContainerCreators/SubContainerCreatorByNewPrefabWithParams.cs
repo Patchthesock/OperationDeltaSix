@@ -49,13 +49,13 @@ namespace Zenject
                     argPair.Type, _installerType);
 
                 tempSubContainer.Bind(match.MemberType)
-                    .FromInstance(argPair.Value, true).WhenInjectedInto(_installerType);
+                    .FromInstance(argPair.Value).WhenInjectedInto(_installerType);
             }
 
             return tempSubContainer;
         }
 
-        public DiContainer CreateSubContainer(List<TypeValuePair> args)
+        public DiContainer CreateSubContainer(List<TypeValuePair> args, InjectContext parentContext)
         {
             Assert.That(!args.IsEmpty());
 

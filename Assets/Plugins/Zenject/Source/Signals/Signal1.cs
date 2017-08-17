@@ -30,7 +30,7 @@ namespace Zenject
 #endif
 
 #if ZEN_SIGNALS_ADD_UNIRX
-        public IObservable<TParam1> AsObservable
+        public UniRx.IObservable<TParam1> AsObservable
         {
             get
             {

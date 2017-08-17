@@ -231,22 +231,22 @@ namespace Zenject
                 {
                     case ZenjectBinding.BindTypes.Self:
                     {
-                        Container.Bind(componentType).WithId(identifier).FromInstance(component, true);
+                        Container.Bind(componentType).WithId(identifier).FromInstance(component);
                         break;
                     }
                     case ZenjectBinding.BindTypes.BaseType:
                     {
-                        Container.Bind(componentType.BaseType()).WithId(identifier).FromInstance(component, true);
+                        Container.Bind(componentType.BaseType()).WithId(identifier).FromInstance(component);
                         break;
                     }
                     case ZenjectBinding.BindTypes.AllInterfaces:
                     {
-                        Container.Bind(componentType.Interfaces().ToArray()).WithId(identifier).FromInstance(component, true);
+                        Container.Bind(componentType.Interfaces().ToArray()).WithId(identifier).FromInstance(component);
                         break;
                     }
                     case ZenjectBinding.BindTypes.AllInterfacesAndSelf:
                     {
-                        Container.Bind(componentType.Interfaces().Append(componentType).ToArray()).WithId(identifier).FromInstance(component, true);
+                        Container.Bind(componentType.Interfaces().Append(componentType).ToArray()).WithId(identifier).FromInstance(component);
                         break;
                     }
                     default:

@@ -20,7 +20,7 @@ namespace Zenject
             _container = container;
         }
 
-        public DiContainer CreateSubContainer(List<TypeValuePair> args)
+        public DiContainer CreateSubContainer(List<TypeValuePair> args, InjectContext parentContext)
         {
             Assert.That(args.IsEmpty());
 

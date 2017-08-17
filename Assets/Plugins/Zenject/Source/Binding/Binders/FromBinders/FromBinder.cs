@@ -321,15 +321,8 @@ namespace Zenject
             return new ScopeConditionCopyNonLazyBinder(BindInfo);
         }
 
-        protected ScopeConditionCopyNonLazyBinder FromInstanceBase(object instance, bool allowNull)
+        protected ScopeConditionCopyNonLazyBinder FromInstanceBase(object instance)
         {
-            if (!allowNull)
-            {
-                Assert.That(!ZenUtilInternal.IsNull(instance),
-                    "Found null instance for type '{0}' in FromInstance method",
-                    ConcreteTypes.First());
-            }
-
             BindingUtil.AssertInstanceDerivesFromOrEqual(instance, AllParentTypes);
 
             BindInfo.RequireExplicitScope = false;

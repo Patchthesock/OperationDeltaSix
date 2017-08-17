@@ -64,12 +64,12 @@ namespace Zenject
                 _container.IsInstalling = false;
             }
 
-            Log.Debug("GameObjectContext: Injecting into child components...");
-
-            _container.FlushInjectQueue();
+            Log.Debug("GameObjectContext: Resolving all dependencies...");
 
             Assert.That(_dependencyRoots.IsEmpty());
             _dependencyRoots.AddRange(_container.ResolveDependencyRoots());
+
+            _container.FlushInjectQueue();
 
             if (_container.IsValidating)
             {

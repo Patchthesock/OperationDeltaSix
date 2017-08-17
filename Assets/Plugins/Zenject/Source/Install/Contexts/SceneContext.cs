@@ -247,12 +247,12 @@ namespace Zenject
             Assert.That(!_hasResolved);
             _hasResolved = true;
 
-            _container.FlushInjectQueue();
-
-            Log.Debug("SceneContext: Resolving dependency roots...");
+            Log.Debug("SceneContext: Resolving all...");
 
             Assert.That(_dependencyRoots.IsEmpty());
             _dependencyRoots.AddRange(_container.ResolveDependencyRoots());
+
+            _container.FlushInjectQueue();
 
             Log.Debug("SceneContext: Initialized successfully");
         }

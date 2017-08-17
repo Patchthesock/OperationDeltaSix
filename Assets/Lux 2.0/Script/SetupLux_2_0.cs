@@ -140,10 +140,10 @@ public class SetupLux_2_0 : MonoBehaviour {
 	void OnDrawGizmosSelected()
     {
     //	Draw Wind Direction Handle
-    	float hsize = HandleUtility.GetHandleSize(transform.position);
+    	var hsize = HandleUtility.GetHandleSize(transform.position);
     	Handles.color = Color.green;
-    	Quaternion rotation = Quaternion.LookRotation(transform.up * (-1.0f));
-    	Handles.ArrowCap(0, transform.position, rotation, hsize * 1.5f);
+    	var rotation = Quaternion.LookRotation(transform.up * -1.0f);
+        Handles.ArrowHandleCap(0, transform.position, rotation, hsize * -1.0f, EventType.MouseDown);
     }
     #endif
 }
